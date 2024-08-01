@@ -80,4 +80,9 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        Shell.Current.GoToAsync("//main");
+        return true;
+    }
 }

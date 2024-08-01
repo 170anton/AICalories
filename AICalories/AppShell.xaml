@@ -10,11 +10,10 @@
     FlyoutHeader="camera.png"
     Title="AICalories">
 
-
     <TabBar>
         <Tab Title="Photo"
              Icon="camera.png">
-             <ShellContent ContentTemplate="{DataTemplate views:PhotoSelectionPage}" />
+             <ShellContent ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Route="main"/>
         </Tab>
         <Tab Title="History"
              Icon="history2.png">
@@ -30,7 +29,7 @@
     
     <FlyoutItem Title="About">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:FlyoutMenuPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
        </Tab>
     </FlyoutItem>
     

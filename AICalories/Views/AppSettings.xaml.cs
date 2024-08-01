@@ -6,4 +6,10 @@ public partial class AppSettings : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    protected override bool OnBackButtonPressed()
+    {
+        Shell.Current.GoToAsync("//main");
+        return true;
+    }
 }
