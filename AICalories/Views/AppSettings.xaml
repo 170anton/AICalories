@@ -3,21 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AICalories.Views.AppSettings">
     <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
-        <Frame HasShadow="True" Padding="20">
-            <Grid ColumnDefinitions="*,*">
+        <Frame Style="{StaticResource ShadowFrameStyle}">
+            <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Dark Mode" Style="{StaticResource LabelAppStyle}"
                        TextColor="Black"
+                       HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1" Margin="0,0,0,0"/>
+                <Switch Grid.Column="1"
+                        Scale="1.3"/>
             </Grid>
         </Frame>
-        <Frame HasShadow="True" Padding="20" Grid.Row="1">
-            <Grid ColumnDefinitions="*,*">
+        <Frame Grid.Row="1" Style="{StaticResource ShadowFrameStyle}">
+            <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Photo Review" Style="{StaticResource LabelAppStyle}"
                        TextColor="Black"
+                       HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1" Margin="0,0,0,0"
-                        IsToggled="True"/>
+                <Switch Grid.Column="1"
+                        IsToggled="True"
+                        Scale="1.3"/>
             </Grid>
         </Frame>
     </Grid>

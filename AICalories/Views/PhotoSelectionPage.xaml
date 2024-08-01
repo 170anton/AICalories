@@ -6,11 +6,11 @@
         <ToolbarItem Text="Menu" IconImageSource="menu.png" Clicked="OnMenuButtonClicked" />
     </ContentPage.ToolbarItems>-->
 
-    <Grid RowDefinitions=".8*,.2*" ColumnDefinitions="*,*">
+    <Grid RowDefinitions=".8*,.2*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10">
         <Button Text="Take Image"
                 ImageSource="camera_white.png"
                 ContentLayout="Top"
-                Padding="0,200"
+                Padding="0,150"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource ImageOptionStyle}"

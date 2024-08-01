@@ -7,17 +7,17 @@
     xmlns:local="clr-namespace:AICalories"
     Shell.FlyoutBehavior="Flyout"
     FlyoutItem.IsVisible="True"
-    FlyoutHeader="camera.png"
-    Title="AICalories">
+    FlyoutHeader="camera.png">
 
     <TabBar>
         <Tab Title="Photo"
              Icon="camera.png">
-             <ShellContent ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Route="main"/>
+            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Route="main"/>
+            <ShellContent Title="AI Context" Content="erf" ContentTemplate="{DataTemplate views:AIContextPage}" />
         </Tab>
         <Tab Title="History"
              Icon="history2.png">
-             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
         </Tab>
     </TabBar>
     

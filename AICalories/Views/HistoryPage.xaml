@@ -10,7 +10,7 @@
             Padding="10"
             RowSpacing="10">
             <Button Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
-            <Button Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
+            <Button IsEnabled="False" Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
             <CollectionView Grid.Row="2"
                             x:Name="collectionView"
                             ItemsSource="{Binding DayGroupedItems}"

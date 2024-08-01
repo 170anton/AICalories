@@ -11,8 +11,9 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="ImageOptionStyle" TargetType="Button">
-                <Setter Property="Margin" Value="20,0,20,20" />
+                <!--<Setter Property="Margin" Value="20,0,20,20" />-->
                 <!--<Setter Property="BackgroundColor" Value="DarkMagenta"/>-->
+                <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="FontSize" Value="Title" />
@@ -24,10 +25,19 @@
                 <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
-                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="TextColor" Value="Black"/>
 
             </Style>
+            
+            <Style x:Key="ShadowFrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Padding" Value="30"/>
 
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

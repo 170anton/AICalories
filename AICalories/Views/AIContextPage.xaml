@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AICalories.Views.AIContextPage"
+             >
+    <ScrollView>
+    <VerticalStackLayout>
+        <Frame Style="{StaticResource ShadowFrameStyle}"
+               Margin="10,10,10,0" Padding="0">
+            <Grid RowDefinitions="Auto,*" >
+                <Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
+                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
+                    <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
+                           HorizontalTextAlignment="Start"/> 
+                    <RadioButton Grid.Column="1"/>
+
+                    <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
+                           HorizontalTextAlignment="Start"/> 
+                    <RadioButton Grid.Column="1" Grid.Row="1"/>
+
+                    <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
+                           HorizontalTextAlignment="Start"/> 
+                    <RadioButton Grid.Column="1" Grid.Row="2" IsChecked="True"/>
+                
+                    <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                           HorizontalTextAlignment="Start"/> 
+                    <RadioButton Grid.Column="1" Grid.Row="3"/>-->
+                </Grid>
+            </Grid>
+        </Frame>
+
+        <Frame Style="{StaticResource ShadowFrameStyle}"
+               Margin="10,5,10,0" Padding="0">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
+                <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
+                <Button Grid.Column="1"
+                        Text="Add" Margin="20,20,20,0"
+                    />
+                <Grid Grid.Row="1" Grid.ColumnSpan="2"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
+                      Padding="30,20,40,20" RowSpacing="0">
+                    <Label Text="Empty mug" Style="{StaticResource LabelAppStyle}"
+                           HorizontalTextAlignment="Start"/>
+                    <CheckBox Grid.Column="1"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="1"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="2"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="3"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="4"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="4"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="5"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="5"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="6"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="6"/>
+                    
+                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="7"
+                           HorizontalTextAlignment="Start"/> 
+                    <CheckBox Grid.Column="1" Grid.Row="7"/>
+
+
+                </Grid>
+            </Grid>
+
+        </Frame>
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

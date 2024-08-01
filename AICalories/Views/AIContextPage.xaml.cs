@@ -1,8 +1,8 @@
 ﻿namespace AICalories.Views;
 
-public partial class LoadScreenPage : ContentPage
+public partial class AIContextPage : ContentPage
 {
-	public LoadScreenPage()
+	public AIContextPage()
 	{
 		InitializeComponent();
     }
