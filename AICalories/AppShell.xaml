@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AICalories.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:AICalories.Views"
+    xmlns:local="clr-namespace:AICalories"
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutItem.IsVisible="True"
+    FlyoutHeader="camera.png"
+    Title="AICalories">
+
+
+    <TabBar>
+        <Tab Title="Photo"
+             Icon="camera.png">
+             <ShellContent ContentTemplate="{DataTemplate views:PhotoSelectionPage}" />
+        </Tab>
+        <Tab Title="History"
+             Icon="history2.png">
+             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+        </Tab>
+    </TabBar>
+    
+    <FlyoutItem Title="Settings">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettings}" />
+       </Tab>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="About">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:FlyoutMenuPage}" />
+       </Tab>
+    </FlyoutItem>
+    
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="Black"
+                  HeightRequest="200">
+                <Image Aspect="AspectFill"
+                       Source="pasta1.jpg"
+                       Opacity="0.6" />
+                <Label Text="AICalories"
+                       Style="{StaticResource LabelAppStyle}"
+                       FontAttributes="Bold"
+                       FontSize="30"/>
+            </Grid>            
+        </DataTemplate>
+        
+    </Shell.FlyoutHeaderTemplate>
+    <!--<ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="Views/PhotoSelectionView" />--> 
+
+</Shell>

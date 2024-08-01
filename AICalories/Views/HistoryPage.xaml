@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:AICalories.Models"
+             xmlns:views="clr-namespace:AICalories.Views"
+             x:Class="AICalories.Views.HistoryPage"
+             x:Name="root">
+        <Grid RowDefinitions="Auto, Auto, *" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                            BackgroundColor="White"
+            Padding="10"
+            RowSpacing="10">
+            <Button Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
+            <Button Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
+            <CollectionView Grid.Row="2"
+                            x:Name="collectionView"
+                            ItemsSource="{Binding DayGroupedItems}"
+                            IsGrouped="True"
+                            SelectionMode="Single"
+                            SelectionChanged="OnCollectionViewSelectionChanged">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                    
+                        <Frame
+                               BackgroundColor="{StaticResource White}"
+                               Padding="0" Margin="0,20,0,0"
+                               BorderColor="{StaticResource Primary}">
+                            <Grid ColumnDefinitions="*,Auto,Auto"
+                                Padding="5"
+                                ColumnSpacing="5">
+                                <Label
+                                    Grid.Column="0"
+                                    Style="{StaticResource LabelAppStyle}"
+                                    HorizontalOptions="Start"
+                                    Margin="10,0,0,0"
+                                    Text="{Binding Title}"
+                                    TextColor="{StaticResource Black}"
+                                    FontSize="Large"/>
+                                <Button
+                                    Grid.Column="1"
+                                    Text="Add"
+                                    Clicked="OnAddToHeaderButton_Clicked"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                    
+                            <Grid ColumnDefinitions="*,*, 2.5*"
+                                  HeightRequest="50"
+                                  Padding="0,1,0,0"
+                                  BackgroundColor="{StaticResource White}">
+                                <Label Grid.Column="0" Text="{Binding Time}" TextColor="{StaticResource Black}"
+                                       Margin="0,0,10,0"
+                                       FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
+                                <Label Grid.Column="1" Text="{Binding Calories}" TextColor="{StaticResource Black}"
+                                       FontSize="Medium" Style="{StaticResource LabelAppStyle}"
+                                       Margin="0,0,10,0"/>
+                                <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
+                                       HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
+                                       Opacity="0.3"/>
+                                <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
+                        
+                            </Grid>
+                            <!--<Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCollectionViewSelectionChanged"/>
+                            </Frame.GestureRecognizers>-->
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+         <!--Blur Effect 
+        <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                 Color="#33119911" IsVisible="False" x:Name="blurBackground"/>-->
+                <!-- Blur Effect -->
+        <!--<views:BlurEffectView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                              IsVisible="False" x:Name="blurBackground"/>
+         Overlay Frame 
+        <Frame AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0.5, 0.5, AutoSize, AutoSize"
+               BackgroundColor="White" CornerRadius="10" Padding="20"
+               IsVisible="False" x:Name="overlayFrame">
+            <StackLayout>
+                <Label Text="This is a frame above the page!"
+                       FontSize="24" 
+                       HorizontalOptions="Center"/>
+                <Button Text="Close"
+                        Clicked="OnCloseButtonClicked"/>
+            </StackLayout>
+        </Frame>-->
+        
+</ContentPage>
