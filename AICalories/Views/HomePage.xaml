@@ -5,7 +5,7 @@
              x:Class="AICalories.Views.HomePage"
              BarBackgroundColor="White"
              BarTextColor="Black"
-             >
+             Title="">
     
         <TabbedPage.ToolbarItems>
             <ToolbarItem Text="Menu" IconImageSource="menu.png" Clicked="OnMenuButtonClicked" />

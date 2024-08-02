@@ -239,7 +239,6 @@ public class PhotoSelectionVM
             using (var inputStream = File.OpenRead(imagePath))
             {
                 var image = PlatformImage.FromStream(inputStream, ImageFormat.Jpeg);
-
                 var resizedImage = image.Downsize(maxRes);
 
                 using (var outputStream = File.Create(tempFilePath))

@@ -7,14 +7,17 @@
     </ContentPage.ToolbarItems>-->
 
     <Grid RowDefinitions=".8*,.2*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10">
-        <Button Text="Take Image"
+        <Button
                 ImageSource="camera_white.png"
                 ContentLayout="Top"
-                Padding="0,150"
+                Padding="0,0"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnTakeImageClicked"/>
+                Clicked="OnTakeImageClicked">
+            
+
+        </Button>
 
         <Button Text="Select Image"
                 Grid.Row="1"

@@ -17,7 +17,19 @@
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="FontSize" Value="Title" />
+                <Setter Property="BorderColor" Value="{StaticResource Black}" />
+                <Setter Property="BorderWidth" Value="1" />
+                
+                <Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="Black"
+                            Offset="10,10"
+                            Radius="15"
+                            Opacity="0.5"/>
 
+                    </Setter.Value>
+
+                </Setter>
             </Style>
 
             

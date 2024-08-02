@@ -89,6 +89,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models/" />
+	  <Folder Include="Resources\Layout\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -101,5 +102,10 @@
 	  <None Remove="Resources\Images\icons8-history-96.png" />
 	  <None Remove="Resources\Images\icons8-history-100.png" />
 	  <None Remove=".gitignore" />
+	  <None Remove="Resources\Layout\" />
+	  <None Remove="Resources\Layout\activity_main.xml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Layout\activity_main.axml" />
 	</ItemGroup>
 </Project>
