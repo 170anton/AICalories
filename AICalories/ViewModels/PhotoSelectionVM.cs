@@ -1,10 +1,12 @@
-﻿using System.Text;
+﻿using System.Drawing;
+using System.Text;
 using System.Windows.Input;
 using AICalories.Models;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels;
@@ -43,13 +45,14 @@ public class PhotoSelectionVM
     {
         try
         {
+            //_photoPath = image.FullPath;
+            _photoPath = ResizeImage(image.FullPath, 2000);
             var stream = await image.OpenReadAsync();
-            _photoPath = image.FullPath;
             //capturedImage.Source = ImageSource.FromStream(() => stream);
 
             var imageUrl = await UploadImageToS3(stream, image.FileName);
             var result = await AnalyzeImageWithOpenAI(imageUrl);
-            AddItemToDB(_photoPath, result.Substring(0,5));
+            AddItemToDB(_photoPath, result.Substring(0,8));
 
             await OnShowResponseRequested(result);
         }
@@ -226,6 +229,43 @@ public class PhotoSelectionVM
         }
 
     }
+
+    private string ResizeImage(string imagePath, int maxRes)
+    {
+        string tempFilePath = Path.GetTempFileName();
+
+        try
+        {
+            using (var inputStream = File.OpenRead(imagePath))
+            {
+                var image = PlatformImage.FromStream(inputStream, ImageFormat.Jpeg);
+
+                var resizedImage = image.Downsize(maxRes);
+
+                using (var outputStream = File.Create(tempFilePath))
+                {
+                    resizedImage.Save(outputStream, ImageFormat.Jpeg);
+                }
+            }
+            File.Copy(tempFilePath, imagePath, true);
+
+            return imagePath;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error resizing image: {ex.Message}");
+            return null;
+        }
+        finally
+        {
+            // Clean up temporary file
+            if (File.Exists(tempFilePath))
+            {
+                File.Delete(tempFilePath);
+            }
+        }
+    }
+
     public void RequestShowResponse(string response)
     {
         OnShowResponseRequested?.Invoke(response);

@@ -5,6 +5,7 @@ using AICalories.ViewModels;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 
 namespace AICalories.Views;
@@ -132,6 +133,7 @@ public partial class PhotoSelectionPage : ContentPage
         }
     }
 
+    
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
