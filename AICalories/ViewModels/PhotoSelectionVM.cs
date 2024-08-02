@@ -19,32 +19,38 @@ public class PhotoSelectionVM
     private string AwsAccessKeyId;
     private string AwsSecretAccessKey;
 
-    private static readonly HttpClient client = new HttpClient();
+    private readonly HttpClient client = new HttpClient();
     private const string OpenAIAPIUrl = "https://api.openai.com/v1/chat/completions";
     private const string BucketName = "aic-images";
-    private static readonly RegionEndpoint BucketRegion = RegionEndpoint.EUNorth1;
+    private readonly RegionEndpoint BucketRegion = RegionEndpoint.EUNorth1;
     private IAmazonS3 _s3Client;
     //private readonly APIManager _aPIManager;
 
-    public delegate Task ShowDelegate(string response);
-    public ShowDelegate OnShowResponseRequested;
-    public ShowDelegate OnShowAlertRequested;
+    //public delegate Task ShowDelegate(string response);
+    //public ShowDelegate OnShowResponseRequested;
+    //public ShowDelegate OnShowAlertRequested;
 
     public string PhotoPath { get => _photoPath; set => _photoPath = value; }
     //public bool HasRecievedSecrets { get; set; }
 
     public PhotoSelectionVM()
     {
-        LoadSecretsAsync();
+        LoadSecrets();
+        if (OpenAIAPIKey == null)
+        {
+            throw new ArgumentNullException();
+        }
+
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
         _s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
         //_aPIManager = new APIManager();
     }
 
-    public async void ProcessImage(FileResult image)
+    public async Task<string> ProcessImage(FileResult image)
     {
         try
         {
+
             //_photoPath = image.FullPath;
             _photoPath = ResizeImage(image.FullPath, 2000);
             var stream = await image.OpenReadAsync();
@@ -54,11 +60,13 @@ public class PhotoSelectionVM
             var result = await AnalyzeImageWithOpenAI(imageUrl);
             AddItemToDB(_photoPath, result.Substring(0,8));
 
-            await OnShowResponseRequested(result);
+            //await OnShowResponseRequested(result);
+            return result;
         }
         catch (Exception)
         {
-            RequestShowAlert("No connection to OpenAI");
+            //RequestShowAlert("No connection to OpenAI");
+            throw;
         }
     }
 
@@ -164,7 +172,7 @@ public class PhotoSelectionVM
         }
     }
 
-    private async void LoadSecretsAsync()
+    private void LoadSecrets()
     {
         //var keyVaultService = new KeyVaultService();
 
@@ -205,7 +213,6 @@ public class PhotoSelectionVM
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading secrets: {ex.Message}");
-            RequestShowAlert("No connection to OpenAI");
         }
     }
     private async void AddItemToDB(string? image, string? calories)
@@ -265,14 +272,14 @@ public class PhotoSelectionVM
         }
     }
 
-    public void RequestShowResponse(string response)
-    {
-        OnShowResponseRequested?.Invoke(response);
-    }
+    //public void RequestShowResponse(string response)
+    //{
+    //    OnShowResponseRequested?.Invoke(response);
+    //}
 
-    public void RequestShowAlert(string response)
-    {
-        //HasRecievedSecrets = false;
-        OnShowAlertRequested?.Invoke(response);
-    }
+    //public void RequestShowAlert(string response)
+    //{
+    //    //HasRecievedSecrets = false;
+    //    OnShowAlertRequested?.Invoke(response);
+    //}
 }

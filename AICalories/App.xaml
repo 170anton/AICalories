@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <!--<ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>-->
+                <!--<ResourceDictionary Source="Resources/Styles/DarkTheme.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="ImageOptionStyle" TargetType="Button">
@@ -38,7 +40,7 @@
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="FontSize" Value="Large"/>
-                <Setter Property="TextColor" Value="Black"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
             
@@ -48,6 +50,20 @@
                 <Setter Property="Padding" Value="20"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="30"/>
+
+            </Style>
+
+            
+            <Style x:Key="RadioButtonAppStyle" TargetType="RadioButton">
+                <!--<Setter Property="FontFamily" Value="UbuntuRegular"/>-->
+                <!--<Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>-->
+                <!--<Setter Property="FontSize" Value="Large"/>-->
+                <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+                
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+                
+                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
         </ResourceDictionary>

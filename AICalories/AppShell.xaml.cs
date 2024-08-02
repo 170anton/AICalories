@@ -1,4 +1,6 @@
-﻿namespace AICalories;
+﻿using AICalories.Views;
+
+namespace AICalories;
 
 public partial class AppShell : Shell
 {

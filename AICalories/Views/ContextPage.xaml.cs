@@ -1,11 +1,11 @@
 ﻿namespace AICalories.Views;
 
-public partial class AppSettings : ContentPage
+public partial class ContextPage : ContentPage
 {
-	public AppSettings()
+	public ContextPage()
 	{
 		InitializeComponent();
-	}
+    }
 
     protected override bool OnBackButtonPressed()
     {

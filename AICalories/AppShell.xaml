@@ -22,7 +22,7 @@
             <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Shell.NavBarIsVisible="False"  Route="main">
             
             </ShellContent>
-            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:AIContextPage}" Shell.NavBarIsVisible="False"  Route="context"/>
+            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}" Shell.NavBarIsVisible="False"  Route="context"/>
         </Tab>
         <Tab Title="History"
              Icon="history2.png">
@@ -32,7 +32,7 @@
     
     <FlyoutItem Title="Settings">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettings}" />
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
        </Tab>
     </FlyoutItem>
     
@@ -69,7 +69,6 @@
                     Text="{Binding AppVersionLabel}"
                     Style="{StaticResource LabelAppStyle}"
                     FontSize="Caption"
-                    TextColor="Black"
                     Opacity="0.2"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" />

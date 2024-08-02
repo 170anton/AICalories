@@ -1,22 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AICalories.Views.AppSettings">
+             x:Class="AICalories.Views.AppSettingsPage">
     <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
         <Frame Style="{StaticResource ShadowFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Dark mode" Style="{StaticResource LabelAppStyle}"
-                       TextColor="Black"
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
                 <Switch Grid.Column="1"
-                        Scale="1.3"/>
+                        Scale="1.3"
+                        IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
             </Grid>
         </Frame>
         <Frame Grid.Row="1" Style="{StaticResource ShadowFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
-                       TextColor="Black"
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
                 <Switch Grid.Column="1"
@@ -27,7 +26,6 @@
         <Frame Grid.Row="2" Style="{StaticResource ShadowFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Save to gallery" Style="{StaticResource LabelAppStyle}"
-                       TextColor="Black"
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
                 <Switch Grid.Column="1"

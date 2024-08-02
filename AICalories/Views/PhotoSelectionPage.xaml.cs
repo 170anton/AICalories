@@ -13,17 +13,23 @@ namespace AICalories.Views;
 public partial class PhotoSelectionPage : ContentPage
 {
     private string _photoPath;
-
     private PhotoSelectionVM _viewModel;
+    private LoadScreenPage _loadScreenPage;
 
     public PhotoSelectionPage()
 	{
 		InitializeComponent();
-
-        _viewModel = new PhotoSelectionVM();
-        BindingContext = _viewModel;
-        _viewModel.OnShowResponseRequested += ShowResponse;
-        _viewModel.OnShowAlertRequested += ShowAlert;
+        try
+        {
+            _viewModel = new PhotoSelectionVM();
+            BindingContext = _viewModel;
+        }
+        catch (Exception)
+        {
+            ShowError("No connection to OpenAI");
+        }
+        //_viewModel.OnShowResponseRequested += ShowResponse;
+        //_viewModel.OnShowAlertRequested += ShowAlert;
 
     }
 
@@ -36,18 +42,26 @@ public partial class PhotoSelectionPage : ContentPage
             {
                 try
                 {
+                    //await Shell.Current.Navigation.PushAsync(new LoadScreenPage());
+                    //return;
                     var image = await MediaPicker.CapturePhotoAsync();
 
                     if (image != null)
                     {
-                        //App.Current.MainPage = new NavigationPage(new LoadScreenPage());
-                        _viewModel.ProcessImage(image);//await
+                        _loadScreenPage = new LoadScreenPage();
+                        await Shell.Current.Navigation.PushAsync(_loadScreenPage);
+                        string response = await _viewModel.ProcessImage(image);
+                        _loadScreenPage.LoadAIResponse(response);
+                        //await ShowResponse(response);
                     }
+                }
+                catch (ArgumentNullException ex)
+                {
+                    await ShowError("No connection to OpenAI");
                 }
                 catch (Exception ex)
                 {
-                    // Handle any errors that occurred during photo capture
-                    await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                    await ShowError($"An error occurred: {ex.Message}");
                 }
             }
             else
@@ -93,7 +107,7 @@ public partial class PhotoSelectionPage : ContentPage
     {
         try
         {
-            await Application.Current.MainPage.DisplayAlert("Analysis Result", response, "Ok");
+            await Shell.Current.CurrentPage.DisplayAlert("Analysis Result", response, "Ok");
         }
         catch (Exception ex)
         {
@@ -101,11 +115,11 @@ public partial class PhotoSelectionPage : ContentPage
         }
     }
 
-    private async Task ShowAlert(string response)
+    private async Task ShowError(string response)
     {
         try
         {
-            await Application.Current.MainPage.DisplayAlert("Alert", response, "Sad");
+            await Shell.Current.CurrentPage.DisplayAlert("Error", response, "Sad");
         }
         catch (Exception ex)
         {
@@ -137,8 +151,8 @@ public partial class PhotoSelectionPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        _viewModel.OnShowResponseRequested -= ShowResponse;
-        _viewModel.OnShowAlertRequested -= ShowAlert;
+        //_viewModel.OnShowResponseRequested -= ShowResponse;
+        //_viewModel.OnShowAlertRequested -= ShowAlert;
     }
 
     protected async override void OnAppearing()
