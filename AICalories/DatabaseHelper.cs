@@ -20,6 +20,11 @@ namespace AICalories
             return _database.Table<HistoryItem>().ToListAsync();
         }
 
+        public Task<int> GetCountAsync()
+        {
+            return _database.Table<HistoryItem>().CountAsync();
+        }
+
         public Task<int> SaveItemAsync(HistoryItem item)
         {
             if (item.Id != 0)

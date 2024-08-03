@@ -12,7 +12,6 @@ namespace AICalories.Views;
 
 public partial class PhotoSelectionPage : ContentPage
 {
-    private string _photoPath;
     private PhotoSelectionVM _viewModel;
     private LoadingScreenPage _loadScreenPage;
 
@@ -33,6 +32,24 @@ public partial class PhotoSelectionPage : ContentPage
 
     }
 
+    private async Task ProcessImage(FileResult? image)
+    {
+        if (image != null)
+        {
+            _loadScreenPage = new LoadingScreenPage();
+            await Shell.Current.Navigation.PushAsync(_loadScreenPage);
+            var response = await _viewModel.ProcessImage(image);
+            if (response != null)
+            {
+                _loadScreenPage.LoadAIResponse(response);
+            }
+            else
+            {
+                _loadScreenPage.LoadAIResponse("Loading error");
+            }
+        }
+    }
+
     private async void OnTakeImageClicked(System.Object sender, System.EventArgs e)
     {
         try
@@ -42,25 +59,8 @@ public partial class PhotoSelectionPage : ContentPage
             {
                 try
                 {
-                    //await Shell.Current.Navigation.PushAsync(new LoadScreenPage());
-                    //return;
-                    
                     var image = await MediaPicker.CapturePhotoAsync();
-
-                    if (image != null)
-                    {
-                        _loadScreenPage = new LoadingScreenPage();
-                        await Shell.Current.Navigation.PushAsync(_loadScreenPage);
-                        var response = await _viewModel.ProcessImage(image);
-                        if (response != null)
-                        {
-                            _loadScreenPage.LoadAIResponse(response);
-                        }
-                        else
-                        {
-                            _loadScreenPage.LoadAIResponse("Loading error");
-                        }
-                    }
+                    await ProcessImage(image);
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -89,14 +89,7 @@ public partial class PhotoSelectionPage : ContentPage
         try
         {
             var image = await MediaPicker.PickPhotoAsync();
-
-            if (image != null)
-            {
-                _loadScreenPage = new LoadingScreenPage();
-                await Shell.Current.Navigation.PushAsync(_loadScreenPage);
-                var response = await _viewModel.ProcessImage(image);
-                _loadScreenPage.LoadAIResponse(response);
-            }
+            await ProcessImage(image);
         }
         catch (Exception ex)
         {

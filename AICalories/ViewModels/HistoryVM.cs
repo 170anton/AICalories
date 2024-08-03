@@ -10,6 +10,7 @@ namespace AICalories.ViewModels
 	public class HistoryVM : INotifyPropertyChanged
     {
         public ObservableCollection<DayGroupedItem> DayGroupedItems { get; private set; }
+        public int HistoryItemCount { get; private set; }
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand ClearAllCommand { get; }
@@ -21,12 +22,11 @@ namespace AICalories.ViewModels
             AddItemCommand = new Command(OnAddItem);
             DeleteItemCommand = new Command<HistoryItem>(OnDeleteItem);
             ClearAllCommand = new Command(OnClearAll);
-            LoadData();
             //Task.Run(() => LoadData());
         }
 
 
-        public async void LoadData()
+        public async Task UpdateData()
         {
             try
             {
@@ -34,6 +34,8 @@ namespace AICalories.ViewModels
 
                 var dateTimeNow = DateTime.Now;
                 var items = await App.Database.GetItemsAsync();
+                HistoryItemCount = items.Count();
+
                 var grouped = items.GroupBy(i => i.Date.Date)
                                    .Select(g => new DayGroupedItem(g.Key))
                                    .OrderByDescending(g => g.Date)
@@ -72,22 +74,27 @@ namespace AICalories.ViewModels
                     Calories = "Calories"
                 };
                 await App.Database.SaveItemAsync(newItem);
-
-                var group = DayGroupedItems.FirstOrDefault(g => g.Date == dateTimeNow.Date);
-                if (group == null)
-                {
-                    group = new DayGroupedItem(dateTimeNow.Date);
-                    DayGroupedItems.Add(group);
-                }
-
-                group.Add(newItem);
-                OnPropertyChanged(nameof(DayGroupedItems));
+                SaveToHistory(dateTimeNow, newItem);
+                HistoryItemCount += 1;
+                //OnPropertyChanged(nameof(DayGroupedItems));
             }
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Sad");
             }
 
+        }
+
+        public void SaveToHistory(DateTime dateTimeNow, HistoryItem newItem)
+        {
+            var group = DayGroupedItems.FirstOrDefault(g => g.Date == dateTimeNow.Date);
+            if (group == null)
+            {
+                group = new DayGroupedItem(dateTimeNow.Date);
+                DayGroupedItems.Add(group);
+            }
+
+            group.Add(newItem);
         }
 
         private async void OnDeleteItem(HistoryItem item)
@@ -106,7 +113,9 @@ namespace AICalories.ViewModels
                         {
                             DayGroupedItems.Remove(group);
                         }
-                        OnPropertyChanged(nameof(DayGroupedItems));
+
+                        HistoryItemCount -= 1;
+                        //OnPropertyChanged(nameof(DayGroupedItems));
                     }
                 }
             }
@@ -123,6 +132,7 @@ namespace AICalories.ViewModels
             {
                 await App.Database.ClearItemsAsync();
                 DayGroupedItems.Clear();
+                HistoryItemCount = 0;
             }
             catch (Exception ex)
             {

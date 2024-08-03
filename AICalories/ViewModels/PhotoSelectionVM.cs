@@ -20,9 +20,9 @@ public class PhotoSelectionVM
 
     private readonly HttpClient client = new HttpClient();
     private const string OpenAIAPIUrl = "https://api.openai.com/v1/chat/completions";
-    private const string BucketName = "aic-images";
-    private readonly RegionEndpoint BucketRegion = RegionEndpoint.EUNorth1;
-    private IAmazonS3 _s3Client;
+    //private const string BucketName = "aic-images";
+    //private readonly RegionEndpoint BucketRegion = RegionEndpoint.EUNorth1;
+    //private IAmazonS3 _s3Client;
     //private readonly APIManager _aPIManager;
 
     //public delegate Task ShowDelegate(string response);
@@ -40,7 +40,7 @@ public class PhotoSelectionVM
         }
 
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
-        _s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
+        //_s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
         //_aPIManager = new APIManager();
     }
 
@@ -51,14 +51,9 @@ public class PhotoSelectionVM
 
             var imagePath = image.FullPath;
             imagePath = await ResizeImage(image.FullPath, 500);
-            //var stream = await image.OpenReadAsync();
-            //capturedImage.Source = ImageSource.FromStream(() => stream);
-            //string res = await ConvertImageToBase64(imagePath);
-            //var imageUrl = await UploadImageToS3(image);
-            //var result = await AnalyzeUrlImage(imageUrl);
 
-            var result = await AnalyzeLocalImage(imagePath);
-            //AddItemToDB(imagePath, result.Substring(0,8));
+            ResponseData result = await AnalyzeLocalImage(imagePath);
+            await AddItemToDB(imagePath, result);
 
             return result;
         }
@@ -71,91 +66,95 @@ public class PhotoSelectionVM
 
     private async Task<ResponseData> AnalyzeLocalImage(string imagePath)
     {
-        byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
-        string base64Image = Convert.ToBase64String(imageArray);
+        string base64Image = ConvertToBase64(imagePath);
 
-        var requestData = RequestData.GetFirstPrompt(base64Image);
-        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await SendRequestToApi(base64Image);
 
-        var response = await client.PostAsync(OpenAIAPIUrl, content);
-        response.EnsureSuccessStatusCode();
-
-        var responseString = await response.Content.ReadAsStringAsync();
-        dynamic rawResult = JsonConvert.DeserializeObject(responseString);
-
-        string stringRawResult = rawResult.choices[0].message.tool_calls[0].function.arguments;
+        string stringRawResult = await ExtractValidResponse(response);
 
         dynamic result = JsonConvert.DeserializeObject(stringRawResult);
 
-        //return rawResult.choices[0].message.content;
-        //return jsonResponse.ToString(Formatting.Indented);
         var responseData = new ResponseData();
         responseData.DishName = result.dish_name;
         responseData.Calories = result.calories;
 
         return responseData;
-        
+
     }
 
-    private async Task<string> UploadImageToS3(FileResult image)
+    private static async Task<string> ExtractValidResponse(HttpResponseMessage response)
     {
-        try
-        {
-            var imageStream = await image.OpenReadAsync();
-            var fileName = image.FileName;
-
-            var uploadRequest = new PutObjectRequest
-            {
-                InputStream = imageStream,
-                BucketName = BucketName,
-                Key = fileName,
-                ContentType = "image/jpeg"
-            };
-
-            var response = await _s3Client.PutObjectAsync(uploadRequest);
-            return $"https://{BucketName}.s3.{BucketRegion.SystemName}.amazonaws.com/{fileName}";
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-        
+        var responseString = await response.Content.ReadAsStringAsync();
+        dynamic rawResult = JsonConvert.DeserializeObject(responseString);
+        string stringRawResult = rawResult.choices[0].message.tool_calls[0].function.arguments;
+        return stringRawResult;
     }
 
-    private async Task<string> AnalyzeUrlImage(string imageUrl)
+    private async Task<HttpResponseMessage> SendRequestToApi(string base64Image)
     {
-        try
-        {
-            //byte[] imageArray = System.IO.File.ReadAllBytes(_photoPath);
-
-            //string base64Image = Convert.ToBase64String(imageArray);
-
-            //HttpClient client = new HttpClient();
-            //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
-
-            var requestData = RequestData.GetSecondPrompt(imageUrl);
-
-            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-
-            var response = await client.PostAsync(OpenAIAPIUrl, content);
-            response.EnsureSuccessStatusCode();
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            dynamic result = JsonConvert.DeserializeObject(responseString);
-            //var responseObject = JObject.Parse(responseString);
-            //int result = responseObject["result"]?.Value<int>() ?? 0;
-            //return result.ToString();
-            return result.choices[0].message.content;
-        }
-        catch (HttpRequestException httpRequestException)
-        {
-            return $"Request error: {httpRequestException.Message}";
-        }
-        catch (Exception ex)
-        {
-            return $"An error occurred: {ex.Message}";
-        }
+        var requestData = RequestData.GetFirstPrompt(base64Image);
+        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(OpenAIAPIUrl, content);
+        response.EnsureSuccessStatusCode();
+        return response;
     }
+
+    private static string ConvertToBase64(string imagePath)
+    {
+        byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
+        string base64Image = Convert.ToBase64String(imageArray);
+        return base64Image;
+    }
+
+    //private async Task<string> UploadImageToS3(FileResult image)
+    //{
+    //    try
+    //    {
+    //        var imageStream = await image.OpenReadAsync();
+    //        var fileName = image.FileName;
+
+    //        var uploadRequest = new PutObjectRequest
+    //        {
+    //            InputStream = imageStream,
+    //            BucketName = BucketName,
+    //            Key = fileName,
+    //            ContentType = "image/jpeg"
+    //        };
+
+    //        var response = await _s3Client.PutObjectAsync(uploadRequest);
+    //        return $"https://{BucketName}.s3.{BucketRegion.SystemName}.amazonaws.com/{fileName}";
+    //    }
+    //    catch (Exception)
+    //    {
+    //        throw;
+    //    }
+        
+    //}
+
+    //private async Task<string> AnalyzeUrlImage(string imageUrl)
+    //{
+    //    try
+    //    {
+    //        var requestData = RequestData.GetSecondPrompt(imageUrl);
+
+    //        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+
+    //        var response = await client.PostAsync(OpenAIAPIUrl, content);
+    //        response.EnsureSuccessStatusCode();
+
+    //        var responseString = await response.Content.ReadAsStringAsync();
+    //        dynamic result = JsonConvert.DeserializeObject(responseString);
+    //        return result.choices[0].message.content;
+    //    }
+    //    catch (HttpRequestException httpRequestException)
+    //    {
+    //        return $"Request error: {httpRequestException.Message}";
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return $"An error occurred: {ex.Message}";
+    //    }
+    //}
 
     private void LoadSecrets()
     {
@@ -182,7 +181,7 @@ public class PhotoSelectionVM
             Console.WriteLine($"Error loading secrets: {ex.Message}");
         }
     }
-    private async void AddItemToDB(string? image, string? calories)
+    private async Task AddItemToDB(string image, ResponseData responseData)
     {
         try
         {
@@ -192,9 +191,12 @@ public class PhotoSelectionVM
                 Date = dateTimeNow,
                 Time = dateTimeNow.ToString("HH:mm"),
                 ImagePath = image,
-                Calories = calories
+                Calories = responseData.Calories
             };
             await App.Database.SaveItemAsync(newItem);
+            //HistoryVM.SaveToHistory(dateTimeNow, newItem);
+            //AppShell.Current
+
 
         }
         catch (Exception ex)

@@ -16,12 +16,18 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         InitializeComponent();
         _viewModel = new HistoryVM();
         BindingContext = _viewModel;
-        //Task.Run(() => _viewModel.LoadData()); //do not await
+        //Task.Run(() => §.LoadData()); //do not await
     }
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        //_viewModel.LoadData();
+        //UpdateData();
+        //var a = await App.Database.GetCountAsync();
+        //var b = _viewModel.HistoryItemCount;
+        if (await App.Database.GetCountAsync() != _viewModel.HistoryItemCount)
+        {
+            await _viewModel.UpdateData();
+        }
     }
 
     private void ShowOverlay()

@@ -13,7 +13,7 @@ namespace AICalories.Models
             {
                 response_format = new { type = "json_object" },
                 tool_choice = "required",  //function calling
-                max_tokens = 2000,
+                max_tokens = 500,
                 temperature = 0,
                 model = "gpt-4o",
                 messages = new object[]
@@ -60,13 +60,7 @@ namespace AICalories.Models
                                 text = "What ingredients are there, what size, what weight, and how many calories it has?" +
                                 "Calories must be calculated as precise as possible, considering every unit" +
                                 "Output result in a JSON format"
-                                //"Must be only 'dish', 'calories' properties"
                             },
-                            //new
-                            //{
-                            //    type = "text",
-                            //    text = "What is this dish and how much calories in total in has?"
-                            //},
                             new
                             {
                                 type = "image_url",
