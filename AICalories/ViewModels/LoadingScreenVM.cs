@@ -4,19 +4,33 @@ using System.Runtime.CompilerServices;
 
 namespace AICalories.ViewModels
 {
-	public class LoadScreenVM : INotifyPropertyChanged
+	public class LoadingScreenVM : INotifyPropertyChanged
     {
         private bool isRefreshing;
-        private string aIResponse;
+        private string dishName;
+        private string calories;
 
-        public string AIResponse
+        public string DishName
         {
-            get => aIResponse;
+            get => dishName;
             set
             {
-                if (aIResponse != value)
+                if (dishName != value)
                 {
-                    aIResponse = value;
+                    dishName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Calories
+        {
+            get => calories;
+            set
+            {
+                if (calories != value)
+                {
+                    calories = value;
                     OnPropertyChanged();
                 }
             }
@@ -34,7 +48,7 @@ namespace AICalories.ViewModels
             }
         }
 
-        public LoadScreenVM()
+        public LoadingScreenVM()
 		{
             isRefreshing = true;
 		}

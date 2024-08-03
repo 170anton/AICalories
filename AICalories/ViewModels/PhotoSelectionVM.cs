@@ -8,13 +8,12 @@ using Amazon.S3.Model;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AICalories.ViewModels;
 
 public class PhotoSelectionVM
 {
-    private string _photoPath;
-
     private string OpenAIAPIKey;
     private string AwsAccessKeyId;
     private string AwsSecretAccessKey;
@@ -30,7 +29,6 @@ public class PhotoSelectionVM
     //public ShowDelegate OnShowResponseRequested;
     //public ShowDelegate OnShowAlertRequested;
 
-    public string PhotoPath { get => _photoPath; set => _photoPath = value; }
     //public bool HasRecievedSecrets { get; set; }
 
     public PhotoSelectionVM()
@@ -46,21 +44,22 @@ public class PhotoSelectionVM
         //_aPIManager = new APIManager();
     }
 
-    public async Task<string> ProcessImage(FileResult image)
+    public async Task<ResponseData> ProcessImage(FileResult image)
     {
         try
         {
 
-            //_photoPath = image.FullPath;
-            _photoPath = ResizeImage(image.FullPath, 2000);
-            var stream = await image.OpenReadAsync();
+            var imagePath = image.FullPath;
+            imagePath = await ResizeImage(image.FullPath, 500);
+            //var stream = await image.OpenReadAsync();
             //capturedImage.Source = ImageSource.FromStream(() => stream);
+            //string res = await ConvertImageToBase64(imagePath);
+            //var imageUrl = await UploadImageToS3(image);
+            //var result = await AnalyzeUrlImage(imageUrl);
 
-            var imageUrl = await UploadImageToS3(stream, image.FileName);
-            var result = await AnalyzeImageWithOpenAI(imageUrl);
-            AddItemToDB(_photoPath, result.Substring(0,8));
+            var result = await AnalyzeLocalImage(imagePath);
+            //AddItemToDB(imagePath, result.Substring(0,8));
 
-            //await OnShowResponseRequested(result);
             return result;
         }
         catch (Exception)
@@ -70,10 +69,41 @@ public class PhotoSelectionVM
         }
     }
 
-    private async Task<string> UploadImageToS3(Stream imageStream, string fileName)
+    private async Task<ResponseData> AnalyzeLocalImage(string imagePath)
+    {
+        byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
+        string base64Image = Convert.ToBase64String(imageArray);
+
+        var requestData = RequestData.GetFirstPrompt(base64Image);
+        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync(OpenAIAPIUrl, content);
+        response.EnsureSuccessStatusCode();
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        dynamic rawResult = JsonConvert.DeserializeObject(responseString);
+
+        string stringRawResult = rawResult.choices[0].message.tool_calls[0].function.arguments;
+
+        dynamic result = JsonConvert.DeserializeObject(stringRawResult);
+
+        //return rawResult.choices[0].message.content;
+        //return jsonResponse.ToString(Formatting.Indented);
+        var responseData = new ResponseData();
+        responseData.DishName = result.dish_name;
+        responseData.Calories = result.calories;
+
+        return responseData;
+        
+    }
+
+    private async Task<string> UploadImageToS3(FileResult image)
     {
         try
         {
+            var imageStream = await image.OpenReadAsync();
+            var fileName = image.FileName;
+
             var uploadRequest = new PutObjectRequest
             {
                 InputStream = imageStream,
@@ -91,28 +121,8 @@ public class PhotoSelectionVM
         }
         
     }
-    private async Task<string> DeleteImageFromS3(Stream imageStream, string fileName)
-    {
-        try
-        {
-            var uploadRequest = new PutObjectRequest
-            {
-                InputStream = imageStream,
-                BucketName = BucketName,
-                Key = fileName,
-                ContentType = "image/jpeg"
-            };
 
-            var response = await _s3Client.PutObjectAsync(uploadRequest);
-            return $"https://{BucketName}.s3.{BucketRegion.SystemName}.amazonaws.com/{fileName}";
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-
-    }
-    private async Task<string> AnalyzeImageWithOpenAI(string imageUrl)
+    private async Task<string> AnalyzeUrlImage(string imageUrl)
     {
         try
         {
@@ -122,35 +132,8 @@ public class PhotoSelectionVM
 
             //HttpClient client = new HttpClient();
             //client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
-            var requestData = new
-            {
-                max_tokens = 100,
-                //temperature = 0.1,
-                model = "gpt-4o",
-                messages = new[]
-                {
-                    new
-                    {
-                        role = "user",
-                        content = new object[]
-                        {
-                            new
-                            {
-                                type = "text",
-                                text = "How much calories is this dish?"
-                            },
-                            new
-                            {
-                                type = "image_url",
-                                image_url = new
-                                {
-                                    url = imageUrl
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+
+            var requestData = RequestData.GetSecondPrompt(imageUrl);
 
             var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
 
@@ -159,7 +142,9 @@ public class PhotoSelectionVM
 
             var responseString = await response.Content.ReadAsStringAsync();
             dynamic result = JsonConvert.DeserializeObject(responseString);
-
+            //var responseObject = JObject.Parse(responseString);
+            //int result = responseObject["result"]?.Value<int>() ?? 0;
+            //return result.ToString();
             return result.choices[0].message.content;
         }
         catch (HttpRequestException httpRequestException)
@@ -174,30 +159,12 @@ public class PhotoSelectionVM
 
     private void LoadSecrets()
     {
-        //var keyVaultService = new KeyVaultService();
-
         try
         {
-            //AwsAccessKeyId = "AKIAQEIP3KP43FCWEAXH";
-            //AwsSecretAccessKey = "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";
-            //    //AwsAccessKeyId = await keyVaultService.GetSecretAsync("AwsAccessKeyId");
-            //    //AwsSecretAccessKey = await keyVaultService.GetSecretAsync("AwsSecretAccessKey");
-            //OpenAIAPIKey = await keyVaultService.GetSecretAsync("OpenAIAPIKey", "1f734d43cdb646e19c215c4e7cb25ccf");
-            //    //OpenAIAPIKey = await _secretClient.GetSecretAsync(secretName)
-
-            //    //var secrets = await _aPIManager.GetSecretsAsync();
-
-            //    //AwsAccessKeyId = secrets["AwsAccessKeyId"];
-            //    //AwsSecretAccessKey = secrets["AwsSecretAccessKey"];
-            //    //OpenAIAPIKey = secrets["OpenAIAPIKey"];
-
             var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
 
             var keyStorageService = new KeyStorageService(encryptionKey);
 
-            // Store keys securely
-
-            // Retrieve and use keys
             var keys = keyStorageService.RetrieveKeys();
 
             Console.WriteLine($"AWS Access Key ID: {keys.AWSAccessKeyId}");
@@ -237,7 +204,7 @@ public class PhotoSelectionVM
 
     }
 
-    private string ResizeImage(string imagePath, int maxRes)
+    private async Task<string> ResizeImage(string imagePath, int maxRes)
     {
         string tempFilePath = Path.GetTempFileName();
 

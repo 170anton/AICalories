@@ -24,7 +24,7 @@
 		<ApplicationTitle>AICalories</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.aicalories</ApplicationId>
+		<ApplicationId>com.visionlive.aicalories</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>0.3.0</ApplicationDisplayVersion>
@@ -42,6 +42,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>iPhone Developer</CodesignKey>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 	  <WarningLevel>4</WarningLevel>

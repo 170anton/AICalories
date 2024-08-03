@@ -14,7 +14,7 @@ public partial class PhotoSelectionPage : ContentPage
 {
     private string _photoPath;
     private PhotoSelectionVM _viewModel;
-    private LoadScreenPage _loadScreenPage;
+    private LoadingScreenPage _loadScreenPage;
 
     public PhotoSelectionPage()
 	{
@@ -44,23 +44,32 @@ public partial class PhotoSelectionPage : ContentPage
                 {
                     //await Shell.Current.Navigation.PushAsync(new LoadScreenPage());
                     //return;
+                    
                     var image = await MediaPicker.CapturePhotoAsync();
 
                     if (image != null)
                     {
-                        _loadScreenPage = new LoadScreenPage();
+                        _loadScreenPage = new LoadingScreenPage();
                         await Shell.Current.Navigation.PushAsync(_loadScreenPage);
-                        string response = await _viewModel.ProcessImage(image);
-                        _loadScreenPage.LoadAIResponse(response);
-                        //await ShowResponse(response);
+                        var response = await _viewModel.ProcessImage(image);
+                        if (response != null)
+                        {
+                            _loadScreenPage.LoadAIResponse(response);
+                        }
+                        else
+                        {
+                            _loadScreenPage.LoadAIResponse("Loading error");
+                        }
                     }
                 }
                 catch (ArgumentNullException ex)
                 {
+                    _loadScreenPage.LoadAIResponse("Loading error");
                     await ShowError("No connection to OpenAI");
                 }
                 catch (Exception ex)
                 {
+                    _loadScreenPage.LoadAIResponse("Loading error");
                     await ShowError($"An error occurred: {ex.Message}");
                 }
             }
@@ -68,17 +77,6 @@ public partial class PhotoSelectionPage : ContentPage
             {
                 await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
             }
-            //FileResult? image;
-            //var device = DeviceInfo.Platform;
-            //var ead = DevicePlatform.macOS;
-            //if (DeviceInfo.Platform == DevicePlatform.MacCatalyst)
-            //{
-            //    image = await MediaPicker.CapturePhotoAsync();
-            //}
-            //else
-            //{
-            //    image = await MediaPicker.CapturePhotoAsync();
-            //}
         }
         catch (Exception ex)
         {
@@ -94,11 +92,15 @@ public partial class PhotoSelectionPage : ContentPage
 
             if (image != null)
             {
-                _viewModel.ProcessImage(image);//await
+                _loadScreenPage = new LoadingScreenPage();
+                await Shell.Current.Navigation.PushAsync(_loadScreenPage);
+                var response = await _viewModel.ProcessImage(image);
+                _loadScreenPage.LoadAIResponse(response);
             }
         }
         catch (Exception ex)
         {
+            _loadScreenPage.LoadAIResponse("Loading error");
             await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
         }
     }
@@ -107,7 +109,7 @@ public partial class PhotoSelectionPage : ContentPage
     {
         try
         {
-            await Shell.Current.CurrentPage.DisplayAlert("Analysis Result", response, "Ok");
+            await Application.Current.MainPage.DisplayAlert("Analysis Result", response, "Ok");
         }
         catch (Exception ex)
         {
@@ -119,7 +121,7 @@ public partial class PhotoSelectionPage : ContentPage
     {
         try
         {
-            await Shell.Current.CurrentPage.DisplayAlert("Error", response, "Sad");
+            await Application.Current.MainPage.DisplayAlert("Error", response, "Sad");
         }
         catch (Exception ex)
         {

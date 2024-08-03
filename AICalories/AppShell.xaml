@@ -36,6 +36,24 @@
        </Tab>
     </FlyoutItem>
     
+    <FlyoutItem Title="Donate">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+       </Tab>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Help">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+       </Tab>
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Support">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+       </Tab>
+    </FlyoutItem>
+    
     <FlyoutItem Title="About">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
