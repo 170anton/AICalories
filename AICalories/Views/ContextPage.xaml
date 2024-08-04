@@ -2,7 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AICalories.Views.ContextPage"
-             >
+             xmlns:converters="clr-namespace:AICalories.Models">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ScrollView>
     <VerticalStackLayout>
         <Frame Style="{StaticResource ShadowFrameStyle}"
@@ -15,18 +22,21 @@
                            HorizontalTextAlignment="Start"/> 
                     <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
                            CheckedChanged="RadioButton_CheckedChanged" 
-                           Value="Diet" />
+                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Diet', Mode=TwoWay}"
+                           Value="Diet"/>
 
                     <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
                            HorizontalTextAlignment="Start"/> 
                     <RadioButton Grid.Column="1" Grid.Row="1"
                            CheckedChanged="RadioButton_CheckedChanged" 
-                           Value="Healthy"    />
+                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Healthy', Mode=TwoWay}"
+                           Value="Healthy"/>
 
                     <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
                            HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="2" IsChecked="True"
+                    <RadioButton Grid.Column="1" Grid.Row="2"
                            CheckedChanged="RadioButton_CheckedChanged" 
+                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Regular', Mode=TwoWay}"
                            Value="Regular"/>
                 
                     <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
