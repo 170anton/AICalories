@@ -10,7 +10,6 @@ namespace AICalories.ViewModels
 	public class HistoryVM : INotifyPropertyChanged
     {
         public ObservableCollection<DayGroupedItem> DayGroupedItems { get; private set; }
-        public int HistoryItemCount { get; private set; }
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand ClearAllCommand { get; }
@@ -34,7 +33,6 @@ namespace AICalories.ViewModels
 
                 var dateTimeNow = DateTime.Now;
                 var items = await App.Database.GetItemsAsync();
-                HistoryItemCount = items.Count();
 
                 var grouped = items.GroupBy(i => i.Date.Date)
                                    .Select(g => new DayGroupedItem(g.Key))
@@ -75,7 +73,6 @@ namespace AICalories.ViewModels
                 };
                 await App.Database.SaveItemAsync(newItem);
                 SaveToHistory(dateTimeNow, newItem);
-                HistoryItemCount += 1;
                 //OnPropertyChanged(nameof(DayGroupedItems));
             }
             catch (Exception ex)
@@ -85,13 +82,15 @@ namespace AICalories.ViewModels
 
         }
 
-        public void SaveToHistory(DateTime dateTimeNow, HistoryItem newItem)
+        private async void SaveToHistory(DateTime dateTimeNow, HistoryItem newItem)
         {
             var group = DayGroupedItems.FirstOrDefault(g => g.Date == dateTimeNow.Date);
             if (group == null)
             {
                 group = new DayGroupedItem(dateTimeNow.Date);
                 DayGroupedItems.Add(group);
+                //ObservColl does not sort
+                await UpdateData();
             }
 
             group.Add(newItem);
@@ -105,7 +104,7 @@ namespace AICalories.ViewModels
                 if (item != null)
                 {
                     await App.Database.DeleteItemAsync(item);
-                    var group = DayGroupedItems.FirstOrDefault(g => g.Date == dateTimeNow.Date);
+                    var group = DayGroupedItems.FirstOrDefault(g => g.Date == item.Date.Date);
                     if (group != null)
                     {
                         group.Remove(item);
@@ -114,7 +113,6 @@ namespace AICalories.ViewModels
                             DayGroupedItems.Remove(group);
                         }
 
-                        HistoryItemCount -= 1;
                         //OnPropertyChanged(nameof(DayGroupedItems));
                     }
                 }
@@ -132,7 +130,6 @@ namespace AICalories.ViewModels
             {
                 await App.Database.ClearItemsAsync();
                 DayGroupedItems.Clear();
-                HistoryItemCount = 0;
             }
             catch (Exception ex)
             {

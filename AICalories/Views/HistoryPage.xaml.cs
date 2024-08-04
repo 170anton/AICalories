@@ -21,10 +21,10 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        //UpdateData();
-        //var a = await App.Database.GetCountAsync();
-        //var b = _viewModel.HistoryItemCount;
-        if (await App.Database.GetCountAsync() != _viewModel.HistoryItemCount)
+
+        var countInDb = await App.Database.GetCountAsync();
+        var countInColl = _viewModel.DayGroupedItems.SelectMany(grouped => grouped).Count();
+        if (countInDb != countInColl)
         {
             await _viewModel.UpdateData();
         }

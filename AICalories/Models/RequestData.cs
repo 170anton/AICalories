@@ -66,7 +66,8 @@ namespace AICalories.Models
                                 type = "image_url",
                                 image_url = new
                                 {
-                                    url = $"data:image/jpeg;base64,{base64Image}"
+                                    url = $"data:image/jpeg;base64,{base64Image}",
+                                    detail = "high"
                                 }
                             }
                         }
