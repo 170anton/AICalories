@@ -1,6 +1,7 @@
 using System.Data;
 using System.Text;
 using AICalories;
+using AICalories.DI;
 using AICalories.ViewModels;
 using Amazon;
 using Amazon.S3;
@@ -20,8 +21,13 @@ public partial class PhotoSelectionPage : ContentPage
 		InitializeComponent();
         try
         {
-            _viewModel = new PhotoSelectionVM();
-            BindingContext = _viewModel;
+            var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
+            if (viewModelLocator != null)
+            {
+                _viewModel = viewModelLocator.GetPhotoSelectionViewModel();
+                BindingContext = _viewModel;
+
+            }
         }
         catch (Exception)
         {

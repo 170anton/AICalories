@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.4.0</ReleaseVersion>
+		<ReleaseVersion>0.5.0</ReleaseVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -90,6 +90,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models/" />
+	  <Folder Include="DI\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -103,5 +104,6 @@
 	  <None Remove="Resources\Images\icons8-history-100.png" />
 	  <None Remove=".gitignore" />
 	  <None Remove="Resources\Layout\activity_main.xml" />
+	  <None Remove="DI\" />
 	</ItemGroup>
 </Project>

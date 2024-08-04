@@ -1,17 +1,28 @@
-﻿using AICalories.Views;
+﻿using AICalories.DI;
+using AICalories.Views;
 
 namespace AICalories;
 
 public partial class AppShell : Shell
 {
+    private readonly ViewModelLocator _viewModelLocator;
     private bool isNavigating = false;
     public string AppVersionLabel { get; set; }
 
-    public AppShell()
+    public AppShell(ViewModelLocator viewModelLocator)
     {
         AppVersionLabel = $"Version: Alpha {AppInfo.VersionString}";
         InitializeComponent();
+        _viewModelLocator = viewModelLocator;
         BindingContext = this;
+
+        // Ensure your pages get their view models
+        Routing.RegisterRoute("main", typeof(PhotoSelectionPage));
+        Routing.RegisterRoute("context", typeof(ContextPage));
+
+        //Routing.RegisterRoute(nameof(ContextPage), typeof(ContextPage));
+        //Routing.RegisterRoute(nameof(PhotoSelectionPage), typeof(PhotoSelectionPage));
+
         this.Navigating += OnNavigating;
     }
 

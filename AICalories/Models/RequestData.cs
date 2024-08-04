@@ -7,13 +7,13 @@ namespace AICalories.Models
         private static object secondPrompt;
 
 
-        public static object GetFirstPrompt(string base64Image)
+        public static object GetFirstPrompt(string base64Image, string dishType)
         {
             firstPrompt = new
             {
                 response_format = new { type = "json_object" },
                 tool_choice = "required",  //function calling
-                max_tokens = 500,
+                max_tokens = 1000,
                 temperature = 0,
                 model = "gpt-4o",
                 messages = new object[]
@@ -24,31 +24,6 @@ namespace AICalories.Models
                         content = "You are a gastronomic expert"
                     },
 
-                    //new
-                    //{
-                    //    role = "user",
-                    //    content = new object[]
-                    //    {
-                    //        new
-                    //        {
-                    //            type = "text",
-                    //            text = "Analyze this dish, its engredients, size, weight, and calories "
-                    //        },
-                    //        //new
-                    //        //{
-                    //        //    type = "text",
-                    //        //    text = "What is this dish and how much calories in total in has?"
-                    //        //},
-                    //        new
-                    //        {
-                    //            type = "image_url",
-                    //            image_url = new
-                    //            {
-                    //                url = $"data:image/jpeg;base64,{base64Image}"
-                    //            }
-                    //        }
-                    //    }
-                    //},
                     new
                     {
                         role = "user",
@@ -57,9 +32,9 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = "What ingredients are there, what size, what weight, and how many calories it has?" +
-                                "Calories must be calculated as precise as possible, considering every unit" +
-                                "Output result in a JSON format"
+                                text = $"What ingredients are in this dish? There are {dishType} ingredients" +
+                                "Amount, weight and calories of ingredients must be calculated as precise as possible" +
+                                "Output result in a JSON format."
                             },
                             new
                             {
@@ -67,7 +42,7 @@ namespace AICalories.Models
                                 image_url = new
                                 {
                                     url = $"data:image/jpeg;base64,{base64Image}",
-                                    detail = "high"
+                                    detail = "low"
                                 }
                             }
                         }
@@ -81,23 +56,51 @@ namespace AICalories.Models
                         function = new
                         {
                             name = "gastronomic_expert",
-                            description = "Analyze image",
+                            description = "Analyze this dish and its amount of calories",
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "dish_name", "calories" },
+                                required = new[] { "ingredients", "dish_name", "calories",  },
                                 properties = new
                                 {
+                                    ingredients = new
+                                    {
+                                        type = "array",
+                                        description = "List of ingredients and their calories",
+                                        items = new
+                                        {
+                                            type = "object",
+                                            properties = new
+                                            {
+                                                ingredient_name = new
+                                                {
+                                                    type = "string",
+                                                    description = "Name of the ingredient"
+                                                },
+                                                ingredient_weight = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Weight of the ingredient"
+                                                },
+                                                ingredient_calories = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Calories of the ingredient"
+                                                }
+                                            },
+                                            required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories" }
+                                        },
+                                    },
                                     dish_name = new
                                     {
                                         type = "string",
-                                        description = "Name of the dish"
+                                        description = "Summarize and give the name of the dish"
                                     },
                                     calories = new
                                     {
-                                        type = "string",
-                                        description = "Amount of calories"
-                                    }
+                                        type = "integer",
+                                        description = "Summarize calories of engredients and give total amount of calories of the dish"
+                                    },
                                 }
                             },
                         }

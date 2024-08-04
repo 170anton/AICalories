@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Text;
 using System.Windows.Input;
+using AICalories.DI;
 using AICalories.Models;
 using Amazon;
 using Amazon.S3;
@@ -18,6 +19,7 @@ public class PhotoSelectionVM
     private string AwsAccessKeyId;
     private string AwsSecretAccessKey;
 
+    private readonly IViewModelService _viewModelService;
     private readonly HttpClient client = new HttpClient();
     private const string OpenAIAPIUrl = "https://api.openai.com/v1/chat/completions";
     //private const string BucketName = "aic-images";
@@ -30,9 +32,13 @@ public class PhotoSelectionVM
     //public ShowDelegate OnShowAlertRequested;
 
     //public bool HasRecievedSecrets { get; set; }
+    public ContextVM ContextVM => _viewModelService.ContextVM;
 
-    public PhotoSelectionVM()
+    public PhotoSelectionVM(IViewModelService viewModelService)
     {
+        _viewModelService = viewModelService;
+        _viewModelService.PhotoSelectionVM = this;
+
         LoadSecrets();
         if (OpenAIAPIKey == null)
         {
@@ -50,12 +56,18 @@ public class PhotoSelectionVM
         {
 
             var imagePath = image.FullPath;
-            imagePath = await ResizeImage(image.FullPath, 500);
+            imagePath = await ResizeImage(image.FullPath, 1000);
 
-            ResponseData result = await AnalyzeLocalImage(imagePath);
-            await AddItemToDB(imagePath, result);
+            ResponseData resultOne = await AnalyzeLocalImage(imagePath);
+            ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
+            ResponseData resultFinal = new ResponseData()
+            {
+                DishName = resultTwo.DishName,
+                Calories = (resultOne.Calories + resultTwo.Calories) / 2
+            };
+            //await AddItemToDB(imagePath, resultFinal);
 
-            return result;
+            return resultFinal;
         }
         catch (Exception)
         {
@@ -92,7 +104,7 @@ public class PhotoSelectionVM
 
     private async Task<HttpResponseMessage> SendRequestToApi(string base64Image)
     {
-        var requestData = RequestData.GetFirstPrompt(base64Image);
+        var requestData = RequestData.GetFirstPrompt(base64Image, ContextVM.SelectedOption);
         var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
         var response = await client.PostAsync(OpenAIAPIUrl, content);
         response.EnsureSuccessStatusCode();
@@ -191,7 +203,7 @@ public class PhotoSelectionVM
                 Date = dateTimeNow,
                 Time = dateTimeNow.ToString("HH:mm"),
                 ImagePath = image,
-                Calories = responseData.Calories
+                Calories = responseData.Calories.ToString()
             };
             await App.Database.SaveItemAsync(newItem);
             //HistoryVM.SaveToHistory(dateTimeNow, newItem);
@@ -215,6 +227,12 @@ public class PhotoSelectionVM
             using (var inputStream = File.OpenRead(imagePath))
             {
                 var image = PlatformImage.FromStream(inputStream, ImageFormat.Jpeg);
+
+                if (maxRes >= image.Width && maxRes >= image.Height)
+                {
+                    return imagePath;
+                }
+
                 var resizedImage = image.Downsize(maxRes);
 
                 using (var outputStream = File.Create(tempFilePath))

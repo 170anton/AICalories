@@ -17,12 +17,9 @@
     </Shell.NavBarHasShadow>
 
     <TabBar>
-        <Tab Title="Photo"
-             Icon="camera.png">
-            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Shell.NavBarIsVisible="False"  Route="main">
-            
-            </ShellContent>
-            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}" Shell.NavBarIsVisible="False"  Route="context"/>
+        <Tab Title="Photo" Icon="camera.png">
+            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Shell.NavBarIsVisible="False" Route="main"/>
+            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}" Shell.NavBarIsVisible="False" Route="context"/>
         </Tab>
         <Tab Title="History"
              Icon="history2.png">

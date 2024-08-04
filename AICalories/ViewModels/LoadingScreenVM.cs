@@ -17,6 +17,7 @@ namespace AICalories.ViewModels
             {
                 if (dishName != value)
                 {
+
                     dishName = value;
                     OnPropertyChanged();
                 }

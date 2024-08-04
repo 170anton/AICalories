@@ -6,8 +6,5 @@
              x:Name="leftSidePanelPage"
              Title="LeftSidePanelPage">
         <NavigationPage>
-            <x:Arguments>
-                <local:HomePage />
-            </x:Arguments>
         </NavigationPage>
 </FlyoutPage>

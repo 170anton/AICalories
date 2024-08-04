@@ -1,4 +1,6 @@
-﻿using AICalories.Models;
+﻿using AICalories.DI;
+using AICalories.Models;
+using AICalories.ViewModels;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls;
 using SkiaSharp.Views.Maui.Handlers;
@@ -27,8 +29,21 @@ public static class MauiProgram
                 fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
             });
 
+
+        // Register the view model service
+        builder.Services.AddSingleton<IViewModelService, ViewModelService>();
+
+        // Register view models
+        builder.Services.AddTransient<PhotoSelectionVM>();
+        builder.Services.AddTransient<ContextVM>();
+
+        builder.Services.AddSingleton<ViewModelLocator>();
+        builder.Services.AddSingleton<AppShell>();
+
+
+
 #if DEBUG
-		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();

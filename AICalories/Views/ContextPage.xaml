@@ -13,15 +13,21 @@
                 <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
                     <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
                            HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}"/>
+                    <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
+                           CheckedChanged="RadioButton_CheckedChanged" 
+                           Value="Diet" />
 
                     <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
                            HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="1"/>
+                    <RadioButton Grid.Column="1" Grid.Row="1"
+                           CheckedChanged="RadioButton_CheckedChanged" 
+                           Value="Healthy"    />
 
                     <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
                            HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="2" IsChecked="True"/>
+                    <RadioButton Grid.Column="1" Grid.Row="2" IsChecked="True"
+                           CheckedChanged="RadioButton_CheckedChanged" 
+                           Value="Regular"/>
                 
                     <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
                            HorizontalTextAlignment="Start"/> 
