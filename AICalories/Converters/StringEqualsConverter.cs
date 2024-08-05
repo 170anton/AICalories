@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace AICalories.Models
+namespace AICalories.Converters
 {
     public class StringEqualsConverter : IValueConverter
     {

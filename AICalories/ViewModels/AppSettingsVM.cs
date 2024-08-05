@@ -51,7 +51,7 @@ namespace AICalories.ViewModels
             _viewModelService = viewModelService;
             _viewModelService.AppSettingsVM = this;
 
-            IsDarkMode = Application.Current.RequestedTheme == AppTheme.Dark;
+            //IsDarkMode = Application.Current.RequestedTheme == AppTheme.Dark;
 
             ToggleDarkModeCommand = new Command(() => IsDarkMode = !IsDarkMode);
             ToggleSaveToGalleryCommand = new Command(() => IsSaveToGallery = !IsSaveToGallery);

@@ -1,10 +1,16 @@
-﻿namespace AICalories.Views;
+﻿using AICalories.ViewModels;
+
+namespace AICalories.Views;
 
 public partial class DonatePage : ContentPage
 {
-	public DonatePage()
+    private DonateVM _viewModel;
+
+    public DonatePage()
 	{
 		InitializeComponent();
+        _viewModel = new DonateVM();
+        BindingContext = _viewModel;
     }
 
     protected override bool OnBackButtonPressed()

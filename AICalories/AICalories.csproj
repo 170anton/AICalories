@@ -92,6 +92,8 @@
 	  <Folder Include="Models/" />
 	  <Folder Include="DI\" />
 	  <Folder Include="Views\CustomViews\" />
+	  <Folder Include="Converters\" />
+	  <Folder Include="CustomControls\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -107,5 +109,7 @@
 	  <None Remove="Resources\Layout\activity_main.xml" />
 	  <None Remove="DI\" />
 	  <None Remove="Views\CustomViews\" />
+	  <None Remove="Converters\" />
+	  <None Remove="CustomControls\" />
 	</ItemGroup>
 </Project>

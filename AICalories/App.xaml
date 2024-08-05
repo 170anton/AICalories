@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AICalories"
+             xmlns:converters="clr-namespace:AICalories.Converters"
              x:Class="AICalories.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,6 +12,24 @@
                 <!--<ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>-->
                 <!--<ResourceDictionary Source="Resources/Styles/DarkTheme.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
+
+            
+            <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Editor">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+
 
             <Style x:Key="ImageOptionStyle" TargetType="Button">
                 <!--<Setter Property="Margin" Value="20,0,20,20" />-->
@@ -46,8 +65,6 @@
             
             <Style x:Key="ShadowFrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="True"/>
-                <Setter Property="Padding" Value="20"/>
-                <Setter Property="Padding" Value="20"/>
                 <Setter Property="CornerRadius" Value="20"/>
                 <Setter Property="Padding" Value="30"/>
 
@@ -66,6 +83,17 @@
                 <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
+
+
+
+
+
+
+
+
+
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
