@@ -7,6 +7,7 @@ namespace AICalories.DI
 	{
         PhotoSelectionVM PhotoSelectionVM { get; set; }
         ContextVM ContextVM { get; set; }
+        AppSettingsVM AppSettingsVM { get; set; }
     }
 }
 

@@ -37,6 +37,7 @@ public static class MauiProgram
         // Register view models
         builder.Services.AddTransient<PhotoSelectionVM>();
         builder.Services.AddTransient<ContextVM>();
+        builder.Services.AddTransient<AppSettingsVM>();
 
         builder.Services.AddSingleton<ViewModelLocator>();
         builder.Services.AddSingleton<AppShell>();

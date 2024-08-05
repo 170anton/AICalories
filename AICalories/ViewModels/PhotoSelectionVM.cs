@@ -32,7 +32,8 @@ public class PhotoSelectionVM
     //public ShowDelegate OnShowAlertRequested;
 
     //public bool HasRecievedSecrets { get; set; }
-    public ContextVM ContextVM => _viewModelService.ContextVM;  
+    public ContextVM ContextVM => _viewModelService.ContextVM;
+    public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
     public PhotoSelectionVM(IViewModelService viewModelService)
     {

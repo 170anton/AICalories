@@ -20,7 +20,6 @@
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
                 <Switch Grid.Column="1"
-                        IsToggled="True"
                         Scale="1.3"/>
             </Grid>
         </Frame>
@@ -30,7 +29,8 @@
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
                 <Switch Grid.Column="1"
-                        Scale="1.3"/>
+                        Scale="1.3"
+                        IsToggled="{Binding IsSaveToGallery, Mode=TwoWay}" />
             </Grid>
         </Frame>
     </Grid>

@@ -19,7 +19,8 @@ public partial class AppShell : Shell
         // Ensure your pages get their view models
         Routing.RegisterRoute("main", typeof(PhotoSelectionPage));
         Routing.RegisterRoute("context", typeof(ContextPage));
-        
+        Routing.RegisterRoute("settings", typeof(AppSettingsPage));
+
 
         //Routing.RegisterRoute(nameof(ContextPage), typeof(ContextPage));
         //Routing.RegisterRoute(nameof(PhotoSelectionPage), typeof(PhotoSelectionPage));

@@ -27,11 +27,12 @@ public partial class App : Application
         MainPage = serviceProvider.GetRequiredService<AppShell>();
 
         // Ensure ContextPage is initialized
-        InitializeContextPage(serviceProvider);
+        InitializeViewModels(serviceProvider);
     }
 
-    private void InitializeContextPage(IServiceProvider serviceProvider)
+    private void InitializeViewModels(IServiceProvider serviceProvider)
     {
         var contextVM = serviceProvider.GetRequiredService<ContextVM>();
+        var appSettingsVM = serviceProvider.GetRequiredService<AppSettingsVM>();
     }
 }
