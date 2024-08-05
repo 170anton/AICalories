@@ -1,6 +1,7 @@
 ﻿using AICalories.DI;
 using AICalories.Models;
 using AICalories.ViewModels;
+using AICalories.Views;
 using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls;
 using SkiaSharp.Views.Maui.Handlers;
@@ -14,7 +15,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-   //         .ConfigureMauiHandlers(handlers =>
+			//.ConfigureMauiHandlers(handlers =>
 			//{
 			//	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));
 			//})

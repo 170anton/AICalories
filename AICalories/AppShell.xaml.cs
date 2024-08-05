@@ -19,11 +19,20 @@ public partial class AppShell : Shell
         // Ensure your pages get their view models
         Routing.RegisterRoute("main", typeof(PhotoSelectionPage));
         Routing.RegisterRoute("context", typeof(ContextPage));
+        
 
         //Routing.RegisterRoute(nameof(ContextPage), typeof(ContextPage));
         //Routing.RegisterRoute(nameof(PhotoSelectionPage), typeof(PhotoSelectionPage));
 
         this.Navigating += OnNavigating;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        //Shell.Current.GoToAsync("//context");
+        //Shell.Current.GoToAsync("//main");
     }
 
     private void OnNavigating(object sender, ShellNavigatingEventArgs e)

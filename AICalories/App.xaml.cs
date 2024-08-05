@@ -1,4 +1,6 @@
-﻿using AICalories.Views;
+﻿using AICalories.DI;
+using AICalories.ViewModels;
+using AICalories.Views;
 
 namespace AICalories;
 
@@ -23,5 +25,13 @@ public partial class App : Application
 	{
 		InitializeComponent();
         MainPage = serviceProvider.GetRequiredService<AppShell>();
+
+        // Ensure ContextPage is initialized
+        InitializeContextPage(serviceProvider);
+    }
+
+    private void InitializeContextPage(IServiceProvider serviceProvider)
+    {
+        var contextVM = serviceProvider.GetRequiredService<ContextVM>();
     }
 }

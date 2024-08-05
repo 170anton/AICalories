@@ -32,7 +32,7 @@ public class PhotoSelectionVM
     //public ShowDelegate OnShowAlertRequested;
 
     //public bool HasRecievedSecrets { get; set; }
-    public ContextVM ContextVM => _viewModelService.ContextVM;
+    public ContextVM ContextVM => _viewModelService.ContextVM;  
 
     public PhotoSelectionVM(IViewModelService viewModelService)
     {
@@ -65,7 +65,7 @@ public class PhotoSelectionVM
                 DishName = resultTwo.DishName,
                 Calories = (resultOne.Calories + resultTwo.Calories) / 2
             };
-            //await AddItemToDB(imagePath, resultFinal);
+            await AddItemToDB(imagePath, resultFinal);
 
             return resultFinal;
         }
@@ -94,12 +94,11 @@ public class PhotoSelectionVM
 
     }
 
-    private static async Task<string> ExtractValidResponse(HttpResponseMessage response)
+    private static string ConvertToBase64(string imagePath)
     {
-        var responseString = await response.Content.ReadAsStringAsync();
-        dynamic rawResult = JsonConvert.DeserializeObject(responseString);
-        string stringRawResult = rawResult.choices[0].message.tool_calls[0].function.arguments;
-        return stringRawResult;
+        byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
+        string base64Image = Convert.ToBase64String(imageArray);
+        return base64Image;
     }
 
     private async Task<HttpResponseMessage> SendRequestToApi(string base64Image)
@@ -111,88 +110,14 @@ public class PhotoSelectionVM
         return response;
     }
 
-    private static string ConvertToBase64(string imagePath)
+    private static async Task<string> ExtractValidResponse(HttpResponseMessage response)
     {
-        byte[] imageArray = System.IO.File.ReadAllBytes(imagePath);
-        string base64Image = Convert.ToBase64String(imageArray);
-        return base64Image;
+        var responseString = await response.Content.ReadAsStringAsync();
+        dynamic rawResult = JsonConvert.DeserializeObject(responseString);
+        string stringRawResult = rawResult.choices[0].message.tool_calls[0].function.arguments;
+        return stringRawResult;
     }
 
-    //private async Task<string> UploadImageToS3(FileResult image)
-    //{
-    //    try
-    //    {
-    //        var imageStream = await image.OpenReadAsync();
-    //        var fileName = image.FileName;
-
-    //        var uploadRequest = new PutObjectRequest
-    //        {
-    //            InputStream = imageStream,
-    //            BucketName = BucketName,
-    //            Key = fileName,
-    //            ContentType = "image/jpeg"
-    //        };
-
-    //        var response = await _s3Client.PutObjectAsync(uploadRequest);
-    //        return $"https://{BucketName}.s3.{BucketRegion.SystemName}.amazonaws.com/{fileName}";
-    //    }
-    //    catch (Exception)
-    //    {
-    //        throw;
-    //    }
-        
-    //}
-
-    //private async Task<string> AnalyzeUrlImage(string imageUrl)
-    //{
-    //    try
-    //    {
-    //        var requestData = RequestData.GetSecondPrompt(imageUrl);
-
-    //        var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-
-    //        var response = await client.PostAsync(OpenAIAPIUrl, content);
-    //        response.EnsureSuccessStatusCode();
-
-    //        var responseString = await response.Content.ReadAsStringAsync();
-    //        dynamic result = JsonConvert.DeserializeObject(responseString);
-    //        return result.choices[0].message.content;
-    //    }
-    //    catch (HttpRequestException httpRequestException)
-    //    {
-    //        return $"Request error: {httpRequestException.Message}";
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return $"An error occurred: {ex.Message}";
-    //    }
-    //}
-
-    private void LoadSecrets()
-    {
-        try
-        {
-            var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
-
-            var keyStorageService = new KeyStorageService(encryptionKey);
-
-            var keys = keyStorageService.RetrieveKeys();
-
-            Console.WriteLine($"AWS Access Key ID: {keys.AWSAccessKeyId}");
-            Console.WriteLine($"AWS Secret Access Key: {keys.AWSSecretAccessKey}");
-            Console.WriteLine($"OpenAI API Key: {keys.OpenAIAPIKey}");
-
-            OpenAIAPIKey = keys.OpenAIAPIKey;
-            AwsAccessKeyId = keys.AWSAccessKeyId;
-            AwsSecretAccessKey = keys.AWSSecretAccessKey;
-
-            //HasRecievedSecrets = true;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading secrets: {ex.Message}");
-        }
-    }
     private async Task AddItemToDB(string image, ResponseData responseData)
     {
         try
@@ -203,11 +128,10 @@ public class PhotoSelectionVM
                 Date = dateTimeNow,
                 Time = dateTimeNow.ToString("HH:mm"),
                 ImagePath = image,
-                Calories = responseData.Calories.ToString()
+                Calories = responseData.Calories.ToString(),
+                CaloriesInt = responseData.Calories
             };
             await App.Database.SaveItemAsync(newItem);
-            //HistoryVM.SaveToHistory(dateTimeNow, newItem);
-            //AppShell.Current
 
 
         }
@@ -256,6 +180,33 @@ public class PhotoSelectionVM
             {
                 File.Delete(tempFilePath);
             }
+        }
+    }
+
+
+    private void LoadSecrets()
+    {
+        try
+        {
+            var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
+
+            var keyStorageService = new KeyStorageService(encryptionKey);
+
+            var keys = keyStorageService.RetrieveKeys();
+
+            Console.WriteLine($"AWS Access Key ID: {keys.AWSAccessKeyId}");
+            Console.WriteLine($"AWS Secret Access Key: {keys.AWSSecretAccessKey}");
+            Console.WriteLine($"OpenAI API Key: {keys.OpenAIAPIKey}");
+
+            OpenAIAPIKey = keys.OpenAIAPIKey;
+            AwsAccessKeyId = keys.AWSAccessKeyId;
+            AwsSecretAccessKey = keys.AWSSecretAccessKey;
+
+            //HasRecievedSecrets = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading secrets: {ex.Message}");
         }
     }
 

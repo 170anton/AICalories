@@ -9,7 +9,7 @@ using Microsoft.Maui.Controls.Handlers.Compatibility;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 
-[assembly: ExportRenderer(typeof(AppShell), typeof(AICalories.Platforms.Android.CustomShellRenderer))]
+//[assembly: ExportRenderer(typeof(AppShell), typeof(AICalories.Platforms.Android.CustomShellRenderer))]
 namespace AICalories.Platforms.Android
 {
     public class CustomShellRenderer : ShellRenderer

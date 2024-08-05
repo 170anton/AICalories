@@ -7,7 +7,7 @@ using Microsoft.Maui.Controls.Compatibility;
 using Microsoft.Maui.Controls.Handlers.Compatibility;
 using Microsoft.Maui.Controls.Platform.Compatibility;
 
-[assembly: ExportRenderer(typeof(AppShell), typeof(AICalories.Platforms.Android.CustomShellTabRenderer))]
+//[assembly: ExportRenderer(typeof(AppShell), typeof(AICalories.Platforms.Android.CustomShellTabRenderer))]
 namespace AICalories.Platforms.Android
 {
 	public class CustomShellTabRenderer : ShellRenderer

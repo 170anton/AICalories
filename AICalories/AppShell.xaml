@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="AICalories.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AICalories.AppShell"
     xmlns:views="clr-namespace:AICalories.Views"
     xmlns:local="clr-namespace:AICalories"
     Shell.FlyoutBehavior="Flyout"
@@ -16,17 +16,36 @@
         True
     </Shell.NavBarHasShadow>
 
+    <!--<TabBar>    
+        <ShellContent Title="Image" Icon="camera.png" Route="main" ContentTemplate="{DataTemplate views:PhotoSelectionPage}">
+            <views:PhotoSelectionPage/>
+        </ShellContent>
+        
+        <ShellContent Title="Context" Route="context"  ContentTemplate="{DataTemplate views:ContextPage}">
+            <views:ContextPage/>
+        </ShellContent>
+
+        <ShellContent Title="History" Route="history"
+             Icon="history2.png">
+            <views:HistoryPage/>
+        </ShellContent>
+    </TabBar>-->
     <TabBar>
         <Tab Title="Photo" Icon="camera.png">
-            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}" Shell.NavBarIsVisible="False" Route="main"/>
-            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}" Shell.NavBarIsVisible="False" Route="context"/>
+            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}"
+                          Shell.NavBarIsVisible="False" Route="main">
+                <!--<views:PhotoSelectionPage/>-->
+            </ShellContent>
+            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}"
+                          Shell.NavBarIsVisible="False" Route="context">
+                <!--<views:ContextPage/>-->
+            </ShellContent>
         </Tab>
         <Tab Title="History"
              Icon="history2.png">
             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="history"/>
         </Tab>
     </TabBar>
-    
     <FlyoutItem Title="Settings">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
@@ -35,27 +54,21 @@
     
     <FlyoutItem Title="Donate">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
-       </Tab>
-    </FlyoutItem>
-    
-    <FlyoutItem Title="Help">
-        <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:DonatePage}" />
        </Tab>
     </FlyoutItem>
     
     <FlyoutItem Title="Support">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:SupportPage}" />
        </Tab>
     </FlyoutItem>
     
-    <FlyoutItem Title="About">
+    <!--<FlyoutItem Title="About">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
        </Tab>
-    </FlyoutItem>
+    </FlyoutItem>-->
 
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
@@ -94,5 +107,5 @@
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="Views/PhotoSelectionView" />--> 
-
+    
 </Shell>

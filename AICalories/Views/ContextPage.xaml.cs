@@ -24,7 +24,7 @@ public partial class ContextPage : ContentPage
             //    _viewModel.SelectedOption = "Regular";
             //}
 
-            LoadSelectedOption();
+            //LoadSelectedOption();
         }
 
     }

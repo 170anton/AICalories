@@ -5,8 +5,8 @@
              xmlns:views="clr-namespace:AICalories.Views"
              x:Class="AICalories.Views.HistoryPage"
              x:Name="root">
-        <Grid RowDefinitions="Auto, Auto, *" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                            BackgroundColor="White"
+        <Grid RowDefinitions="Auto, Auto, *" AbsoluteLayout.LayoutFlags="All"
+            
             Padding="10"
             RowSpacing="10">
             <Button Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
@@ -16,13 +16,13 @@
                             ItemsSource="{Binding DayGroupedItems}"
                             IsGrouped="True"
                             SelectionMode="Single"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"
                             SelectionChanged="OnCollectionViewSelectionChanged">
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                     
                         <Frame
-                               BackgroundColor="{StaticResource White}"
-                               Padding="0" Margin="0,20,0,0"
+                               Padding="0" Margin="0,20,0,5"
                                BorderColor="{StaticResource Primary}">
                             <Grid ColumnDefinitions="*,Auto,Auto"
                                 Padding="5"
@@ -33,8 +33,8 @@
                                     HorizontalOptions="Start"
                                     Margin="10,0,0,0"
                                     Text="{Binding Title}"
-                                    TextColor="{StaticResource Black}"
                                     FontSize="Large"/>
+
                                 <Button
                                     Grid.Column="1"
                                     Text="Add"
@@ -48,17 +48,16 @@
                     
                             <Grid ColumnDefinitions="*,*, 2.5*"
                                   HeightRequest="50"
-                                  Padding="0,1,0,0"
-                                  BackgroundColor="{StaticResource White}">
-                                <Label Grid.Column="0" Text="{Binding Time}" TextColor="{StaticResource Black}"
+                                  Padding="0,0,0,0">
+                                <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
-                                <Label Grid.Column="1" Text="{Binding Calories}" TextColor="{StaticResource Black}"
+                                <Label Grid.Column="1" Text="{Binding Calories}"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"
                                        Margin="0,0,10,0"/>
                                 <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
                                        HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                       Opacity="0.3"/>
+                                       Opacity="0.5"/>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
                             </Grid>

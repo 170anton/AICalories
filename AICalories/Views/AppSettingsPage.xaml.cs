@@ -15,7 +15,7 @@ public partial class AppSettingsPage : ContentPage
 
     protected override bool OnBackButtonPressed()
     {
-        Shell.Current.GoToAsync("//main");
+        Shell.Current.GoToAsync("//history");
         return true;
     }
 }

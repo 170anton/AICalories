@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AICalories.Views.AppSettingsPage">
+             x:Class="AICalories.Views.AppSettingsPage"
+             Title="Settings">
     <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
         <Frame Style="{StaticResource ShadowFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">

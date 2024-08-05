@@ -32,9 +32,9 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = $"What ingredients are in this dish? There are {dishType} ingredients" +
-                                "Amount, weight and calories of ingredients must be calculated as precise as possible" +
-                                "Output result in a JSON format."
+                                text = $"What ingredients are in this dish? There are {dishType} ingredients. " +
+                                "Amount, weight and calories of ingredients must be calculated as precise as possible. " +
+                                "Output result in a JSON format. "
                             },
                             new
                             {
