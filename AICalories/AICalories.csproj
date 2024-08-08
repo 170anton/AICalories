@@ -111,5 +111,7 @@
 	  <None Remove="Views\CustomViews\" />
 	  <None Remove="Converters\" />
 	  <None Remove="CustomControls\" />
+	  <None Remove="Resources\Images\icons8-settings.svg" />
+	  <None Remove="Resources\Images\settings.svg" />
 	</ItemGroup>
 </Project>

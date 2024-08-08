@@ -33,7 +33,7 @@ public partial class AppShell : Shell
         base.OnAppearing();
 
         //Shell.Current.GoToAsync("//context");
-        //Shell.Current.GoToAsync("//main");
+        Shell.Current.GoToAsync("//main");
     }
 
     private void OnNavigating(object sender, ShellNavigatingEventArgs e)

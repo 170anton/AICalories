@@ -13,7 +13,7 @@
         True
     </Shell.NavBarIsVisible>
     <Shell.NavBarHasShadow>
-        True
+        False
     </Shell.NavBarHasShadow>
 
     <!--<TabBar>    
@@ -31,6 +31,11 @@
         </ShellContent>
     </TabBar>-->
     <TabBar>
+        <Tab Title="Settings" Icon="settings.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings"/>
+
+
+        </Tab>
         <Tab Title="Photo" Icon="camera.png">
             <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}"
                           Shell.NavBarIsVisible="False" Route="main">
@@ -46,11 +51,11 @@
             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="history"/>
         </Tab>
     </TabBar>
-    <FlyoutItem Title="Settings">
+    <!--<FlyoutItem Title="Settings">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
        </Tab>
-    </FlyoutItem>
+    </FlyoutItem>-->
     
     <FlyoutItem Title="Donate">
         <Tab>

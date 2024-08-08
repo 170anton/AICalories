@@ -14,7 +14,8 @@
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnTakeImageClicked">
+                Clicked="OnTakeImageClicked"
+                BackgroundColor="{StaticResource Primary}">
             
 
         </Button>
@@ -23,7 +24,8 @@
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnSelectImageClicked"/>
+                Clicked="OnSelectImageClicked"
+                BackgroundColor="{StaticResource Primary}"/>
     </Grid>
 
     <!--<VerticalStackLayout

@@ -24,7 +24,7 @@
                         <Frame
                                Padding="0" Margin="0,20,0,5"
                                BorderColor="{StaticResource Primary}"
-                               HeightRequest="50">
+                               HeightRequest="60">
                             <Grid ColumnDefinitions="*,Auto,Auto"
                                 Padding="5"
                                 ColumnSpacing="5">
