@@ -19,6 +19,7 @@ public partial class LoadingScreenPage : ContentPage
         _viewModel.IsRefreshing = false;
         _viewModel.DishName = response.DishName;
         _viewModel.Calories = response.Calories.ToString();
+        _viewModel.TotalResultJSON = response.TotalResultJSON;
     }
 
     public void LoadAIResponse(string response)

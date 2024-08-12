@@ -68,6 +68,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+        
+        
+            <Grid.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipedRight"/>
+            </Grid.GestureRecognizers>
         </Grid>
          <!--Blur Effect 
         <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"

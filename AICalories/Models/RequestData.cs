@@ -33,7 +33,7 @@ namespace AICalories.Models
                             {
                                 type = "text",
                                 text = $"What ingredients are in this dish? There are {dishType} ingredients. " +
-                                "Amount, weight and calories of ingredients must be calculated as precise as possible. " +
+                                "Amount, volume, weight and calories of ingredients must be calculated as precise as possible. " +
                                 "Output result in a JSON format. "
                             },
                             new
@@ -42,7 +42,7 @@ namespace AICalories.Models
                                 image_url = new
                                 {
                                     url = $"data:image/jpeg;base64,{base64Image}",
-                                    detail = "low"
+                                    detail = "high"
                                 }
                             }
                         }
@@ -77,6 +77,16 @@ namespace AICalories.Models
                                                     type = "string",
                                                     description = "Name of the ingredient"
                                                 },
+                                                ingredient_amount = new
+                                                {
+                                                    type = "string",
+                                                    description = "Amount of the ingredient"
+                                                },
+                                                ingredient_volume = new
+                                                {
+                                                    type = "string",
+                                                    description = "Volume of the ingredient"
+                                                },
                                                 ingredient_weight = new
                                                 {
                                                     type = "integer",
@@ -88,7 +98,7 @@ namespace AICalories.Models
                                                     description = "Calories of the ingredient"
                                                 }
                                             },
-                                            required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories" }
+                                            required = new[] { "ingredient_name", "ingredient_amount", "ingredient_volume", "ingredient_weight", "ingredient_calories" }
                                         },
                                     },
                                     dish_name = new

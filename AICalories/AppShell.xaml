@@ -41,10 +41,10 @@
                           Shell.NavBarIsVisible="False" Route="main">
                 <!--<views:PhotoSelectionPage/>-->
             </ShellContent>
-            <ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}"
+            <!--<ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}"
                           Shell.NavBarIsVisible="False" Route="context">
-                <!--<views:ContextPage/>-->
-            </ShellContent>
+                <views:ContextPage/>
+            </ShellContent>-->
         </Tab>
         <Tab Title="History"
              Icon="history2.png">

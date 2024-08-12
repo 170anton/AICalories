@@ -9,6 +9,7 @@ namespace AICalories.ViewModels
         private bool isRefreshing;
         private string dishName;
         private string calories;
+        private string totalResultJSON;
 
         public string DishName
         {
@@ -32,6 +33,19 @@ namespace AICalories.ViewModels
                 if (calories != value)
                 {
                     calories = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string TotalResultJSON
+        {
+            get => totalResultJSON;
+            set
+            {
+                if (totalResultJSON != value)
+                {
+                    totalResultJSON = value;
                     OnPropertyChanged();
                 }
             }

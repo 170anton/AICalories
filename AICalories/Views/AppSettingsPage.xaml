@@ -4,26 +4,26 @@
              x:Class="AICalories.Views.AppSettingsPage"
              >
     <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
-        <Frame Style="{StaticResource ShadowFrameStyle}">
+        <Frame Style="{StaticResource MainFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Dark mode" Style="{StaticResource LabelAppStyle}"
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1"
+                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
                         Scale="1.3"
                         IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
             </Grid>
         </Frame>
-        <Frame Grid.Row="1" Style="{StaticResource ShadowFrameStyle}">
+        <Frame Grid.Row="1" Style="{StaticResource MainFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
                        HorizontalOptions="Start"
                        FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1"
+                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
                         Scale="1.3"/>
             </Grid>
         </Frame>
-        <Frame Grid.Row="2" Style="{StaticResource ShadowFrameStyle}">
+        <Frame Grid.Row="2" Style="{StaticResource MainFrameStyle}">
             <Grid ColumnDefinitions="*,Auto" Padding="20,0">
                 <Label Text="Save to gallery" Style="{StaticResource LabelAppStyle}"
                        HorizontalOptions="Start"

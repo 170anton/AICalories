@@ -25,6 +25,7 @@ public partial class AppShell : Shell
         //Routing.RegisterRoute(nameof(ContextPage), typeof(ContextPage));
         //Routing.RegisterRoute(nameof(PhotoSelectionPage), typeof(PhotoSelectionPage));
 
+
         this.Navigating += OnNavigating;
     }
 

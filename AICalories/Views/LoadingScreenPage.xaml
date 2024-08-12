@@ -4,6 +4,7 @@
              x:Class="AICalories.Views.LoadingScreenPage"
              Shell.NavBarIsVisible="False">
     <Frame HasShadow="True" Margin="10" Padding="30" CornerRadius="20">
+    <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
             <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
 
@@ -14,8 +15,11 @@
                            WidthRequest="100"
                            HeightRequest="100" />
 
-            <Label Grid.Row="2" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="3" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>
+            <Label Grid.Row="1" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
+            <Label Grid.Row="2" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>
+            <Label Grid.Row="3" Text="{Binding TotalResultJSON}" FontSize="15"
+                   Style="{StaticResource LabelAppStyle}"/>
         </Grid>
+    </ScrollView>
     </Frame>
 </ContentPage>

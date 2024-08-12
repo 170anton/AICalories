@@ -60,15 +60,15 @@ public class PhotoSelectionVM
             imagePath = await ResizeImage(image.FullPath, 1000);
 
             ResponseData resultOne = await AnalyzeLocalImage(imagePath);
-            ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
-            ResponseData resultFinal = new ResponseData()
-            {
-                DishName = resultTwo.DishName,
-                Calories = (resultOne.Calories + resultTwo.Calories) / 2
-            };
-            await AddItemToDB(imagePath, resultFinal);
+            //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
+            //ResponseData resultFinal = new ResponseData()
+            //{
+            //    DishName = resultTwo.DishName,
+            //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
+            //};
+            await AddItemToDB(imagePath, resultOne);
 
-            return resultFinal;
+            return resultOne;
         }
         catch (Exception)
         {
@@ -90,6 +90,7 @@ public class PhotoSelectionVM
         var responseData = new ResponseData();
         responseData.DishName = result.dish_name;
         responseData.Calories = result.calories;
+        responseData.TotalResultJSON = stringRawResult;
 
         return responseData;
 

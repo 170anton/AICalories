@@ -86,6 +86,11 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         
     }
 
+    private void OnSwipedRight(object sender, SwipedEventArgs e)
+    {
+        Shell.Current.GoToAsync("//main");
+    }
+
     protected override bool OnBackButtonPressed()
     {
         Shell.Current.GoToAsync("//main");

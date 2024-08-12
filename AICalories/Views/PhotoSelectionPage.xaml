@@ -5,28 +5,50 @@
     <!--<ContentPage.ToolbarItems>
         <ToolbarItem Text="Menu" IconImageSource="menu.png" Clicked="OnMenuButtonClicked" />
     </ContentPage.ToolbarItems>-->
+    
+    <ScrollView>
+        <Grid RowDefinitions=".3*,.3*,.1*,.1*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10" ColumnSpacing="10">
+            <Frame Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}">
 
-    <Grid RowDefinitions=".8*,.2*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10">
+
+            </Frame>
+                
+            
+            <Frame Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}"
+                   Margin="0,0,0,20">
+
+
+            </Frame>
+
+
         <Button
-                ImageSource="camera_white.png"
+                ImageSource="{AppThemeBinding Light=camera.png, Dark=camera_white.png}"
+
                 ContentLayout="Top"
-                Padding="0,0"
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
+                Padding="30"
+                Grid.Row="2" Grid.RowSpan="2"
+                Grid.Column="1" Grid.ColumnSpan="1"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnTakeImageClicked"
-                BackgroundColor="{StaticResource Primary}">
+                Clicked="OnTakeImageClicked">
             
 
         </Button>
+                            <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
 
         <Button Text="Select Image"
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
+                Grid.Row="2" Grid.RowSpan="2"
+                Grid.Column="0" Grid.ColumnSpan="1"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnSelectImageClicked"
-                BackgroundColor="{StaticResource Primary}"/>
+                Clicked="OnSelectImageClicked"/>
+
+
+        
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Swiped="OnSwipedLeft"/>
+            <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipedRight"/>
+        </Grid.GestureRecognizers>
     </Grid>
+    </ScrollView>
 
     <!--<VerticalStackLayout
         VerticalOptions="Center" 

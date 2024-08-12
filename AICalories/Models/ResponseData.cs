@@ -9,10 +9,7 @@ namespace AICalories.Models
         public string DishName { get => dishName;
             set => dishName = char.ToUpper(value[0]) + value.Substring(1); }
         public int Calories { get; set; }
-
-        public ResponseData()
-		{
-		}
+        public string TotalResultJSON { get; set; }
 	}
 }
 
