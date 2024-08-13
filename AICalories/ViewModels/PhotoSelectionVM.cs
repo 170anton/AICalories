@@ -35,6 +35,9 @@ public class PhotoSelectionVM
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
+
+    #region Constructor
+
     public PhotoSelectionVM(IViewModelService viewModelService)
     {
         _viewModelService = viewModelService;
@@ -50,6 +53,9 @@ public class PhotoSelectionVM
         //_s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
         //_aPIManager = new APIManager();
     }
+    #endregion
+
+    #region Process Image
 
     public async Task<ResponseData> ProcessImage(FileResult image)
     {
@@ -185,6 +191,7 @@ public class PhotoSelectionVM
         }
     }
 
+    #endregion
 
     private void LoadSecrets()
     {

@@ -36,7 +36,7 @@
 
 
         </Tab>
-        <Tab Title="Photo" Icon="camera.png">
+        <Tab Title="Photo" Icon="settings.png">
             <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}"
                           Shell.NavBarIsVisible="False" Route="main">
                 <!--<views:PhotoSelectionPage/>-->

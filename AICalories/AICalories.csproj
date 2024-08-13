@@ -126,5 +126,6 @@
 	  <None Remove="Resources\Images\noun-camera-7084717.svg" />
 	  <None Remove="Resources\Images\camera-svgrepo-com %281%29.png" />
 	  <None Remove="Resources\Images\camera-svgrepo-com %281%29.svg" />
+	  <None Remove="Resources\Images\settings_white.svg" />
 	</ItemGroup>
 </Project>

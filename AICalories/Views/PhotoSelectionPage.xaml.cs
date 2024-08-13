@@ -16,6 +16,8 @@ public partial class PhotoSelectionPage : ContentPage
     private PhotoSelectionVM _viewModel;
     private LoadingScreenPage _loadScreenPage;
 
+    #region Constructor
+
     public PhotoSelectionPage()
 	{
 		InitializeComponent();
@@ -38,23 +40,29 @@ public partial class PhotoSelectionPage : ContentPage
 
     }
 
-    private async Task ProcessImage(FileResult? image)
+    #endregion
+
+    #region FirstFrame
+
+    #endregion
+
+    #region SecondFrame
+
+    private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        if (image != null)
+        if (e.Value)
         {
-            _loadScreenPage = new LoadingScreenPage();
-            await Shell.Current.Navigation.PushAsync(_loadScreenPage);
-            var response = await _viewModel.ProcessImage(image);
-            if (response != null)
-            {
-                _loadScreenPage.LoadAIResponse(response);
-            }
-            else
-            {
-                _loadScreenPage.LoadAIResponse("Loading error");
-            }
+            //var radioButton = sender as RadioButton;
+            //var selectedOption = radioButton?.Value?.ToString();
+            //// Save the selected option to preferences
+            //Preferences.Set(SelectedOptionKey, selectedOption);
+
+            //_viewModel.SelectedOption = selectedOption;
         }
     }
+    #endregion
+
+    #region Photo selection buttons
 
     private async void OnTakeImageClicked(System.Object sender, System.EventArgs e)
     {
@@ -104,27 +112,21 @@ public partial class PhotoSelectionPage : ContentPage
         }
     }
 
-    private async Task ShowResponse(string response)
+    private async Task ProcessImage(FileResult? image)
     {
-        try
+        if (image != null)
         {
-            await Application.Current.MainPage.DisplayAlert("Analysis Result", response, "Ok");
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-        }
-    }
-
-    private async Task ShowError(string response)
-    {
-        try
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", response, "Sad");
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+            _loadScreenPage = new LoadingScreenPage();
+            await Shell.Current.Navigation.PushAsync(_loadScreenPage);
+            var response = await _viewModel.ProcessImage(image);
+            if (response != null)
+            {
+                _loadScreenPage.LoadAIResponse(response);
+            }
+            else
+            {
+                _loadScreenPage.LoadAIResponse("Loading error");
+            }
         }
     }
 
@@ -148,6 +150,10 @@ public partial class PhotoSelectionPage : ContentPage
         }
     }
 
+    #endregion
+
+
+    #region View
 
     private void OnSwipedLeft(object sender, SwipedEventArgs e)
     {
@@ -174,6 +180,33 @@ public partial class PhotoSelectionPage : ContentPage
         Shell.Current.GoToAsync("//settings");
     }
 
+
+
+    private async Task ShowResponse(string response)
+    {
+        try
+        {
+            await Application.Current.MainPage.DisplayAlert("Analysis Result", response, "Ok");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+        }
+    }
+
+    private async Task ShowError(string response)
+    {
+        try
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", response, "Sad");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+        }
+    }
+
+
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
@@ -190,4 +223,6 @@ public partial class PhotoSelectionPage : ContentPage
         //    ShowAlert(message);
         //}
     }
+    #endregion
+
 }
