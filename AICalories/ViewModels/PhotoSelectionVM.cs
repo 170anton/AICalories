@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using AICalories.DI;
@@ -13,11 +15,15 @@ using Newtonsoft.Json.Linq;
 
 namespace AICalories.ViewModels;
 
-public class PhotoSelectionVM
+public class PhotoSelectionVM : INotifyPropertyChanged
 {
     private string OpenAIAPIKey;
     private string AwsAccessKeyId;
     private string AwsSecretAccessKey;
+
+    private string _lastHistoryItemImage;
+    private string _lastHistoryItemName;
+    private string _lastHistoryItemCalories;
 
     private readonly IViewModelService _viewModelService;
     private readonly HttpClient client = new HttpClient();
@@ -35,6 +41,41 @@ public class PhotoSelectionVM
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
+    #region Last HistoryItem Info
+
+    public string LastHistoryItemImage
+    {
+        get => _lastHistoryItemImage;
+        set
+        {
+            _lastHistoryItemImage = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    public string LastHistoryItemName
+    {
+        get => _lastHistoryItemName;
+        set
+        {
+            _lastHistoryItemName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastHistoryItemCalories
+    {
+        get => _lastHistoryItemCalories;
+        set
+        {
+            _lastHistoryItemCalories = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    #endregion
 
     #region Constructor
 
@@ -52,6 +93,7 @@ public class PhotoSelectionVM
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
         //_s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
         //_aPIManager = new APIManager();
+        //LoadLastHistoryItem();
     }
     #endregion
 
@@ -73,7 +115,7 @@ public class PhotoSelectionVM
             //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
             //};
             await AddItemToDB(imagePath, resultOne);
-
+            LoadLastHistoryItem();
             return resultOne;
         }
         catch (Exception)
@@ -133,6 +175,7 @@ public class PhotoSelectionVM
             var dateTimeNow = DateTime.Now;
             var newItem = new HistoryItem
             {
+                Name = responseData.DishName,
                 Date = dateTimeNow,
                 Time = dateTimeNow.ToString("HH:mm"),
                 ImagePath = image,
@@ -193,6 +236,28 @@ public class PhotoSelectionVM
 
     #endregion
 
+
+
+    public async void LoadLastHistoryItem()
+    {
+        try
+        {
+            var lastItem = await App.Database.GetLastItemAsync();
+            if (lastItem != null)
+            {
+                LastHistoryItemImage = lastItem.ImagePath;
+                LastHistoryItemName = lastItem.Name;
+                LastHistoryItemCalories = lastItem.Calories;
+            }
+            //todo else
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
+            throw;
+        }
+    }
+
     private void LoadSecrets()
     {
         try
@@ -216,6 +281,7 @@ public class PhotoSelectionVM
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading secrets: {ex.Message}");
+            throw;
         }
     }
 
@@ -229,4 +295,10 @@ public class PhotoSelectionVM
     //    //HasRecievedSecrets = false;
     //    OnShowAlertRequested?.Invoke(response);
     //}
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

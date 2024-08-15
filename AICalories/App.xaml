@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:AICalories"
              xmlns:converters="clr-namespace:AICalories.Converters"
              x:Class="AICalories.App">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

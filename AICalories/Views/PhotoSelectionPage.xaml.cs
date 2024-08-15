@@ -74,7 +74,7 @@ public partial class PhotoSelectionPage : ContentPage
                 try
                 {
                     var image = await MediaPicker.CapturePhotoAsync();
-                    await ProcessImage(image);
+                    ProcessImage(image);
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -103,7 +103,7 @@ public partial class PhotoSelectionPage : ContentPage
         try
         {
             var image = await MediaPicker.PickPhotoAsync();
-            await ProcessImage(image);
+            ProcessImage(image);
         }
         catch (Exception ex)
         {
@@ -112,7 +112,7 @@ public partial class PhotoSelectionPage : ContentPage
         }
     }
 
-    private async Task ProcessImage(FileResult? image)
+    private async void ProcessImage(FileResult? image)
     {
         if (image != null)
         {
@@ -222,6 +222,7 @@ public partial class PhotoSelectionPage : ContentPage
         //    string message = "No connection to OpenAI"; //todo
         //    ShowAlert(message);
         //}
+        _viewModel.LoadLastHistoryItem();
     }
     #endregion
 

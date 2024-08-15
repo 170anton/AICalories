@@ -1,6 +1,10 @@
 ﻿using System;
 using AICalories.Models;
 using SQLite;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace AICalories
 {
@@ -15,36 +19,43 @@ namespace AICalories
             //_database.CreateTableAsync<HistorySubItem>().Wait();
         }
 
-        public Task<List<HistoryItem>> GetItemsAsync()
+        public async Task<List<HistoryItem>> GetItemsAsync()
         {
-            return _database.Table<HistoryItem>().ToListAsync();
+            return await _database.Table<HistoryItem>().ToListAsync();
         }
 
-        public Task<int> GetCountAsync()
+        public async Task<HistoryItem> GetLastItemAsync()
         {
-            return _database.Table<HistoryItem>().CountAsync();
+            return await _database.Table<HistoryItem>()
+                .OrderByDescending(i => i.Date)
+                .FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveItemAsync(HistoryItem item)
+        public async Task<int> GetCountAsync()
+        {
+            return await _database.Table<HistoryItem>().CountAsync();
+        }
+
+        public async Task<int> SaveItemAsync(HistoryItem item)
         {
             if (item.Id != 0)
             {
-                return _database.UpdateAsync(item);
+                return await _database.UpdateAsync(item);
             }
             else
             {
-                return _database.InsertAsync(item);
+                return await _database.InsertAsync(item);
             }
         }
 
-        public Task<int> DeleteItemAsync(HistoryItem item)
+        public async Task<int> DeleteItemAsync(HistoryItem item)
         {
-            return _database.DeleteAsync(item);
+            return await _database.DeleteAsync(item);
         }
 
-        public Task<int> ClearItemsAsync()
+        public async Task<int> ClearItemsAsync()
         {
-            return _database.DeleteAllAsync<HistoryItem>();
+            return await _database.DeleteAllAsync<HistoryItem>();
         }
 
         //public Task<List<HistorySubItem>> GetSubItemsAsync(int itemId)
