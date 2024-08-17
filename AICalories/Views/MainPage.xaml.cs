@@ -8,17 +8,19 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 
 namespace AICalories.Views;
 
-public partial class PhotoSelectionPage : ContentPage
+public partial class MainPage : ContentPage
 {
-    private PhotoSelectionVM _viewModel;
+    private MainVM _viewModel;
     private LoadingScreenPage _loadScreenPage;
 
     #region Constructor
 
-    public PhotoSelectionPage()
+    public MainPage()
 	{
 		InitializeComponent();
         try
@@ -26,7 +28,7 @@ public partial class PhotoSelectionPage : ContentPage
             var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
             if (viewModelLocator != null)
             {
-                _viewModel = viewModelLocator.GetPhotoSelectionViewModel();
+                _viewModel = viewModelLocator.GetMainViewModel();
                 BindingContext = _viewModel;
 
             }
@@ -73,17 +75,25 @@ public partial class PhotoSelectionPage : ContentPage
             {
                 try
                 {
-                    var image = await MediaPicker.CapturePhotoAsync();
+                    //var image = await MediaPicker.Default.CapturePhotoAsync();
+                    //await CrossMedia.Current.Initialize();
+                    // Initialize the media plugin
+                    await CrossMedia.Current.Initialize();
+
+                    var image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                    {
+                        PhotoSize = PhotoSize.Medium,
+                        //SaveToAlbum = true
+                    });
+
                     ProcessImage(image);
                 }
                 catch (ArgumentNullException ex)
                 {
-                    _loadScreenPage.LoadAIResponse("Loading error");
                     await ShowError("No connection to OpenAI");
                 }
                 catch (Exception ex)
                 {
-                    _loadScreenPage.LoadAIResponse("Loading error");
                     await ShowError($"An error occurred: {ex.Message}");
                 }
             }
@@ -102,17 +112,16 @@ public partial class PhotoSelectionPage : ContentPage
     {
         try
         {
-            var image = await MediaPicker.PickPhotoAsync();
-            ProcessImage(image);
+            //var image = await MediaPicker.PickPhotoAsync();
+            //ProcessImage(image);
         }
         catch (Exception ex)
         {
-            _loadScreenPage.LoadAIResponse("Loading error");
             await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
         }
     }
 
-    private async void ProcessImage(FileResult? image)
+    private async void ProcessImage(MediaFile? image)
     {
         if (image != null)
         {

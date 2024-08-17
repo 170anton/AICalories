@@ -12,10 +12,12 @@ using Azure.Security.KeyVault.Secrets;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Plugin.Media.Abstractions;
+using SkiaSharp;
 
 namespace AICalories.ViewModels;
 
-public class PhotoSelectionVM : INotifyPropertyChanged
+public class MainVM : INotifyPropertyChanged
 {
     private string OpenAIAPIKey;
     private string AwsAccessKeyId;
@@ -79,10 +81,10 @@ public class PhotoSelectionVM : INotifyPropertyChanged
 
     #region Constructor
 
-    public PhotoSelectionVM(IViewModelService viewModelService)
+    public MainVM(IViewModelService viewModelService)
     {
         _viewModelService = viewModelService;
-        _viewModelService.PhotoSelectionVM = this;
+        _viewModelService.MainVM = this;
 
         LoadSecrets();
         if (OpenAIAPIKey == null)
@@ -99,13 +101,13 @@ public class PhotoSelectionVM : INotifyPropertyChanged
 
     #region Process Image
 
-    public async Task<ResponseData> ProcessImage(FileResult image)
+    public async Task<ResponseData> ProcessImage(MediaFile image)
     {
         try
         {
 
-            var imagePath = image.FullPath;
-            imagePath = await ResizeImage(image.FullPath, 1000);
+            var imagePath = image.Path;
+            //imagePath = await ResizeImage(image.FullPath, 1000);
 
             ResponseData resultOne = await AnalyzeLocalImage(imagePath);
             //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
@@ -232,6 +234,43 @@ public class PhotoSelectionVM : INotifyPropertyChanged
                 File.Delete(tempFilePath);
             }
         }
+    }
+
+    private async Task<string> ResizeImageSkia(string imagePath, int maxRes)
+    {
+        using (var inputStream = File.OpenRead(imagePath))
+        using (var original = SKBitmap.Decode(inputStream))
+        {
+            // Calculate the scaling factors
+            float scale = Math.Max((float)maxRes / original.Width, (float)maxRes / original.Height);
+
+            // Calculate the new dimensions
+            int scaledWidth = (int)(original.Width * scale);
+            int scaledHeight = (int)(original.Height * scale);
+
+            // Create a new bitmap with the desired size
+            var resizedBitmap = new SKBitmap(maxRes, maxRes);
+
+            using (var canvas = new SKCanvas(resizedBitmap))
+            {
+                canvas.Clear(SKColors.Transparent);
+
+                // Define the source rectangle (original image)
+                var sourceRect = SKRect.Create(0, 0, original.Width, original.Height);
+
+                // Define the destination rectangle (scaled and centered)
+                var destRect = SKRect.Create(0, 0, maxRes, maxRes);
+                canvas.DrawBitmap(original, sourceRect, destRect, new SKPaint { FilterQuality = SKFilterQuality.High });
+            }
+
+            // Save the resized image to the same file path (overwrite the original file)
+            using (var outputStream = File.OpenWrite(imagePath))
+            {
+                SKImage.FromBitmap(resizedBitmap).Encode(SKEncodedImageFormat.Png, 100).SaveTo(outputStream);
+            }
+        }
+
+        return imagePath;
     }
 
     #endregion

@@ -5,7 +5,7 @@ namespace AICalories.DI
 {
     public class ViewModelService : IViewModelService
     {
-        public PhotoSelectionVM PhotoSelectionVM { get; set; }
+        public MainVM MainVM { get; set; }
         public ContextVM ContextVM { get; set; }
         public AppSettingsVM AppSettingsVM { get; set; }
     }

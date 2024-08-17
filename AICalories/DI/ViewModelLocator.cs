@@ -12,7 +12,7 @@ namespace AICalories.DI
             _serviceProvider = serviceProvider;
         }
 
-        public PhotoSelectionVM GetPhotoSelectionViewModel() => _serviceProvider.GetRequiredService<PhotoSelectionVM>();
+        public MainVM GetMainViewModel() => _serviceProvider.GetRequiredService<MainVM>();
         public ContextVM GetContextViewModel() => _serviceProvider.GetRequiredService<ContextVM>();
         public AppSettingsVM GetAppSettingsViewModel() => _serviceProvider.GetRequiredService<AppSettingsVM>();
 

@@ -5,12 +5,12 @@
     x:Class="AICalories.AppShell"
     xmlns:views="clr-namespace:AICalories.Views"
     xmlns:local="clr-namespace:AICalories"
-    Shell.FlyoutBehavior="Flyout"
-    FlyoutItem.IsVisible="True"
-    FlyoutHeader="camera.png"
+    Shell.FlyoutBehavior="Disabled"
     >
+    <!--FlyoutItem.IsVisible="False"
+    FlyoutHeader="camera.png"-->
     <Shell.NavBarIsVisible>
-        True
+        False
     </Shell.NavBarIsVisible>
     <Shell.NavBarHasShadow>
         False
@@ -32,12 +32,12 @@
     </TabBar>-->
     <TabBar>
         <Tab Title="Settings" Icon="settings.png">
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings"/>
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="settings"/>
 
 
         </Tab>
         <Tab Title="Photo" Icon="settings.png">
-            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:PhotoSelectionPage}"
+            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:MainPage}"
                           Shell.NavBarIsVisible="False" Route="main">
                 <!--<views:PhotoSelectionPage/>-->
             </ShellContent>
@@ -57,7 +57,7 @@
        </Tab>
     </FlyoutItem>-->
     
-    <FlyoutItem Title="Donate">
+    <!--<FlyoutItem Title="Donate">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:DonatePage}" />
        </Tab>
@@ -67,7 +67,7 @@
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate views:SupportPage}" />
        </Tab>
-    </FlyoutItem>
+    </FlyoutItem>-->
     
     <!--<FlyoutItem Title="About">
         <Tab>
@@ -75,7 +75,7 @@
        </Tab>
     </FlyoutItem>-->
 
-    <Shell.FlyoutHeaderTemplate>
+    <!--<Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="Black"
                   HeightRequest="200">
@@ -90,9 +90,9 @@
             </Grid>            
         </DataTemplate>
         
-    </Shell.FlyoutHeaderTemplate>
+    </Shell.FlyoutHeaderTemplate>-->
 
-    <Shell.FlyoutFooterTemplate>
+    <!--<Shell.FlyoutFooterTemplate>
         <DataTemplate>
             <VerticalStackLayout>
                 <BoxView Color="{StaticResource Gray100}"
@@ -107,7 +107,7 @@
                     HorizontalOptions="Center" />
             </VerticalStackLayout>
         </DataTemplate>
-    </Shell.FlyoutFooterTemplate>
+    </Shell.FlyoutFooterTemplate>-->
     <!--<ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"

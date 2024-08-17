@@ -17,7 +17,7 @@ public partial class AppShell : Shell
         BindingContext = this;
 
         // Ensure your pages get their view models
-        Routing.RegisterRoute("main", typeof(PhotoSelectionPage));
+        Routing.RegisterRoute("main", typeof(MainPage));
         Routing.RegisterRoute("context", typeof(ContextPage));
         Routing.RegisterRoute("settings", typeof(AppSettingsPage));
 
@@ -26,7 +26,7 @@ public partial class AppShell : Shell
         //Routing.RegisterRoute(nameof(PhotoSelectionPage), typeof(PhotoSelectionPage));
 
 
-        this.Navigating += OnNavigating;
+        //this.Navigating += OnNavigating;
     }
 
     protected override void OnAppearing()

@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AICalories.Views.LoadingScreenPage"
              Shell.NavBarIsVisible="False">
-    <Frame HasShadow="True" Margin="10" Padding="30" CornerRadius="20">
-    <ScrollView>
+    <Frame Margin="10" Padding="30" CornerRadius="20" Style="{StaticResource MainFrameStyle}">
         <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
             <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
 
@@ -20,6 +19,5 @@
             <Label Grid.Row="3" Text="{Binding TotalResultJSON}" FontSize="15"
                    Style="{StaticResource LabelAppStyle}"/>
         </Grid>
-    </ScrollView>
     </Frame>
 </ContentPage>
