@@ -11,23 +11,37 @@ public partial class AppSettingsPage : ContentPage
 	{
 		InitializeComponent();
         var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
-        if (viewModelLocator != null)
+        if (viewModelLocator == null)
         {
-            _viewModel = viewModelLocator.GetAppSettingsViewModel();
-            BindingContext = _viewModel;
-
-            //if (_viewModel.SelectedOption == null)
-            //{
-            //    _viewModel.SelectedOption = "Regular";
-            //}
-
-            //LoadSelectedOption();
+            //throw new NullReferenceException("Dependency has not found");
+            return;
         }
-	}
+        _viewModel = viewModelLocator.GetAppSettingsViewModel();
+        BindingContext = _viewModel;
+
+
+
+        editor.SizeChanged += OnEditorSizeChanged;
+    }
+
+
+    private void OnEditorSizeChanged(object sender, EventArgs e)
+    {
+        var editor = sender as Editor;
+        if (editor != null)
+        {
+            var frame = editor.Parent as Frame;
+            if (frame != null)
+            {
+                // Update frame's height based on editor's height
+                frame.HeightRequest = editor.Height;
+            }
+        }
+    }
 
     protected override bool OnBackButtonPressed()
     {
-        Shell.Current.GoToAsync("//history");
+        Shell.Current.GoToAsync("//main");
         return true;
     }
 }

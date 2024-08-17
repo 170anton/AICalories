@@ -1,37 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:AICalories.CustomControls"
              x:Class="AICalories.Views.AppSettingsPage"
              >
-    <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
-        <Frame Style="{StaticResource MainFrameStyle}">
-            <Grid ColumnDefinitions="*,Auto" Padding="20,0">
-                <Label Text="Dark mode" Style="{StaticResource LabelAppStyle}"
-                       HorizontalOptions="Start"
-                       FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
-                        Scale="1.3"
-                        IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
+    
+    <AbsoluteLayout>
+    <ScrollView
+           AbsoluteLayout.LayoutBounds="0,0,1,1"
+           AbsoluteLayout.LayoutFlags="All" >
+        <VerticalStackLayout  Padding="20,10" Spacing="10">
+
+            <Grid RowDefinitions="Auto,*" >
+                <Label Text="Settings" FontSize="Title" Grid.Row="0" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                        HorizontalTextAlignment="Start" Margin="20,20,20,10"/>
+                
+                <Frame Grid.Row="1" Style="{StaticResource MainFrameStyle}" >
+                    <VerticalStackLayout Padding="10,10" Spacing="20">
+                    
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Dark mode" Style="{StaticResource LabelAppStyle}"
+                                       HorizontalOptions="Start"
+                                       FontSize="Large"/>
+                                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
+                                        Scale="1.3"
+                                        IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
+                                       HorizontalOptions="Start"
+                                       FontSize="Large"/>
+                                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
+                                        Scale="1.3"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Save to gallery" Style="{StaticResource LabelAppStyle}"
+                                       HorizontalOptions="Start"
+                                       FontSize="Large"/>
+                                <Switch Grid.Column="1"
+                                        Scale="1.3"
+                                        IsToggled="{Binding IsSaveToGallery, Mode=TwoWay}" />
+                            </Grid>
+                    </VerticalStackLayout>
+                    
+                </Frame>
             </Grid>
-        </Frame>
-        <Frame Grid.Row="1" Style="{StaticResource MainFrameStyle}">
-            <Grid ColumnDefinitions="*,Auto" Padding="20,0">
-                <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
-                       HorizontalOptions="Start"
-                       FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
-                        Scale="1.3"/>
+
+
+
+
+
+
+
+
+
+            <Grid  Margin="0,0,0,260" RowDefinitions="Auto,*">
+                <Label Text="Support" FontSize="Title"  Grid.Row="0" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                        HorizontalTextAlignment="Start" Margin="20,20,20,10"/>
+                
+                <custom:CustomAutoHeightFrame AutoHeight="True"  Grid.Row="1" Style="{StaticResource MainFrameStyle}" >
+                    <VerticalStackLayout Padding="10,10" Spacing="20">
+            
+                        <Entry Text="{Binding Email}" Placeholder="Enter your email" FontSize="Large"
+                               TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                            
+                        <Editor Text="{Binding Question}" Placeholder="Enter your question"  FontSize="Large"
+                                x:Name="editor" MaxLength="1000" MaximumHeightRequest="800" AutoSize="TextChanges"
+                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+                  
+                        <Button Text="Send" FontAttributes="Bold" Command="{Binding SendQuestionCommand}" IsEnabled="{Binding IsSending, Converter={StaticResource InverseBooleanConverter}}" 
+                                Grid.Row="2" HeightRequest="50" Margin="0,10,0,0"
+                                CornerRadius="20" FontSize="Large"/>
+            
+
+                    </VerticalStackLayout>
+                </custom:CustomAutoHeightFrame>
             </Grid>
-        </Frame>
-        <Frame Grid.Row="2" Style="{StaticResource MainFrameStyle}">
-            <Grid ColumnDefinitions="*,Auto" Padding="20,0">
-                <Label Text="Save to gallery" Style="{StaticResource LabelAppStyle}"
-                       HorizontalOptions="Start"
-                       FontSize="Large" FontAttributes="Bold"/>
-                <Switch Grid.Column="1"
-                        Scale="1.3"
-                        IsToggled="{Binding IsSaveToGallery, Mode=TwoWay}" />
-            </Grid>
-        </Frame>
-    </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+            
+    <ActivityIndicator
+        IsRunning="{Binding IsSending}"
+        Color="Black"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        Scale="2"
+        IsVisible="{Binding IsSending}"
+        
+        AbsoluteLayout.LayoutBounds="0.5,0.3,-1,-1"
+        AbsoluteLayout.LayoutFlags="PositionProportional" 
+        />
+    </AbsoluteLayout>
 </ContentPage>

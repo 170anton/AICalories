@@ -79,6 +79,7 @@
             
             
             <Style x:Key="MainFrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False"/>
                 <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="Padding" Value="30"/>
                 <Setter Property="Opacity" Value="0.8" />

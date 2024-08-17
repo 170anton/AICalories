@@ -31,8 +31,8 @@
         </ShellContent>
     </TabBar>-->
     <TabBar>
-        <Tab Title="Settings" Icon="settings.png">
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" Route="settings"/>
+        <Tab Title="Other" Icon="other_black.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings"/>
 
 
         </Tab>
