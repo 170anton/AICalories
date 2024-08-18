@@ -9,7 +9,7 @@
     <Color x:Key="PrimaryMain">White</Color>
     <Color x:Key="SecondaryMain">#EEEEEE</Color>
     <Color x:Key="TertiaryMain">Black</Color>
-    <Color x:Key="Other">#f5df73</Color>
+    <Color x:Key="SoftYellow">#EBD87F</Color><!--f5df73-->
 
 
     <Color x:Key="Primary">#512BD4</Color>

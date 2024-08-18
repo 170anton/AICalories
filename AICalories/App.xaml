@@ -39,11 +39,14 @@
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="FontSize" Value="Title" />
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                <Setter Property="TextColor" Value="White" />
+                
+                <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
                 <Setter Property="Opacity" Value="0.8" />
                 <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource SoftYellow}" />
 
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
                 
                 <!--<Setter Property="BorderColor" Value="{StaticResource Black}" />
                 <Setter Property="BorderWidth" Value="1" />-->

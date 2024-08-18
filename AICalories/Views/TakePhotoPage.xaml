@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             x:Class="AICalories.Views.TakePhotoPage"
+             Title="TakePhotoPage">
+    <!--<Shell.TabBarIsVisible>
+        False
+    </Shell.TabBarIsVisible>-->
+    <Grid RowDefinitions="*,Auto">
+        <!-- Camera view -->
+        <cv:CameraView x:Name="cameraView" WidthRequest="306" HeightRequest="408"/>
+        <Image x:Name="snapPreview"/>
+
+
+        <!-- Capture button -->
+        <Button x:Name="captureButton" Text="Capture Photo" Grid.Row="1" Margin="10"
+                Clicked="OnCaptureButtonClicked" Style="{StaticResource ImageOptionStyle}"/>
+    </Grid>
+</ContentPage>

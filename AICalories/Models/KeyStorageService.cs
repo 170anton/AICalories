@@ -21,13 +21,12 @@ namespace AICalories.Models
             return filePath;
         }
 
-        public void StoreKeys(string awsAccessKeyId, string awsSecretAccessKey, string openAiApiKey)
+        public void StoreKeys(string openAiApiKey, string openAiApiKeyReserved)
         {
             var keys = new ApiKeys
             {
-                AWSAccessKeyId = awsAccessKeyId,
-                AWSSecretAccessKey = awsSecretAccessKey,
-                OpenAIAPIKey = openAiApiKey
+                OpenAIAPIKey = openAiApiKey,
+                OpenAIAPIKeyReserved = openAiApiKeyReserved
             };
 
             var jsonKeys = JsonSerializer.Serialize(keys);

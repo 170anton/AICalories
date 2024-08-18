@@ -7,7 +7,7 @@
     </ContentPage.ToolbarItems>-->
     
     <ScrollView>
-        <Grid RowDefinitions=".3*,.3*,.1*,.1*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10" ColumnSpacing="10">
+        <Grid RowDefinitions=".5*,.5*,.1*,.1*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10" ColumnSpacing="10">
             <Frame Padding="10" Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}">
                 <Grid ColumnDefinitions=".6*, .3*">
                     <Frame Padding="0" Style="{StaticResource MainFrameStyle}">
@@ -91,13 +91,13 @@
 
             <!--ImageSource="{AppThemeBinding Light=camera.png, Dark=camera_white.png}"-->
         <Button
-                
                 Text="Take"
                 ContentLayout="Top"
                 Padding="30"
                 Grid.Row="2" Grid.RowSpan="2"
                 Grid.Column="1" Grid.ColumnSpan="1"
                 Style="{StaticResource ImageOptionStyle}"
+                BackgroundColor="{StaticResource SoftYellow}"
                 Clicked="OnTakeImageClicked">
             
 

@@ -62,11 +62,15 @@
                     <VerticalStackLayout Padding="10,10" Spacing="20">
             
                         <Entry Text="{Binding Email}" Placeholder="Enter your email" FontSize="Large"
-                               TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                               TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                               PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
+                               />
                             
                         <Editor Text="{Binding Question}" Placeholder="Enter your question"  FontSize="Large"
                                 x:Name="editor" MaxLength="1000" MaximumHeightRequest="800" AutoSize="TextChanges"
-                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
+                                />
 
                   
                         <Button Text="Send" FontAttributes="Bold" Command="{Binding SendQuestionCommand}" IsEnabled="{Binding IsSending, Converter={StaticResource InverseBooleanConverter}}" 

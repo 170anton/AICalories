@@ -5,10 +5,6 @@ using System.Text;
 using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Models;
-using Amazon;
-using Amazon.S3;
-using Amazon.S3.Model;
-using Azure.Security.KeyVault.Secrets;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,21 +15,14 @@ namespace AICalories.ViewModels;
 
 public class MainVM : INotifyPropertyChanged
 {
-    private string OpenAIAPIKey;
-    private string AwsAccessKeyId;
-    private string AwsSecretAccessKey;
-
     private string _lastHistoryItemImage;
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
 
+    private ApiKeys _apiKeys;
     private readonly IViewModelService _viewModelService;
-    private readonly HttpClient client = new HttpClient();
+    private readonly HttpClient _client = new HttpClient();
     private const string OpenAIAPIUrl = "https://api.openai.com/v1/chat/completions";
-    //private const string BucketName = "aic-images";
-    //private readonly RegionEndpoint BucketRegion = RegionEndpoint.EUNorth1;
-    //private IAmazonS3 _s3Client;
-    //private readonly APIManager _aPIManager;
 
     //public delegate Task ShowDelegate(string response);
     //public ShowDelegate OnShowResponseRequested;
@@ -87,12 +76,12 @@ public class MainVM : INotifyPropertyChanged
         _viewModelService.MainVM = this;
 
         LoadSecrets();
-        if (OpenAIAPIKey == null)
+        if (_apiKeys.OpenAIAPIKey == null)
         {
             throw new ArgumentNullException();
         }
 
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {OpenAIAPIKey}");
+        _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys.OpenAIAPIKey}");
         //_s3Client = new AmazonS3Client(AwsAccessKeyId, AwsSecretAccessKey, BucketRegion);
         //_aPIManager = new APIManager();
         //LoadLastHistoryItem();
@@ -157,7 +146,7 @@ public class MainVM : INotifyPropertyChanged
     {
         var requestData = RequestData.GetFirstPrompt(base64Image, ContextVM.SelectedOption);
         var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync(OpenAIAPIUrl, content);
+        var response = await _client.PostAsync(OpenAIAPIUrl, content);
         response.EnsureSuccessStatusCode();
         return response;
     }
@@ -305,18 +294,11 @@ public class MainVM : INotifyPropertyChanged
 
             var keyStorageService = new KeyStorageService(encryptionKey);
 
-            var keys = keyStorageService.RetrieveKeys();
+            _apiKeys = keyStorageService.RetrieveKeys();
 
-            Console.WriteLine($"AWS Access Key ID: {keys.AWSAccessKeyId}");
-            Console.WriteLine($"AWS Secret Access Key: {keys.AWSSecretAccessKey}");
-            Console.WriteLine($"OpenAI API Key: {keys.OpenAIAPIKey}");
-
-            OpenAIAPIKey = keys.OpenAIAPIKey;
-            AwsAccessKeyId = keys.AWSAccessKeyId;
-            AwsSecretAccessKey = keys.AWSSecretAccessKey;
 
             //HasRecievedSecrets = true;
-        }
+        } 
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading secrets: {ex.Message}");

@@ -3,9 +3,6 @@ using System.Text;
 using AICalories;
 using AICalories.DI;
 using AICalories.ViewModels;
-using Amazon;
-using Amazon.S3;
-using Amazon.S3.Model;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 using Plugin.Media;
@@ -77,20 +74,23 @@ public partial class MainPage : ContentPage
                 {
                     //var image = await MediaPicker.Default.CapturePhotoAsync();
                     //await CrossMedia.Current.Initialize();
-                    // Initialize the media plugin
-                    await CrossMedia.Current.Initialize();
 
-                    var image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                    {
-                        PhotoSize = PhotoSize.Medium,
-                        //SaveToAlbum = true
-                    });
+                    var _takePhotoPage = new TakePhotoPage();
+                    await Shell.Current.Navigation.PushModalAsync(_takePhotoPage);
+                    
+                    //await CrossMedia.Current.Initialize();
 
-                    ProcessImage(image);
+                    //var image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                    //{
+                    //    PhotoSize = PhotoSize.Medium,
+                    //    //SaveToAlbum = true
+                    //});
+
+                    //ProcessImage(image);
                 }
                 catch (ArgumentNullException ex)
                 {
-                    await ShowError("No connection to OpenAI");
+                    await ShowError("No connection to AI server. Please try again later");
                 }
                 catch (Exception ex)
                 {
@@ -128,14 +128,11 @@ public partial class MainPage : ContentPage
             _loadScreenPage = new LoadingScreenPage();
             await Shell.Current.Navigation.PushAsync(_loadScreenPage);
             var response = await _viewModel.ProcessImage(image);
-            if (response != null)
-            {
-                _loadScreenPage.LoadAIResponse(response);
-            }
-            else
+            if (response == null)
             {
                 _loadScreenPage.LoadAIResponse("Loading error");
             }
+            _loadScreenPage.LoadAIResponse(response);
         }
     }
 
