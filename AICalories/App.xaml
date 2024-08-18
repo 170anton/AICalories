@@ -113,7 +113,13 @@
 
             </Style>
 
-
+            
+            <Style x:Key="MainActivityIndicatorStyle" TargetType="ActivityIndicator">
+                <Setter Property="Color" Value="{StaticResource SoftYellow}"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Scale" Value="2"/>
+            </Style>
 
 
 

@@ -172,10 +172,10 @@ namespace AICalories.ViewModels
             {
                 IsSending = true;
                 var success = await EmailService.SendEmailAsync(Email, Question);
+                IsSending = false;
 
                 if (success)
                 {
-                    IsSending = false;
                     Email = null;
                     Question = null;
                     AddTimestamp();
@@ -183,7 +183,6 @@ namespace AICalories.ViewModels
                 }
                 else
                 {
-                    IsSending = false;
                     await Application.Current.MainPage.DisplayAlert("Error", "Failed to send your question. Try again later", "Sad");
                 }
             }

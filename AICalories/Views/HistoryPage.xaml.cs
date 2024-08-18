@@ -18,17 +18,6 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         BindingContext = _viewModel;
         //Task.Run(() => §.LoadData()); //do not await
     }
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        var countInDb = await App.Database.GetCountAsync();
-        var countInColl = _viewModel.DayGroupedItems.SelectMany(grouped => grouped).Count();
-        if (countInDb != countInColl)
-        {
-            await _viewModel.UpdateData();
-        }
-    }
 
     private void ShowOverlay()
     {
@@ -95,5 +84,11 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
     {
         Shell.Current.GoToAsync("//main");
         return true;
+    }
+
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.CheckForUpdate();
     }
 }

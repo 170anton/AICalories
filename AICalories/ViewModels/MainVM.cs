@@ -18,6 +18,8 @@ public class MainVM : INotifyPropertyChanged
     private string _lastHistoryItemImage;
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
+    private bool isLoading;
+    private bool isLabelVisible;
 
     private ApiKeys _apiKeys;
     private readonly IViewModelService _viewModelService;
@@ -32,7 +34,7 @@ public class MainVM : INotifyPropertyChanged
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
-    #region Last HistoryItem Info
+    #region Properties
 
     public string LastHistoryItemImage
     {
@@ -65,7 +67,27 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
+    public bool IsLoading
+    {
+        get => isLoading;
+        set
+        {
+            isLoading = value;
+            OnPropertyChanged();
+        }
+    }
 
+
+
+    public bool IsLabelVisible
+    {
+        get => isLabelVisible;
+        set
+        {
+            isLabelVisible = value;
+            OnPropertyChanged();
+        }
+    }
     #endregion
 
     #region Constructor
@@ -270,14 +292,21 @@ public class MainVM : INotifyPropertyChanged
     {
         try
         {
+            IsLabelVisible = false;
+            IsLoading = true;
+            await Task.Delay(2000);
             var lastItem = await App.Database.GetLastItemAsync();
-            if (lastItem != null)
+            IsLoading = false;
+
+            if (lastItem == null)
             {
-                LastHistoryItemImage = lastItem.ImagePath;
-                LastHistoryItemName = lastItem.Name;
-                LastHistoryItemCalories = lastItem.Calories;
+                IsLabelVisible = true;
+                return;
             }
-            //todo else
+
+            LastHistoryItemImage = lastItem.ImagePath;
+            LastHistoryItemName = lastItem.Name;
+            LastHistoryItemCalories = lastItem.Calories;
         }
         catch (Exception ex)
         {

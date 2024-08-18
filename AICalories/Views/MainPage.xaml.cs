@@ -27,7 +27,6 @@ public partial class MainPage : ContentPage
             {
                 _viewModel = viewModelLocator.GetMainViewModel();
                 BindingContext = _viewModel;
-
             }
         }
         catch (Exception)
@@ -223,11 +222,7 @@ public partial class MainPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        //if (_viewModel.HasRecievedSecrets == false)
-        //{
-        //    string message = "No connection to OpenAI"; //todo
-        //    ShowAlert(message);
-        //}
+
         _viewModel.LoadLastHistoryItem();
     }
     #endregion

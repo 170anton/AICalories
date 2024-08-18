@@ -11,6 +11,8 @@ namespace AICalories.ViewModels
         private string calories;
         private string totalResultJSON;
 
+        #region Properties
+
         public string DishName
         {
             get => dishName;
@@ -62,6 +64,8 @@ namespace AICalories.ViewModels
                 }
             }
         }
+
+        #endregion
 
         public LoadingScreenVM()
 		{

@@ -7,21 +7,43 @@
     </ContentPage.ToolbarItems>-->
     
     <ScrollView>
-        <Grid RowDefinitions=".5*,.5*,.1*,.1*" ColumnDefinitions="*,*" Padding="20,10" RowSpacing="10" ColumnSpacing="10">
+        <Grid RowDefinitions=".5*,.5*,.1*,.1*" ColumnDefinitions="*,*"
+              Padding="20,10" RowSpacing="10" ColumnSpacing="10">
             <Frame Padding="10" Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}">
-                <Grid ColumnDefinitions=".6*, .3*">
-                    <Frame Padding="0" Style="{StaticResource MainFrameStyle}">
+                <AbsoluteLayout>
+                    <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All" >
+                        <Grid ColumnDefinitions=".6*, .3*" >
+                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}">
                         
-                        <Image Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"/>
+                                <Image Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"/>
 
-                    </Frame>
-                    <Grid Grid.Column="1" RowDefinitions="*,*">
-                        <Label Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
-                        <Label Text="{Binding LastHistoryItemCalories}" Style="{StaticResource LabelAppStyle}" Grid.Row="1"/>
+                            </Frame>
+                            <Grid Grid.Column="1" RowDefinitions="*,*">
+                                <Label Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
+                                <Label Text="{Binding LastHistoryItemCalories}" Style="{StaticResource LabelAppStyle}" Grid.Row="1"/>
 
-                    </Grid>
-                </Grid>
+                            </Grid>
+                        </Grid>
+                    </ScrollView>
 
+                    <Label x:Name="MakeFirstRecordLabel"
+                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        MaximumWidthRequest="200"
+                        FontSize="Title" FontAttributes="Bold"
+                        Text="Make your first record" Style="{StaticResource LabelAppStyle}"
+                        IsVisible="{Binding IsLabelVisible}"/>
+
+                    <ActivityIndicator
+                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        IsVisible="{Binding IsLoading}"
+                        IsRunning="{Binding IsLoading}"
+                        Style="{StaticResource MainActivityIndicatorStyle}"
+        
+                        />
+                </AbsoluteLayout>
             </Frame>
                 
             

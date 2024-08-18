@@ -10,9 +10,7 @@
             <ActivityIndicator x:Name="RefreshIndicator" Grid.Row="2"
                            IsRunning="{Binding IsRefreshing}"
                            IsVisible="{Binding IsRefreshing}"
-                           Color="Black"
-                           WidthRequest="100"
-                           HeightRequest="100" />
+                           Style="{StaticResource MainActivityIndicatorStyle}"/>
 
             <Label Grid.Row="1" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
             <Label Grid.Row="2" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>

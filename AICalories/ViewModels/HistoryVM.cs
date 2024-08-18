@@ -4,15 +4,44 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using AICalories.Models;
+using AndroidX.Lifecycle;
 
 namespace AICalories.ViewModels
 {
 	public class HistoryVM : INotifyPropertyChanged
     {
+        private bool isLoading;
+        private bool isLabelVisible;
+
         public ObservableCollection<DayGroupedItem> DayGroupedItems { get; private set; }
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand ClearAllCommand { get; }
+
+        #region Properties
+
+        public bool IsLoading
+        {
+            get => isLoading;
+            set
+            {
+                isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+        public bool IsLabelVisible
+        {
+            get => isLabelVisible;
+            set
+            {
+                isLabelVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
         public HistoryVM()
         {
@@ -25,7 +54,38 @@ namespace AICalories.ViewModels
         }
 
 
-        public async Task UpdateData()
+        public async void CheckForUpdate()
+        {
+            try
+            {
+                IsLabelVisible = false;
+                IsLoading = true;
+                await Task.Delay(2000);
+
+                var countInDb = await App.Database.GetCountAsync();
+                var countInColl = DayGroupedItems.SelectMany(grouped => grouped).Count();
+
+                if (countInDb != countInColl)
+                {
+                    UpdateData();
+                    IsLoading = false;
+                }
+
+                if (countInColl == 0)
+                {
+                    IsLoading = false;
+                    IsLabelVisible = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error CheckForUpdate: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async void UpdateData()
         {
             try
             {
@@ -90,7 +150,7 @@ namespace AICalories.ViewModels
                 group = new DayGroupedItem(dateTimeNow.Date);
                 DayGroupedItems.Add(group);
                 //ObservColl does not sort
-                await UpdateData();
+                UpdateData();
             }
 
             group.Add(newItem);
