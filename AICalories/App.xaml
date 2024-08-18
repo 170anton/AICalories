@@ -43,7 +43,7 @@
                 
                 <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
                 <Setter Property="Opacity" Value="0.8" />
-                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <Setter Property="BorderColor" Value="{StaticResource SoftYellow}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource SoftYellow}" />
 
                 <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->

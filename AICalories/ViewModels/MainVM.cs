@@ -294,7 +294,7 @@ public class MainVM : INotifyPropertyChanged
         {
             IsLabelVisible = false;
             IsLoading = true;
-            await Task.Delay(2000);
+            await Task.Delay(1000);
             var lastItem = await App.Database.GetLastItemAsync();
             IsLoading = false;
 

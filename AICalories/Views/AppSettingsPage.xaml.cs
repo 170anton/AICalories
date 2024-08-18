@@ -44,4 +44,12 @@ public partial class AppSettingsPage : ContentPage
         Shell.Current.GoToAsync("//main");
         return true;
     }
+
+    protected async override void OnAppearing()
+    {
+        //_viewModel.IsLoading = true;
+        base.OnAppearing();
+        //await Task.Delay(1000);
+        //_viewModel.IsLoading = false;
+    }
 }

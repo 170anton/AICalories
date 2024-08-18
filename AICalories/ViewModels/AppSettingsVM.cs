@@ -17,7 +17,7 @@ namespace AICalories.ViewModels
 
         private string email;
         private string question;
-        private bool isSending;
+        private bool isLoading;
         private const int MaxQuestionsPerHour = 2;
         private const string QuestionTimestampsKey = "QuestionTimestamps";
 
@@ -71,12 +71,12 @@ namespace AICalories.ViewModels
             }
         }
 
-        public bool IsSending
+        public bool IsLoading
         {
-            get => isSending;
+            get => isLoading;
             set
             {
-                isSending = value;
+                isLoading = value;
                 OnPropertyChanged();
             }
         }
@@ -170,9 +170,9 @@ namespace AICalories.ViewModels
 
             try
             {
-                IsSending = true;
+                IsLoading = true;
                 var success = await EmailService.SendEmailAsync(Email, Question);
-                IsSending = false;
+                IsLoading = false;
 
                 if (success)
                 {
@@ -194,7 +194,7 @@ namespace AICalories.ViewModels
             }
             finally
             {
-                IsSending = false; // Re-enable the button
+                IsLoading = false; // Re-enable the button
             }
         }
 

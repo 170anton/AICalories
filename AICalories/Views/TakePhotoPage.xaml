@@ -4,17 +4,19 @@
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              x:Class="AICalories.Views.TakePhotoPage"
              Title="TakePhotoPage">
-    <!--<Shell.TabBarIsVisible>
-        False
-    </Shell.TabBarIsVisible>-->
-    <Grid RowDefinitions="*,Auto">
-        <!-- Camera view -->
-        <cv:CameraView x:Name="cameraView" WidthRequest="306" HeightRequest="408"/>
+
+    <Grid RowDefinitions=".9*,.2*">
         <Image x:Name="snapPreview"/>
 
+        <cv:CameraView x:Name="cameraView" Grid.RowSpan="2"
+                       VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
+                       />
+        
 
-        <!-- Capture button -->
-        <Button x:Name="captureButton" Text="Capture Photo" Grid.Row="1" Margin="10"
-                Clicked="OnCaptureButtonClicked" Style="{StaticResource ImageOptionStyle}"/>
+
+        <Button x:Name="captureButton" Text=""  Grid.Row="1" Margin="10"
+                Clicked="OnCaptureButtonClicked" Style="{StaticResource ImageOptionStyle}"
+                HeightRequest="80" WidthRequest="80"
+                CornerRadius="50"/>
     </Grid>
 </ContentPage>

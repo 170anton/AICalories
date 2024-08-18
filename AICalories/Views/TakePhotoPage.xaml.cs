@@ -15,6 +15,10 @@ public partial class TakePhotoPage : ContentPage
         _viewModel = new TakePhotoVM();
         BindingContext = _viewModel;
 
+        //var displayInfo = DeviceDisplay.MainDisplayInfo;
+        //var screenWidthInDips = displayInfo.Width / displayInfo.Density;
+        //var screenHeightInDips = displayInfo.Height / displayInfo.Density;
+
         cameraView.CamerasLoaded += CameraView_CamerasLoaded;
     }
 
@@ -28,7 +32,7 @@ public partial class TakePhotoPage : ContentPage
             captureButton.IsVisible = false;
             snapPreview.Source = result;
         }
-        await Shell.Current.Navigation.PushModalAsync(new LoadingScreenPage());
+        //await Shell.Current.Navigation.PushModalAsync(new LoadingScreenPage());
 
     }
 
@@ -37,12 +41,12 @@ public partial class TakePhotoPage : ContentPage
         if (cameraView.NumCamerasDetected > 0)
         {
             cameraView.Camera = cameraView.Cameras.First();
+
+
             cameraView.StartCameraAsync(new Size(1440, 1080)); // todo make mode resolutions if unavailable 0.75
-            //cameraView.ZoomFactor = 2.5f;
-            //MainThread.BeginInvokeOnMainThread(async () =>
-            //{
-            //    await cameraView.StartCameraAsync(new Size(1920, 1080));
-            //});
+            //cameraView.StartCameraAsync(cameraView.Camera.AvailableResolutions.OrderByDescending
+            //            (size => size.Width * size.Height).FirstOrDefault());
+            cameraView.ForceAutoFocus();
         }
     }
 
