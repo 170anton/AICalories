@@ -9,10 +9,9 @@ public partial class ContextPage : ContentPage
     private const string SelectedOptionKey = "SelectedOption";
 
     private ContextVM _viewModel;
-    private IImageInfo _imageInfo;
 
 
-    public ContextPage(IImageInfo ImageInfo)
+    public ContextPage()
 	{
 		InitializeComponent();
 
@@ -25,17 +24,14 @@ public partial class ContextPage : ContentPage
         _viewModel = viewModelLocator.GetContextViewModel();
         BindingContext = _viewModel;
 
-        _imageInfo = ImageInfo;
-
-        _viewModel.MainImage = _imageInfo.Image;
-
     }
 
 
     private void OnConfirmClicked(System.Object sender, System.EventArgs e)
     {
-        var resultPage = new ResultPage(_imageInfo);
+        //var resultPage = new ResultPage();
 
+        var resultPage = IPlatformApplication.Current.Services.GetService<ResultPage>();
         Shell.Current.Navigation.PopModalAsync();
         Shell.Current.Navigation.PushModalAsync(resultPage);
 

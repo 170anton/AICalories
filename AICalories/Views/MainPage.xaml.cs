@@ -74,9 +74,12 @@ public partial class MainPage : ContentPage
                     //var image = await MediaPicker.Default.CapturePhotoAsync();
                     //await CrossMedia.Current.Initialize();
 
-                    var takeImagePage = new TakeImagePage();
+                    //var takeImagePage = new TakeImagePage();
+
+                    var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
                     await Shell.Current.Navigation.PushModalAsync(takeImagePage);
-                    
+
+
                     //await CrossMedia.Current.Initialize();
 
                     //var image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions

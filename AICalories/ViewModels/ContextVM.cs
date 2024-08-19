@@ -34,12 +34,12 @@ namespace AICalories.ViewModels
 
         public ImageSource MainImage
         {
-            get => _mainImage;
+            get => _imageInfo.Image;
             set
             {
-                if (_mainImage != value)
+                if (_imageInfo.Image != value)
                 {
-                    _mainImage = value;
+                    _imageInfo.Image = value;
                     OnPropertyChanged();
                 }
             }
@@ -50,16 +50,19 @@ namespace AICalories.ViewModels
 
         //public ICommand SetSelectedOptionCommand { get; }
 
-        public ContextVM(IViewModelService viewModelService)
+        public ContextVM(IViewModelService viewModelService, IImageInfo imageInfo)
         {
             _viewModelService = viewModelService;
             _viewModelService.ContextVM = this;
+
+            _imageInfo = imageInfo;
             //SetSelectedOptionCommand = new Command(OnSetSelectedOption);
 
 
             LoadSelectedOption();
         }
-
+        
+    
         private void LoadSelectedOption()
         {
             var savedOption = Preferences.Get(SelectedOptionKey, "Regular");

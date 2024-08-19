@@ -6,12 +6,11 @@ namespace AICalories.Views;
 public partial class ResultPage : ContentPage
 {
 	private ResultVM _viewModel;
-    private IImageInfo _imageInfo;
 
-    public ResultPage(IImageInfo ImageInfo)
+    public ResultPage(ResultVM viewModel)
 	{
 		InitializeComponent();
-		_viewModel = new ResultVM();
+		_viewModel = viewModel;
 		BindingContext = _viewModel;
 	}
 

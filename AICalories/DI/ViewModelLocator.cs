@@ -1,4 +1,5 @@
 ﻿using System;
+using AICalories.Interfaces;
 using AICalories.ViewModels;
 
 namespace AICalories.DI
@@ -6,10 +7,12 @@ namespace AICalories.DI
 	public class ViewModelLocator
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IImageInfo _imageInfo;
 
-        public ViewModelLocator(IServiceProvider serviceProvider)
+        public ViewModelLocator(IServiceProvider serviceProvider, IImageInfo imageInfo)
         {
             _serviceProvider = serviceProvider;
+            _imageInfo = imageInfo;
         }
 
         public MainVM GetMainViewModel() => _serviceProvider.GetRequiredService<MainVM>();

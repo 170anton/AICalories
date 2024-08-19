@@ -9,15 +9,13 @@ namespace AICalories.Views;
 public partial class TakeImagePage : ContentPage
 {
     private TakeImageVM _viewModel;
-    private IImageInfo _imageInfo;
 
-    public TakeImagePage()
+    public TakeImagePage(TakeImageVM viewModel)
 	{
 		InitializeComponent();
 
-        _viewModel = new TakeImageVM();
+        _viewModel = viewModel;
         BindingContext = _viewModel;
-        _imageInfo = new ImageInfo();
 
         //var displayInfo = DeviceDisplay.MainDisplayInfo;
         //var screenWidthInDips = displayInfo.Width / displayInfo.Density;
@@ -36,16 +34,15 @@ public partial class TakeImagePage : ContentPage
         }
 
         var image = ImageSource.FromStream(() => stream);
-        _imageInfo.Image = image;
+        _viewModel.SetImage(image);
 
-        ContextPage contextPage = new ContextPage(_imageInfo);
+        ContextPage contextPage = new ContextPage();
 
         Shell.Current.Navigation.PopModalAsync();
         await Shell.Current.Navigation.PushModalAsync(contextPage);
-        
+
 
     }
-
 
     private async void OnGalleryButtonClicked(object sender, EventArgs e)
     {
@@ -61,8 +58,8 @@ public partial class TakeImagePage : ContentPage
             return; //todo
         }
 
-        _imageInfo.Image = image.FullPath;
-        ContextPage contextPage = new ContextPage(_imageInfo);
+        _viewModel.SetImage(image.FullPath);
+        ContextPage contextPage = new ContextPage();
         await Shell.Current.Navigation.PushModalAsync(contextPage);
         
 
