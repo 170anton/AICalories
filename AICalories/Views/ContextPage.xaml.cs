@@ -1,4 +1,5 @@
 ﻿using AICalories.DI;
+using AICalories.Interfaces;
 using AICalories.ViewModels;
 
 namespace AICalories.Views;
@@ -8,27 +9,37 @@ public partial class ContextPage : ContentPage
     private const string SelectedOptionKey = "SelectedOption";
 
     private ContextVM _viewModel;
-         
-	public ContextPage()
+    private IImageInfo _imageInfo;
+
+
+    public ContextPage(IImageInfo ImageInfo)
 	{
 		InitializeComponent();
 
         var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
-        if (viewModelLocator != null)
+        if (viewModelLocator == null)
         {
-            _viewModel = viewModelLocator.GetContextViewModel();
-            BindingContext = _viewModel;
-
-            //if (_viewModel.SelectedOption == null)
-            //{
-            //    _viewModel.SelectedOption = "Regular";
-            //}
-
-            //LoadSelectedOption();
+            return;
         }
+
+        _viewModel = viewModelLocator.GetContextViewModel();
+        BindingContext = _viewModel;
+
+        _imageInfo = ImageInfo;
+
+        _viewModel.MainImage = _imageInfo.Image;
 
     }
 
+
+    private void OnConfirmClicked(System.Object sender, System.EventArgs e)
+    {
+        var resultPage = new ResultPage(_imageInfo);
+
+        Shell.Current.Navigation.PopModalAsync();
+        Shell.Current.Navigation.PushModalAsync(resultPage);
+
+    }
 
     private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
@@ -36,26 +47,17 @@ public partial class ContextPage : ContentPage
         {
             var radioButton = sender as RadioButton;
             var selectedOption = radioButton?.Value?.ToString();
-            // Save the selected option to preferences
+            
             Preferences.Set(SelectedOptionKey, selectedOption);
 
             _viewModel.SelectedOption = selectedOption;
         }
     }
 
-
-    private void LoadSelectedOption()
-    {
-        var savedOption = Preferences.Get(SelectedOptionKey, "Regular");
-        if (savedOption != null)
-        {
-            _viewModel.SelectedOption = savedOption;
-        }
-    }
-
     protected override bool OnBackButtonPressed()
     {
-        Shell.Current.GoToAsync("//main");
+        //Shell.Current.GoToAsync("//main");
+        Shell.Current.Navigation.PopModalAsync();
         return true;
     }
 }

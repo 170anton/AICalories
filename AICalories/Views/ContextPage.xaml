@@ -1,98 +1,104 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AICalories.Views.ContextPage">
+             x:Class="AICalories.Views.ContextPage"
+             x:Name="Page">
     
     <!--<ContentPage.Resources>
         <ResourceDictionary>
             <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>-->
+    <Grid RowDefinitions=".9*,.1*">
+        <ScrollView Grid.RowSpan="2">
+            <VerticalStackLayout  Margin="0,0,0,80">
+                <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFit"/>
 
-    <ScrollView>
-    <VerticalStackLayout>
-        <Frame Style="{StaticResource ShadowFrameStyle}"
-               Margin="10,10,10,0" Padding="0">
-            <Grid RowDefinitions="Auto,*" >
-                <Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
-                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
-                    <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
-                           HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
-                           CheckedChanged="RadioButton_CheckedChanged" 
-                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Diet', Mode=TwoWay}"
-                           Value="Diet"/>
+                <Frame Style="{StaticResource MainFrameStyle}"
+                       Margin="10,10,10,0" Padding="0">
+                    <Grid RowDefinitions="Auto,*" >
+                        <Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                               HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
+                        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
+                            <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Diet', Mode=TwoWay}"
+                                   Value="Diet"/>
 
-                    <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
-                           HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="1"
-                           CheckedChanged="RadioButton_CheckedChanged" 
-                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Healthy', Mode=TwoWay}"
-                           Value="Healthy"/>
+                            <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Grid.Row="1"
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Healthy', Mode=TwoWay}"
+                                   Value="Healthy"/>
 
-                    <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
-                           HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="2"
-                           CheckedChanged="RadioButton_CheckedChanged" 
-                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Regular', Mode=TwoWay}"
-                           Value="Regular"/>
+                            <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Grid.Row="2"
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Regular', Mode=TwoWay}"
+                                   Value="Regular"/>
                 
-                    <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
-                           HorizontalTextAlignment="Start"/> 
-                    <RadioButton Grid.Column="1" Grid.Row="3"/>-->
-                </Grid>
-            </Grid>
-        </Frame>
+                            <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Grid.Row="3"/>-->
+                        </Grid>
+                    </Grid>
+                </Frame>
 
-        <Frame Style="{StaticResource ShadowFrameStyle}"
-               Margin="10,5,10,0" Padding="0">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
-                <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
-                <Button Grid.Column="1"
-                        Text="Add" Margin="20,20,20,0"
-                    />
-                <Grid Grid.Row="1" Grid.ColumnSpan="2"
-                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
-                      Padding="30,20,40,20" RowSpacing="0">
-                    <Label Text="Empty mug" Style="{StaticResource LabelAppStyle}"
-                           HorizontalTextAlignment="Start"/>
-                    <CheckBox Grid.Column="1"/>
+                <Frame Style="{StaticResource MainFrameStyle}"
+                       Margin="10,5,10,0" Padding="0">
+                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
+                        <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                               HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
+                        <Button Grid.Column="1"
+                                Text="Add" Margin="20,20,20,0"
+                            />
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2"
+                              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
+                              Padding="30,20,40,20" RowSpacing="0">
+                            <Label Text="Empty mug" Style="{StaticResource LabelAppStyle}"
+                                   HorizontalTextAlignment="Start"/>
+                            <CheckBox Grid.Column="1"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="1"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="1"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="2"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="2"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="3"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="3"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="4"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="4"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="4"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="4"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="5"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="5"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="5"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="5"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="6"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="6"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="6"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="6"/>
                     
-                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="7"
-                           HorizontalTextAlignment="Start"/> 
-                    <CheckBox Grid.Column="1" Grid.Row="7"/>
+                            <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="7"
+                                   HorizontalTextAlignment="Start"/> 
+                            <CheckBox Grid.Column="1" Grid.Row="7"/>
 
 
-                </Grid>
-            </Grid>
+                        </Grid>
+                    </Grid>
 
-        </Frame>
-    </VerticalStackLayout>
-    </ScrollView>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+        <Button Grid.Row="1" Style="{StaticResource ImageOptionStyle}"
+                Text="Confirm" Margin="10" Clicked="OnConfirmClicked"/>
+    </Grid>
 </ContentPage>

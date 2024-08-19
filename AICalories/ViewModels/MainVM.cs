@@ -18,8 +18,8 @@ public class MainVM : INotifyPropertyChanged
     private string _lastHistoryItemImage;
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
-    private bool isLoading;
-    private bool isLabelVisible;
+    private bool _isLoading;
+    private bool _isLabelVisible;
 
     private ApiKeys _apiKeys;
     private readonly IViewModelService _viewModelService;
@@ -69,10 +69,10 @@ public class MainVM : INotifyPropertyChanged
 
     public bool IsLoading
     {
-        get => isLoading;
+        get => _isLoading;
         set
         {
-            isLoading = value;
+            _isLoading = value;
             OnPropertyChanged();
         }
     }
@@ -81,10 +81,10 @@ public class MainVM : INotifyPropertyChanged
 
     public bool IsLabelVisible
     {
-        get => isLabelVisible;
+        get => _isLabelVisible;
         set
         {
-            isLabelVisible = value;
+            _isLabelVisible = value;
             OnPropertyChanged();
         }
     }
@@ -315,13 +315,14 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    private void LoadSecrets()
+    private async void LoadSecrets()
     {
         try
         {
             var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
 
             var keyStorageService = new KeyStorageService(encryptionKey);
+
 
             _apiKeys = keyStorageService.RetrieveKeys();
 

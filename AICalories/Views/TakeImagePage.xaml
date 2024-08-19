@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
-             x:Class="AICalories.Views.TakePhotoPage"
+             x:Class="AICalories.Views.TakeImagePage"
              Title="TakePhotoPage">
 
     <Grid RowDefinitions=".9*,.2*">
-        <Image x:Name="snapPreview"/>
+        <Image x:Name="imagePreview" IsVisible="False"/>
 
         <cv:CameraView x:Name="cameraView" Grid.RowSpan="2"
                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
@@ -17,6 +17,10 @@
         <Button x:Name="captureButton" Text=""  Grid.Row="1" Margin="10"
                 Clicked="OnCaptureButtonClicked" Style="{StaticResource ImageOptionStyle}"
                 HeightRequest="80" WidthRequest="80"
+                CornerRadius="50"/>
+        <Button x:Name="galleryButton" Text=""  Grid.Row="1" Margin="10" HorizontalOptions="Start"
+                Clicked="OnGalleryButtonClicked" Style="{StaticResource ImageOptionStyle}"
+                HeightRequest="60" WidthRequest="60"
                 CornerRadius="50"/>
     </Grid>
 </ContentPage>

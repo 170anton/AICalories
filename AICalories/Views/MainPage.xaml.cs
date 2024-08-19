@@ -74,8 +74,8 @@ public partial class MainPage : ContentPage
                     //var image = await MediaPicker.Default.CapturePhotoAsync();
                     //await CrossMedia.Current.Initialize();
 
-                    var _takePhotoPage = new TakePhotoPage();
-                    await Shell.Current.Navigation.PushModalAsync(_takePhotoPage);
+                    var takeImagePage = new TakeImagePage();
+                    await Shell.Current.Navigation.PushModalAsync(takeImagePage);
                     
                     //await CrossMedia.Current.Initialize();
 

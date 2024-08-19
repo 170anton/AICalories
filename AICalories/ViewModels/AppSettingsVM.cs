@@ -15,9 +15,9 @@ namespace AICalories.ViewModels
         private bool _isDarkMode;
         private bool _isSaveToGallery;
 
-        private string email;
-        private string question;
-        private bool isLoading;
+        private string _email;
+        private string _question;
+        private bool _isLoading;
         private const int MaxQuestionsPerHour = 2;
         private const string QuestionTimestampsKey = "QuestionTimestamps";
 
@@ -53,30 +53,30 @@ namespace AICalories.ViewModels
 
         public string Email
         {
-            get => email;
+            get => _email;
             set
             {
-                email = value;
+                _email = value;
                 OnPropertyChanged();
             }
         }
 
         public string Question
         {
-            get => question;
+            get => _question;
             set
             {
-                question = value;
+                _question = value;
                 OnPropertyChanged();
             }
         }
 
         public bool IsLoading
         {
-            get => isLoading;
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 OnPropertyChanged();
             }
         }

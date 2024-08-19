@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using AICalories.DI;
+using AICalories.Interfaces;
 
 namespace AICalories.ViewModels
 {
@@ -12,6 +14,10 @@ namespace AICalories.ViewModels
         private const string SelectedOptionKey = "SelectedOption";
 
         private string _selectedOption;
+        private ImageSource _mainImage;
+        private IImageInfo _imageInfo;
+
+        #region Properties
 
         public string SelectedOption
         {
@@ -26,6 +32,22 @@ namespace AICalories.ViewModels
             }
         }
 
+        public ImageSource MainImage
+        {
+            get => _mainImage;
+            set
+            {
+                if (_mainImage != value)
+                {
+                    _mainImage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        #endregion
+
         //public ICommand SetSelectedOptionCommand { get; }
 
         public ContextVM(IViewModelService viewModelService)
@@ -33,6 +55,7 @@ namespace AICalories.ViewModels
             _viewModelService = viewModelService;
             _viewModelService.ContextVM = this;
             //SetSelectedOptionCommand = new Command(OnSetSelectedOption);
+
 
             LoadSelectedOption();
         }
@@ -55,9 +78,9 @@ namespace AICalories.ViewModels
         //        // Save the selected option to preferences
         //        Preferences.Set(SelectedOptionKey, selectedOption);
 
-        //        SelectedOption = selectedOption;
-        //    }
-        //}
+            //        SelectedOption = selectedOption;
+            //    }
+            //}
 
 
         public event PropertyChangedEventHandler PropertyChanged;

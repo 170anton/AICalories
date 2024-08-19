@@ -85,11 +85,11 @@
 	<ItemGroup>
 	  <Folder Include="Models/" />
 	  <Folder Include="DI\" />
-	  <Folder Include="Views\CustomViews\" />
 	  <Folder Include="Converters\" />
 	  <Folder Include="CustomControls\" />
 	  <Folder Include="Resources\Splash\" />
 	  <Folder Include="Resources\xml\" />
+	  <Folder Include="Interfaces\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -104,7 +104,6 @@
 	  <None Remove=".gitignore" />
 	  <None Remove="Resources\Layout\activity_main.xml" />
 	  <None Remove="DI\" />
-	  <None Remove="Views\CustomViews\" />
 	  <None Remove="Converters\" />
 	  <None Remove="CustomControls\" />
 	  <None Remove="Resources\Images\icons8-settings.svg" />
@@ -131,6 +130,7 @@
 	  <None Remove="Resources\xml\file_paths.xml" />
 	  <None Remove="Resources\Images\other_white.png" />
 	  <None Remove="Resources\Images\other_black.png" />
+	  <None Remove="Interfaces\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiSplashScreen Include="Resources\Splash\splashmain.jpg" Color="#f5df73" />

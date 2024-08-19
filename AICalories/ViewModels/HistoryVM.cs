@@ -4,14 +4,13 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using AICalories.Models;
-using AndroidX.Lifecycle;
 
 namespace AICalories.ViewModels
 {
 	public class HistoryVM : INotifyPropertyChanged
     {
-        private bool isLoading;
-        private bool isLabelVisible;
+        private bool _isLoading;
+        private bool _isLabelVisible;
 
         public ObservableCollection<DayGroupedItem> DayGroupedItems { get; private set; }
         public ICommand AddItemCommand { get; }
@@ -22,10 +21,10 @@ namespace AICalories.ViewModels
 
         public bool IsLoading
         {
-            get => isLoading;
+            get => _isLoading;
             set
             {
-                isLoading = value;
+                _isLoading = value;
                 OnPropertyChanged();
             }
         }
@@ -34,10 +33,10 @@ namespace AICalories.ViewModels
 
         public bool IsLabelVisible
         {
-            get => isLabelVisible;
+            get => _isLabelVisible;
             set
             {
-                isLabelVisible = value;
+                _isLabelVisible = value;
                 OnPropertyChanged();
             }
         }

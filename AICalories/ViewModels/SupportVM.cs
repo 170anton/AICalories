@@ -8,9 +8,9 @@ namespace AICalories.ViewModels
 {
     public class SupportVM : INotifyPropertyChanged
     {
-        private string email;
-        private string question;
-        private bool isSending;
+        private string _email;
+        private string _question;
+        private bool _isSending;
         private const int MaxQuestionsPerHour = 2;
         private const string QuestionTimestampsKey = "QuestionTimestamps";
 
@@ -18,41 +18,41 @@ namespace AICalories.ViewModels
 
         public SupportVM()
         {
-            SendCommand = new Command(async () => await Send());
+            SendCommand = new Command(() => Send());
         }
 
         public string Email
         {
-            get => email;
+            get => _email;
             set
             {
-                email = value;
+                _email = value;
                 OnPropertyChanged();
             }
         }
 
         public string Question
         {
-            get => question;
+            get => _question;
             set
             {
-                question = value;
+                _question = value;
                 OnPropertyChanged();
             }
         }
 
         public bool IsSending
         {
-            get => isSending;
+            get => _isSending;
             set
             {
-                isSending = value;
+                _isSending = value;
                 OnPropertyChanged();
             }
         }
 
 
-        private async Task Send()
+        private async void Send()
         {
             if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Question))
             {
