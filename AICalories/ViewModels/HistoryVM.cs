@@ -67,15 +67,14 @@ namespace AICalories.ViewModels
                 if (countInDb != countInColl)
                 {
                     UpdateData();
-                    IsLoading = false;
                 }
 
-                if (countInColl == 0)
+                if (countInDb == 0)
                 {
-                    IsLoading = false;
                     IsLabelVisible = true;
                 }
 
+                IsLoading = false;
             }
             catch (Exception ex)
             {

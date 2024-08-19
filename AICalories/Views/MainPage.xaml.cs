@@ -13,7 +13,6 @@ namespace AICalories.Views;
 public partial class MainPage : ContentPage
 {
     private MainVM _viewModel;
-    private LoadingScreenPage _loadScreenPage;
 
     #region Constructor
 
@@ -44,22 +43,6 @@ public partial class MainPage : ContentPage
 
     #endregion
 
-    #region SecondFrame
-
-    private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        if (e.Value)
-        {
-            //var radioButton = sender as RadioButton;
-            //var selectedOption = radioButton?.Value?.ToString();
-            //// Save the selected option to preferences
-            //Preferences.Set(SelectedOptionKey, selectedOption);
-
-            //_viewModel.SelectedOption = selectedOption;
-        }
-    }
-    #endregion
-
     #region Photo selection buttons
 
     private async void OnTakeImageClicked(System.Object sender, System.EventArgs e)
@@ -88,7 +71,6 @@ public partial class MainPage : ContentPage
                     //    //SaveToAlbum = true
                     //});
 
-                    //ProcessImage(image);
                 }
                 catch (ArgumentNullException ex)
                 {
@@ -110,33 +92,18 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void OnSelectImageClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            //var image = await MediaPicker.PickPhotoAsync();
-            //ProcessImage(image);
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-        }
-    }
-
-    private async void ProcessImage(MediaFile? image)
-    {
-        if (image != null)
-        {
-            _loadScreenPage = new LoadingScreenPage();
-            await Shell.Current.Navigation.PushAsync(_loadScreenPage);
-            var response = await _viewModel.ProcessImage(image);
-            if (response == null)
-            {
-                _loadScreenPage.LoadAIResponse("Loading error");
-            }
-            _loadScreenPage.LoadAIResponse(response);
-        }
-    }
+    //private async void OnSelectImageClicked(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        //var image = await MediaPicker.PickPhotoAsync();
+    //        //ProcessImage(image);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+    //    }
+    //}
 
     private async Task<bool> CheckAndRequestCameraPermissionAsync()
     {
@@ -189,18 +156,6 @@ public partial class MainPage : ContentPage
     }
 
 
-
-    private async Task ShowResponse(string response)
-    {
-        try
-        {
-            await Application.Current.MainPage.DisplayAlert("Analysis Result", response, "Ok");
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-        }
-    }
 
     private async Task ShowError(string response)
     {

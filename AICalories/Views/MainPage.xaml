@@ -7,7 +7,7 @@
     </ContentPage.ToolbarItems>-->
     
     <ScrollView>
-        <Grid RowDefinitions=".5*,.5*,.1*,.1*" ColumnDefinitions="*,*"
+        <Grid RowDefinitions=".9*,.15*" ColumnDefinitions="*,*"
               Padding="20,10" RowSpacing="10" ColumnSpacing="10">
             <Frame Padding="10" Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}">
                 <AbsoluteLayout>
@@ -45,92 +45,27 @@
                         />
                 </AbsoluteLayout>
             </Frame>
-                
-            
-            <Frame Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource MainFrameStyle}"
-                   Margin="0,0,0,20">
-                <ScrollView>
-                    <VerticalStackLayout>
-                            <Grid RowDefinitions="Auto,*" >
-                                <Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
-                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
-                                    <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
-                                           HorizontalTextAlignment="Start"/> 
-                                    <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
-                                           CheckedChanged="RadioButton_CheckedChanged" 
-                                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Diet', Mode=TwoWay}"
-                                           Value="Diet"/>
-
-                                    <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
-                                           HorizontalTextAlignment="Start"/> 
-                                    <RadioButton Grid.Column="1" Grid.Row="1"
-                                           CheckedChanged="RadioButton_CheckedChanged" 
-                                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Healthy', Mode=TwoWay}"
-                                           Value="Healthy"/>
-
-                                    <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
-                                           HorizontalTextAlignment="Start"/> 
-                                    <RadioButton Grid.Column="1" Grid.Row="2"
-                                           CheckedChanged="RadioButton_CheckedChanged" 
-                                           IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Regular', Mode=TwoWay}"
-                                           Value="Regular"/>
-                
-                                    <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
-                                           HorizontalTextAlignment="Start"/> 
-                                    <RadioButton Grid.Column="1" Grid.Row="3"/>-->
-                                </Grid>
-                            </Grid>
-
-                            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
-                                <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                                       HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
-                                <Button Grid.Column="1"
-                                        Text="Add" Margin="20,20,20,0"
-                                    />
-                                <Grid Grid.Row="1" Grid.ColumnSpan="2"
-                                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
-                                      Padding="30,20,40,20" RowSpacing="0">
-                                    <Label Text="Empty mug" Style="{StaticResource LabelAppStyle}"
-                                           HorizontalTextAlignment="Start"/>
-                                    <CheckBox Grid.Column="1"/>
-                    
-                                    <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
-                                           HorizontalTextAlignment="Start"/> 
-                                    <CheckBox Grid.Column="1" Grid.Row="1"/>
-                    
-                    
-
-                                </Grid>
-                            </Grid>
-
-                    </VerticalStackLayout>
-
-                </ScrollView>
 
 
-            </Frame>
 
-            <!--ImageSource="{AppThemeBinding Light=camera.png, Dark=camera_white.png}"-->
         <Button
                 Text="Take"
-                ContentLayout="Top"
-                Padding="30"
-                Grid.Row="2" Grid.RowSpan="2"
-                Grid.Column="1" Grid.ColumnSpan="1"
+                Padding="0"
+                Grid.Row="1"
+                Grid.Column="0" Grid.ColumnSpan="2"
                 Style="{StaticResource ImageOptionStyle}"
-                BackgroundColor="{StaticResource SoftYellow}"
                 Clicked="OnTakeImageClicked">
             
 
         </Button>
                             <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
 
-        <Button Text="Select Image"
-                Grid.Row="2" Grid.RowSpan="2"
+        <!--<Button Text="Select"
+                Padding="0"
+                Grid.Row="2"
                 Grid.Column="0" Grid.ColumnSpan="1"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnSelectImageClicked"/>
+                Clicked="OnSelectImageClicked"/>-->
 
 
         

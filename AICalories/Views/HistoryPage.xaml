@@ -6,7 +6,9 @@
              x:Class="AICalories.Views.HistoryPage"
              x:Name="root">
     <AbsoluteLayout>
-        <Grid RowDefinitions="Auto, Auto, *" AbsoluteLayout.LayoutFlags="All"
+        <Grid RowDefinitions="Auto, Auto, *" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
             
             Padding="10"
             RowSpacing="10">

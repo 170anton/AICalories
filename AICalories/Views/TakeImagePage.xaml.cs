@@ -43,9 +43,7 @@ public partial class TakeImagePage : ContentPage
 
         //var image = ImageSource.FromStream(() => stream);
 
-
         _viewModel.SetImage(imagePath);
-
 
         Shell.Current.Navigation.PopModalAsync();
         await Shell.Current.Navigation.PushModalAsync(new ContextPage());
@@ -61,15 +59,16 @@ public partial class TakeImagePage : ContentPage
             PickerTitle = "Please select an image"
         });
 
-
-        if (image != null)
+        //todo copy to local rep like on capture
+        if (image == null)
         {
             return; //todo
         }
 
         _viewModel.SetImage(image.FullPath);
-        ContextPage contextPage = new ContextPage();
-        await Shell.Current.Navigation.PushModalAsync(contextPage);
+
+        Shell.Current.Navigation.PopModalAsync();
+        await Shell.Current.Navigation.PushModalAsync(new ContextPage());
         
 
     }

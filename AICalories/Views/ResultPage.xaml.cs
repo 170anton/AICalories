@@ -45,12 +45,11 @@ public partial class ResultPage : ContentPage
         _viewModel.DishName = response;
     }
 
-
     protected override bool OnBackButtonPressed()
     {
         if (_viewModel.DishName != null) //should be check on completed result
         {
-            return false;
+            Navigation.PopModalAsync();
         }
         return true;
     }
