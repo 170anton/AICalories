@@ -13,9 +13,9 @@ namespace AICalories.ViewModels
 
 
 
-        public async void SetImage(ImageSource image)
+        public async void SetImage(string image)
         {
-            _imageInfo.Image = image;
+            _imageInfo.ImagePath = image;
         }
     }
 }

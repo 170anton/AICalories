@@ -30,10 +30,12 @@ public partial class ContextPage : ContentPage
     private void OnConfirmClicked(System.Object sender, System.EventArgs e)
     {
         //var resultPage = new ResultPage();
+        _viewModel.SetAdditionalInfo();
 
         var resultPage = IPlatformApplication.Current.Services.GetService<ResultPage>();
         Shell.Current.Navigation.PopModalAsync();
         Shell.Current.Navigation.PushModalAsync(resultPage);
+        resultPage.ProcessImage(_viewModel.MainImage);
 
     }
 

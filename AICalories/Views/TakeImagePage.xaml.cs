@@ -33,13 +33,22 @@ public partial class TakeImagePage : ContentPage
             return; //todo
         }
 
-        var image = ImageSource.FromStream(() => stream);
-        _viewModel.SetImage(image);
+        var imageName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+        var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
 
-        ContextPage contextPage = new ContextPage();
+        using (var fileStream = File.Create(imagePath))
+        {
+            await stream.CopyToAsync(fileStream);
+        }
+
+        //var image = ImageSource.FromStream(() => stream);
+
+
+        _viewModel.SetImage(imagePath);
+
 
         Shell.Current.Navigation.PopModalAsync();
-        await Shell.Current.Navigation.PushModalAsync(contextPage);
+        await Shell.Current.Navigation.PushModalAsync(new ContextPage());
 
 
     }

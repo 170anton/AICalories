@@ -14,7 +14,7 @@ namespace AICalories.ViewModels
         private const string SelectedOptionKey = "SelectedOption";
 
         private string _selectedOption;
-        private ImageSource _mainImage;
+        private string _mainImage;
         private IImageInfo _imageInfo;
 
         #region Properties
@@ -32,14 +32,14 @@ namespace AICalories.ViewModels
             }
         }
 
-        public ImageSource MainImage
+        public string MainImage
         {
-            get => _imageInfo.Image;
+            get => _imageInfo.ImagePath;
             set
             {
-                if (_imageInfo.Image != value)
+                if (_imageInfo.ImagePath != value)
                 {
-                    _imageInfo.Image = value;
+                    _imageInfo.ImagePath = value;
                     OnPropertyChanged();
                 }
             }
@@ -48,7 +48,7 @@ namespace AICalories.ViewModels
 
         #endregion
 
-        //public ICommand SetSelectedOptionCommand { get; }
+        public ICommand ConfirmCommand { get; }
 
         public ContextVM(IViewModelService viewModelService, IImageInfo imageInfo)
         {
@@ -56,13 +56,16 @@ namespace AICalories.ViewModels
             _viewModelService.ContextVM = this;
 
             _imageInfo = imageInfo;
-            //SetSelectedOptionCommand = new Command(OnSetSelectedOption);
 
 
             LoadSelectedOption();
         }
-        
-    
+
+        public async void SetAdditionalInfo()
+        {
+            _imageInfo.MealType = SelectedOption;
+        }
+
         private void LoadSelectedOption()
         {
             var savedOption = Preferences.Get(SelectedOptionKey, "Regular");

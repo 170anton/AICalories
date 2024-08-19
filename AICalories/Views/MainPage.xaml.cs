@@ -82,7 +82,7 @@ public partial class MainPage : ContentPage
 
                     //await CrossMedia.Current.Initialize();
 
-                    //var image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                    //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
                     //{
                     //    PhotoSize = PhotoSize.Medium,
                     //    //SaveToAlbum = true

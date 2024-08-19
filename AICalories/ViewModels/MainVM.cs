@@ -315,7 +315,7 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    private async void LoadSecrets()
+    private void LoadSecrets()
     {
         try
         {
