@@ -2,6 +2,7 @@ using System.Data;
 using System.Text;
 using AICalories;
 using AICalories.DI;
+using AICalories.Models;
 using AICalories.ViewModels;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
@@ -30,16 +31,17 @@ public partial class MainPage : ContentPage
         }
         catch (Exception)
         {
-            ShowError("No connection to OpenAI");
+            DisplayAlertConfiguration.ShowUnexpectedError();
         }
-        //_viewModel.OnShowResponseRequested += ShowResponse;
-        //_viewModel.OnShowAlertRequested += ShowAlert;
-
     }
 
     #endregion
 
     #region FirstFrame
+
+    #endregion
+
+    #region SecondFrame
 
     #endregion
 
@@ -59,6 +61,13 @@ public partial class MainPage : ContentPage
 
                     //var takeImagePage = new TakeImagePage();
 
+                    if (!InternetConnection.CheckInternetConnection())
+                    {
+                        DisplayAlertConfiguration.ShowError("No internet connection");
+                        return;
+                    }
+                    
+
                     var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
                     await Shell.Current.Navigation.PushModalAsync(takeImagePage);
 
@@ -74,11 +83,11 @@ public partial class MainPage : ContentPage
                 }
                 catch (ArgumentNullException ex)
                 {
-                    await ShowError("No connection to AI server. Please try again later");
+                    DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
                 }
                 catch (Exception ex)
                 {
-                    await ShowError($"An error occurred: {ex.Message}");
+                    DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
                 }
             }
             else
@@ -155,19 +164,6 @@ public partial class MainPage : ContentPage
         Shell.Current.GoToAsync("//settings");
     }
 
-
-
-    private async Task ShowError(string response)
-    {
-        try
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", response, "Sad");
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-        }
-    }
 
 
     protected override void OnDisappearing()

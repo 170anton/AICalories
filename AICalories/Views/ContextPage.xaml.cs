@@ -1,5 +1,6 @@
 ﻿using AICalories.DI;
 using AICalories.Interfaces;
+using AICalories.Models;
 using AICalories.ViewModels;
 
 namespace AICalories.Views;
@@ -31,6 +32,13 @@ public partial class ContextPage : ContentPage
     {
         //var resultPage = new ResultPage();
         _viewModel.SetAdditionalInfo();
+
+        if (!InternetConnection.CheckInternetConnection())
+        {
+            DisplayAlertConfiguration.ShowError("No internet connection");
+            return;
+        }
+
 
         var resultPage = IPlatformApplication.Current.Services.GetService<ResultPage>();
         Shell.Current.Navigation.PopModalAsync();
