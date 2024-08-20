@@ -26,6 +26,10 @@ public partial class TakeImagePage : ContentPage
 
     private async void OnCaptureButtonClicked(object sender, EventArgs e)
     {
+        if (cameraView.TorchEnabled)
+        {
+            cameraView.FlashMode = FlashMode.Enabled;
+        }
         var stream = await cameraView.TakePhotoAsync();
 
         if (stream == null)
@@ -36,7 +40,7 @@ public partial class TakeImagePage : ContentPage
         var imageName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
         var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
 
-        using (var fileStream = File.Create(imagePath))
+        await using (var fileStream = File.Create(imagePath))
         {
             await stream.CopyToAsync(fileStream);
         }
@@ -72,6 +76,10 @@ public partial class TakeImagePage : ContentPage
         
 
     }
+    private async void OnToggleTorchButtonClicked(object sender, EventArgs e)
+    {
+        cameraView.TorchEnabled = !cameraView.TorchEnabled;
+    }
 
     private void ToggleVisibility()
     {
@@ -106,6 +114,16 @@ public partial class TakeImagePage : ContentPage
         Shell.Current.Navigation.PopModalAsync();
         //Shell.Current.GoToAsync("//main");
         return true;
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        if (cameraView.TorchEnabled)
+        {
+            cameraView.TorchEnabled = false;
+        }
     }
 
     protected override void OnAppearing()

@@ -32,19 +32,31 @@ namespace AICalories.ViewModels
             }
         }
 
+        //public string MainImage
+        //{
+        //    get => _imageInfo.ImagePath;
+        //    set
+        //    {
+        //        if (_imageInfo.ImagePath != value)
+        //        {
+        //            _imageInfo.ImagePath = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
         public string MainImage
         {
-            get => _imageInfo.ImagePath;
+            get => _mainImage;
             set
             {
-                if (_imageInfo.ImagePath != value)
+                if (_mainImage != value)
                 {
-                    _imageInfo.ImagePath = value;
+                    _mainImage = value;
                     OnPropertyChanged();
                 }
             }
         }
-
 
         #endregion
 
@@ -56,6 +68,7 @@ namespace AICalories.ViewModels
             _viewModelService.ContextVM = this;
 
             _imageInfo = imageInfo;
+            MainImage = _imageInfo.ImagePath;
 
 
             LoadSelectedOption();

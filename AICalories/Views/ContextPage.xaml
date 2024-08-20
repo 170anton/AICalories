@@ -98,7 +98,12 @@
                 </Frame>
             </VerticalStackLayout>
         </ScrollView>
-        <Button Grid.Row="1" Style="{StaticResource ImageOptionStyle}"
+        <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
+            
+            <Button  Style="{StaticResource ImageOptionStyle}" Padding="13"
+                ImageSource="refresh_white.png" Margin="10,10,0,10" Clicked="OnNewImageClicked"/>
+            <Button Grid.Column="1" Style="{StaticResource ImageOptionStyle}"
                 Text="Confirm" Margin="10" Clicked="OnConfirmClicked"/>
+        </Grid>
     </Grid>
 </ContentPage>

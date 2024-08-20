@@ -131,6 +131,9 @@
 	  <None Remove="Resources\Images\other_white.png" />
 	  <None Remove="Resources\Images\other_black.png" />
 	  <None Remove="Interfaces\" />
+	  <None Remove="Resources\Images\icons8-refresh-100.png" />
+	  <None Remove="Resources\Images\icons8-gallery-96.png" />
+	  <None Remove="Resources\Images\icons8-torch-64.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiSplashScreen Include="Resources\Splash\splashmain.jpg" Color="#f5df73" />
@@ -145,5 +148,8 @@
 	<ItemGroup>
 	  <Compile Remove="Models\APIManager.cs" />
 	  <Compile Remove="Models\KeyVaultService.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\flashlight_white.png" />
 	</ItemGroup>
 </Project>

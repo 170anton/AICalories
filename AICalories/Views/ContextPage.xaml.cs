@@ -47,6 +47,16 @@ public partial class ContextPage : ContentPage
 
     }
 
+
+    private void OnNewImageClicked(System.Object sender, System.EventArgs e)
+    {
+
+        var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+
+        Shell.Current.Navigation.PopModalAsync();
+        Shell.Current.Navigation.PushModalAsync(takeImagePage);
+
+    }
     private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         if (e.Value)
