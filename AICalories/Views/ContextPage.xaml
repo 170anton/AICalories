@@ -90,7 +90,7 @@
                             <Label Text="No sause" Style="{StaticResource LabelAppStyle}" Grid.Row="7"
                                    HorizontalTextAlignment="Start"/> 
                             <CheckBox Grid.Column="1" Grid.Row="7"/>
-
+                                
 
                         </Grid>
                     </Grid>

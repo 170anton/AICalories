@@ -13,9 +13,9 @@ namespace AICalories.Models
             {
                 response_format = new { type = "json_object" },
                 tool_choice = "required",  //function calling
-                max_tokens = 1000,
+                max_tokens = 3000,
                 temperature = 0,
-                model = "gpt-4o",
+                model = "gpt-4o-mini",
                 messages = new object[]
                 {
                     new
@@ -32,8 +32,10 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = $"What ingredients are in this dish? There are {dishType} ingredients. " +
-                                "Amount, volume, weight and calories of ingredients must be calculated as precise as possible. " +
+                                text = $"What ingredients are in this meal? There are {dishType} ingredients. " +
+                                "Weight and calories of ingredients must be calculated as precise as possible. " +
+                                //"If you are not sure about weight of ingredient, take a lower-value. " +
+                                "Then summarize all calories of all ingredients as precise as possible. " +
                                 "Output result in a JSON format. "
                             },
                             new
@@ -56,11 +58,11 @@ namespace AICalories.Models
                         function = new
                         {
                             name = "gastronomic_expert",
-                            description = "Analyze this dish and its amount of calories",
+                            //description = "Analyze this dish and its amount of calories",
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "ingredients", "dish_name", "calories",  },
+                                required = new[] { "ingredients", "meal_name", "calories",  },
                                 properties = new
                                 {
                                     ingredients = new
@@ -77,39 +79,39 @@ namespace AICalories.Models
                                                     type = "string",
                                                     description = "Name of the ingredient"
                                                 },
-                                                ingredient_amount = new
-                                                {
-                                                    type = "string",
-                                                    description = "Amount of the ingredient"
-                                                },
-                                                ingredient_volume = new
-                                                {
-                                                    type = "string",
-                                                    description = "Volume of the ingredient"
-                                                },
+                                                //ingredient_amount = new
+                                                //{
+                                                //    type = "string",
+                                                //    description = "Amount of the ingredient"
+                                                //},
                                                 ingredient_weight = new
                                                 {
                                                     type = "integer",
                                                     description = "Weight of the ingredient"
                                                 },
+                                                //ingredient_volume = new
+                                                //{
+                                                //    type = "string",
+                                                //    description = "Volume of the ingredient"
+                                                //},
                                                 ingredient_calories = new
                                                 {
                                                     type = "integer",
                                                     description = "Calories of the ingredient"
                                                 }
                                             },
-                                            required = new[] { "ingredient_name", "ingredient_amount", "ingredient_volume", "ingredient_weight", "ingredient_calories" }
+                                            required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories" }
                                         },
                                     },
-                                    dish_name = new
+                                    meal_name = new
                                     {
                                         type = "string",
-                                        description = "Summarize and give the name of the dish"
+                                        description = "Summarize and give the name of the meal"
                                     },
                                     calories = new
                                     {
                                         type = "integer",
-                                        description = "Summarize calories of engredients and give total amount of calories of the dish"
+                                        description = "Summarize all ingredient_calories which you calculated"
                                     },
                                 }
                             },

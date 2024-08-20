@@ -2,7 +2,6 @@
 using AICalories.Models;
 using AICalories.ViewModels;
 using Camera.MAUI;
-using Plugin.Media.Abstractions;
 
 namespace AICalories.Views;
 

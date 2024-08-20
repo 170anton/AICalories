@@ -11,7 +11,7 @@ namespace AICalories.ViewModels
 	public class ResultVM : INotifyPropertyChanged
     {
         private bool isRefreshing;
-        private string dishName;
+        private string mealName;
         private string calories;
         private string totalResultJSON;
 
@@ -25,13 +25,13 @@ namespace AICalories.ViewModels
 
         public string DishName
         {
-            get => dishName;
+            get => mealName;
             set
             {
-                if (dishName != value)
+                if (mealName != value)
                 {
 
-                    dishName = value;
+                    mealName = value;
                     OnPropertyChanged();
                 }
             }
@@ -130,7 +130,7 @@ namespace AICalories.ViewModels
             dynamic result = JsonConvert.DeserializeObject(stringRawResult);
 
             var responseData = new ResponseData();
-            responseData.DishName = result.dish_name;
+            responseData.MealName = result.meal_name;
             responseData.Calories = result.calories;
             responseData.TotalResultJSON = stringRawResult;
 
@@ -169,7 +169,7 @@ namespace AICalories.ViewModels
                 var dateTimeNow = DateTime.Now;
                 var newItem = new HistoryItem
                 {
-                    Name = responseData.DishName,
+                    Name = responseData.MealName,
                     Date = dateTimeNow,
                     Time = dateTimeNow.ToString("HH:mm"),
                     ImagePath = imagePath,
@@ -198,8 +198,7 @@ namespace AICalories.ViewModels
                 var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
 
                 var keyStorageService = new KeyStorageService(encryptionKey);
-
-
+                
                 _apiKeys = keyStorageService.RetrieveKeys();
 
 

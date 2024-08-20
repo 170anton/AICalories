@@ -11,44 +11,33 @@
               Padding="20,10" RowSpacing="10" ColumnSpacing="10">
 
             
-            <Frame Grid.Row="0" Padding="10" Style="{StaticResource MainFrameStyle}">
+            <Frame Grid.Row="0" Padding="40" Style="{StaticResource MainFrameStyle}">
                 <AbsoluteLayout>
-                    <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
-                                AbsoluteLayout.LayoutFlags="All" >
+                    <Grid RowDefinitions=".5*,.5*" Padding="20"
+                            AbsoluteLayout.LayoutBounds="0,0,1,1"
+                            AbsoluteLayout.LayoutFlags="All">
+                        <Label Text="Today:" Style="{StaticResource LabelAppStyle}"
+                                />
+                        <Label Grid.Row="1"
+                                Text="{Binding TotalCalories}" Style="{StaticResource LabelAppStyle}"
+                                FontSize="30"/>
+                            
+                    </Grid>
 
-
-
-
-                    </ScrollView>
-
-                    <Label x:Name="StatisticsLabel"
-                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        MaximumWidthRequest="200"
-                        FontSize="Title" FontAttributes="Bold"
-                        Text="Make your first record" Style="{StaticResource LabelAppStyle}"
-                        IsVisible="{Binding IsLabelVisible}"/>
-
-                    <ActivityIndicator
-                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        IsVisible="{Binding IsLoading}"
-                        IsRunning="{Binding IsLoading}"
-                        Style="{StaticResource MainActivityIndicatorStyle}"
-        
-                        />
                 </AbsoluteLayout>
             </Frame>
 
 
-            <Frame Grid.Row="1" Padding="20" Style="{StaticResource MainFrameStyle}">
-                <AbsoluteLayout>
+            <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
+                <AbsoluteLayout >
                     <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
                                 AbsoluteLayout.LayoutFlags="All" >
-                        <Grid RowDefinitions="*,*" >
-                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}">
+                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,Auto" Padding="20"
+                              IsVisible="{Binding IsHistoryGridVisible}">
+                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}"
+                                   MaximumHeightRequest="200">
                         
-                                <Image Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"/>
+                                <Image x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"/>
 
                             </Frame>
                             <Grid Grid.Row="1" RowDefinitions="Auto,Auto">

@@ -5,9 +5,6 @@ using AICalories.ViewModels;
 using AICalories.Views;
 using Camera.MAUI;
 using Microsoft.Extensions.Logging;
-using Plugin.Media;
-using SkiaSharp.Views.Maui.Controls;
-using SkiaSharp.Views.Maui.Handlers;
 
 namespace AICalories;
 

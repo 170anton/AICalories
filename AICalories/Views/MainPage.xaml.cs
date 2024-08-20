@@ -5,9 +5,7 @@ using AICalories.DI;
 using AICalories.Models;
 using AICalories.ViewModels;
 using Microsoft.Maui.Graphics.Platform;
-using Newtonsoft.Json;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
+using Newtonsoft.Json; 
 
 namespace AICalories.Views;
 
@@ -28,6 +26,8 @@ public partial class MainPage : ContentPage
                 _viewModel = viewModelLocator.GetMainViewModel();
                 BindingContext = _viewModel;
             }
+
+            //_viewModel.LoadLastHistoryItem();
         }
         catch (Exception)
         {
@@ -169,15 +169,20 @@ public partial class MainPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        //_viewModel.OnShowResponseRequested -= ShowResponse;
-        //_viewModel.OnShowAlertRequested -= ShowAlert;
+
     }
 
     protected async override void OnAppearing()
     {
+        _viewModel.LastHistoryItemName = null;
+        _viewModel.LastHistoryItemCalories = null;
+        _viewModel.LastHistoryItemImage = null;
+
         base.OnAppearing();
 
         _viewModel.LoadLastHistoryItem();
+        _viewModel.GetTotalCalories();
+        _viewModel.IsHistoryGridVisible = true;
     }
     #endregion
 

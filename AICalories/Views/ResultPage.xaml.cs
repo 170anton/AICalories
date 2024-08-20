@@ -1,7 +1,6 @@
 ﻿using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.ViewModels;
-using Plugin.Media.Abstractions;
 
 namespace AICalories.Views;
 
@@ -34,7 +33,7 @@ public partial class ResultPage : ContentPage
     public void LoadAIResponse(ResponseData response)
     {
         _viewModel.IsRefreshing = false;
-        _viewModel.DishName = response.DishName;
+        _viewModel.DishName = response.MealName;
         _viewModel.Calories = response.Calories.ToString();
         _viewModel.TotalResultJSON = response.TotalResultJSON;
     }
