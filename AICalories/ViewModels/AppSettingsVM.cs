@@ -23,6 +23,8 @@ namespace AICalories.ViewModels
 
         #region Properties
 
+        public string AppVersion { get; set; }
+
         public bool IsDarkMode
         {
             get => _isDarkMode;
@@ -94,6 +96,8 @@ namespace AICalories.ViewModels
             _viewModelService = viewModelService;
             _viewModelService.AppSettingsVM = this;
 
+            AppVersion = $"Version: {AppInfo.VersionString}";
+
             //IsDarkMode = Application.Current.RequestedTheme == AppTheme.Dark;
 
             ToggleDarkModeCommand = new Command(() => IsDarkMode = !IsDarkMode);
@@ -153,25 +157,15 @@ namespace AICalories.ViewModels
 
         private async Task Send()
         {
-            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Question))
-            {
-                // Display alert if fields are empty
-                await Application.Current.MainPage.DisplayAlert("Warning", "Please, fill in all fields", "OK");
-                return;
-            }
-
-
-            if (HasExceededQuestionLimit())
-            {
-                await Application.Current.MainPage.DisplayAlert("Too many requests", "Please try again later", "OK");
-                return;
-            }
-
-
             try
             {
+                if (!await CheckPrerequirements())
+                {
+                    return;
+                }
+
                 IsLoading = true;
-                var success = await EmailService.SendEmailAsync(Email, Question);
+                var success = await EmailService.SendEmailAsync(Email, Question, AppVersion);
                 IsLoading = false;
 
                 if (success)
@@ -188,7 +182,6 @@ namespace AICalories.ViewModels
             }
             catch (Exception ex)
             {
-                // Handle the exception
                 Console.WriteLine($"Error sending email: {ex.Message}");
                 await Application.Current.MainPage.DisplayAlert("Error", "An unexpected error occurred. Please try again", "Sad");
             }
@@ -197,6 +190,43 @@ namespace AICalories.ViewModels
                 IsLoading = false; // Re-enable the button
             }
         }
+
+        private async Task<bool> CheckPrerequirements()
+        {
+
+            if (!InternetConnection.CheckInternetConnection())
+            {
+                DisplayAlertConfiguration.ShowError("No internet connection");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Question))
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Please complete all fields", "OK");
+                return false;
+            }
+
+            if (Email.Length <= 5)
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Your email is too short", "OK");
+                return false;
+            }
+
+            if (Question.Length <= 10)
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Your question is too short", "OK");
+                return false;
+            }
+
+            if (HasExceededQuestionLimit())
+            {
+                await Application.Current.MainPage.DisplayAlert("Too many requests", "Please try again later", "OK");
+                return false;
+            }
+
+            return true;
+        }
+
 
         private bool HasExceededQuestionLimit()
         {

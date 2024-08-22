@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Models;
+using AICalories.Services;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,9 +23,13 @@ public class MainVM : INotifyPropertyChanged
     private bool _isHistoryGridVisible;
     
     private readonly IViewModelService _viewModelService;
+    private readonly INavigationService _navigationService;
+    private readonly IAlertService _alertService;
 
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
+
+    public ICommand NewImageCommand { get; }
 
     #region Properties
 
@@ -104,11 +109,15 @@ public class MainVM : INotifyPropertyChanged
 
     #region Constructor
 
-    public MainVM(IViewModelService viewModelService)
+    public MainVM(IViewModelService viewModelService,
+            INavigationService navigationService, IAlertService alertService)
     {
         _viewModelService = viewModelService;
         _viewModelService.MainVM = this;
+        _navigationService = navigationService;
+        _alertService = alertService;
 
+        NewImageCommand = new Command(async () => await NewImageClicked());
     }
     #endregion
 
@@ -117,7 +126,7 @@ public class MainVM : INotifyPropertyChanged
     {
 
         var dateTimeNow = DateTime.Now;
-        var items = await App.Database.GetItemsAsync();
+        var items = await App.HistoryDatabase.GetItemsAsync();
         var calorieSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
                               .Sum(i => i.CaloriesInt)
                               .ToString();
@@ -132,7 +141,7 @@ public class MainVM : INotifyPropertyChanged
             IsLabelVisible = false;
             IsLoading = true;
             await Task.Delay(1000);
-            var lastItem = await App.Database.GetLastItemAsync();
+            var lastItem = await App.HistoryDatabase.GetLastItemAsync();
             IsLoading = false;
 
             if (lastItem == null)
@@ -151,6 +160,86 @@ public class MainVM : INotifyPropertyChanged
             throw;
         }
     }
+
+    #region Photo selection buttons
+
+    private async Task NewImageClicked()
+    {
+        try
+        {
+            bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
+            if (isCameraAvailable)
+            {
+                try
+                {
+                    //var image = await MediaPicker.Default.CapturePhotoAsync();
+                    //await CrossMedia.Current.Initialize();
+
+                    //var takeImagePage = new TakeImagePage();
+
+                    if (!InternetConnection.CheckInternetConnection())
+                    {
+                        DisplayAlertConfiguration.ShowError("No internet connection");
+                        return;
+                    }
+
+                    _navigationService.PopModalAsync();
+                    await _navigationService.NavigateToTakeImagePageAsync();
+
+                    //var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+                    //await Shell.Current.Navigation.PushModalAsync(takeImagePage);
+
+
+                    //await CrossMedia.Current.Initialize();
+
+                    //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+                    //{
+                    //    PhotoSize = PhotoSize.Medium,
+                    //    //SaveToAlbum = true
+                    //});
+
+                }
+                catch (ArgumentNullException ex)
+                {
+                    DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+        }
+    }
+
+    private async Task<bool> CheckAndRequestCameraPermissionAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+            }
+
+            return status == PermissionStatus.Granted;
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception as needed
+            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+            return false;
+        }
+    }
+
+    #endregion
 
 
     public event PropertyChangedEventHandler PropertyChanged;

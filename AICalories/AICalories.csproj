@@ -87,6 +87,8 @@
 	  <Folder Include="Resources\Splash\" />
 	  <Folder Include="Resources\xml\" />
 	  <Folder Include="Interfaces\" />
+	  <Folder Include="Services\" />
+	  <Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -131,6 +133,8 @@
 	  <None Remove="Resources\Images\icons8-refresh-100.png" />
 	  <None Remove="Resources\Images\icons8-gallery-96.png" />
 	  <None Remove="Resources\Images\icons8-torch-64.png" />
+	  <None Remove="Services\" />
+	  <None Remove="Repositories\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiSplashScreen Include="Resources\Splash\splashmain.jpg" Color="#f5df73" />

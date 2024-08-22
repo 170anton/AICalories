@@ -75,7 +75,7 @@
                 Grid.Row="2"
                 Grid.Column="0"
                 Style="{StaticResource ImageOptionStyle}"
-                Clicked="OnTakeImageClicked">
+                Command="{Binding NewImageCommand}">
             
 
         </Button>

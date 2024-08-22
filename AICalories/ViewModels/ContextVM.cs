@@ -3,14 +3,19 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using AICalories.CustomControls;
 using AICalories.DI;
 using AICalories.Interfaces;
+using AICalories.Models;
+using AICalories.Services;
 
 namespace AICalories.ViewModels
 {
 	public class ContextVM : INotifyPropertyChanged
     {
         private readonly IViewModelService _viewModelService;
+        private readonly INavigationService _navigationService;
+        private readonly IAlertService _alertService;
         private const string SelectedOptionKey = "SelectedOption";
 
         private string _selectedOption;
@@ -61,31 +66,101 @@ namespace AICalories.ViewModels
         #endregion
 
         public ICommand ConfirmCommand { get; }
+        public ICommand AddNewContextCommand { get; }
 
-        public ContextVM(IViewModelService viewModelService, IImageInfo imageInfo)
+
+
+        public event Action<ContextGrid> ContextGridAdded;
+
+        public ContextVM(IViewModelService viewModelService, IImageInfo imageInfo,
+            INavigationService navigationService, IAlertService alertService)
         {
             _viewModelService = viewModelService;
             _viewModelService.ContextVM = this;
+            _navigationService = navigationService;
+            _alertService = alertService;
 
             _imageInfo = imageInfo;
             MainImage = _imageInfo.ImagePath;
 
+            //ConfirmCommand = new Command(async () => await Send());
+            AddNewContextCommand = new Command<VerticalStackLayout>(async (contextLayout) => await AddNewContextAsync(contextLayout));
+            ConfirmCommand = new Command(async () => await OnConfirmAsync());
 
             LoadSelectedOption();
-        }
 
-        public async void SetAdditionalInfo()
+
+            //App.ContextDatabase.InsertContextItemAsync(new Models.ContextItem() { Text = "First", IsSelected = true });
+            //App.ContextDatabase.InsertContextItemAsync(new Models.ContextItem() { Text = "Second", IsSelected = false });
+
+        }
+        public async Task SetAdditionalInfo()
         {
             _imageInfo.MealType = SelectedOption;
         }
 
-        private void LoadSelectedOption()
+        private async Task LoadSelectedOption()
         {
             var savedOption = Preferences.Get(SelectedOptionKey, "Regular");
             if (savedOption != null)
             {
                 SelectedOption = savedOption;
             }
+        }
+
+        //private async Task AddNewContextAsync(VerticalStackLayout contextLayout)
+        //{
+        //    var newContextItem = new ContextItem() { Text = "First", IsSelected = true };
+        //    await App.ContextItemRepository.InsertContextItemAsync(newContextItem);
+
+        //    newContextItem = await App.ContextItemRepository.GetLastAddedContextItemAsync();
+        //    var newContextGrid = new ContextGrid(newContextItem.Id, newContextItem.Text, newContextItem.IsSelected,
+        //        App.ContextItemRepository, contextLayout);
+
+        //    contextLayout.Children.Add(newContextGrid);
+        //}
+
+
+        private async Task AddNewContextAsync(VerticalStackLayout contextLayout)
+        {
+            var newContextItem = new ContextItem { Text = "First", IsSelected = true };
+            await App.ContextItemRepository.InsertContextItemAsync(newContextItem);
+
+            newContextItem = await App.ContextItemRepository.GetLastAddedContextItemAsync();
+
+            var newContextGrid = new ContextGrid(newContextItem.Id, newContextItem.Text, newContextItem.IsSelected,
+                App.ContextItemRepository, contextLayout);
+
+            ContextGridAdded?.Invoke(newContextGrid);
+        }
+
+
+        public async Task UpdateContextList(VerticalStackLayout contextLayout)
+        {
+            contextLayout.Children.Clear();
+
+            var items = await App.ContextDatabase.GetAllItemsAsync();
+
+            foreach (var item in items)
+            {
+                var contextGrid = new ContextGrid(item.Id, item.Text, item.IsSelected,
+                    App.ContextItemRepository, contextLayout);
+                contextLayout.Children.Add(contextGrid);
+            }
+        }
+
+        private async Task OnConfirmAsync()
+        {
+            SetAdditionalInfo();
+
+            if (!InternetConnection.CheckInternetConnection())
+            {
+                _alertService.ShowError("No internet connection");
+                return;
+            }
+
+            _navigationService.PopModalAsync();
+            await _navigationService.NavigateToResultPageAsync();
         }
 
         //private void OnSetSelectedOption(object sender, CheckedChangedEventArgs e)
@@ -97,9 +172,9 @@ namespace AICalories.ViewModels
         //        // Save the selected option to preferences
         //        Preferences.Set(SelectedOptionKey, selectedOption);
 
-            //        SelectedOption = selectedOption;
-            //    }
-            //}
+        //        SelectedOption = selectedOption;
+        //    }
+        //}
 
 
         public event PropertyChangedEventHandler PropertyChanged;

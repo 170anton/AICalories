@@ -1,4 +1,6 @@
 ﻿using AICalories.DI;
+using AICalories.Models;
+using AICalories.Repositories;
 using AICalories.ViewModels;
 using AICalories.Views;
 
@@ -7,17 +9,33 @@ namespace AICalories;
 
 public partial class App : Application
 {
-    static DatabaseHelper database;
+    private static HistoryDatabase _historyDatabase;
+    private static ContextDatabase<ContextItem> _contextDatabase;
 
-    public static DatabaseHelper Database
+    public static IContextItemRepository ContextItemRepository { get; private set; }
+
+
+    public static HistoryDatabase HistoryDatabase
     {
         get
         {
-            if (database == null)
+            if (_historyDatabase == null)
             {
-                database = new DatabaseHelper(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesDatabase.db3"));
+                _historyDatabase = new HistoryDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesDatabase.db3")); //todo change to AICaloriesHistoryDatabase
             }
-            return database;
+            return _historyDatabase;
+        }
+    }
+
+    public static ContextDatabase<ContextItem> ContextDatabase
+    {
+        get
+        {
+            if (_contextDatabase == null)
+            {
+                _contextDatabase = new ContextDatabase<ContextItem>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesContextDatabase.db3"));
+            }
+            return _contextDatabase;
         }
     }
 
@@ -25,6 +43,8 @@ public partial class App : Application
 	{
 		InitializeComponent();
         MainPage = serviceProvider.GetRequiredService<AppShell>();
+
+        ContextItemRepository = new ContextItemRepository(ContextDatabase);
 
         // Ensure ContextPage is initialized
         InitializeViewModels(serviceProvider);

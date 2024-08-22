@@ -2,14 +2,20 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
+using AICalories.Services;
+using AndroidX.Lifecycle;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
 {
 	public class ResultVM : INotifyPropertyChanged
     {
+        private readonly IViewModelService _viewModelService;
+        private readonly INavigationService _navigationService;
+        private readonly IAlertService _alertService;
         private bool isRefreshing;
         private string mealName;
         private string calories;
@@ -77,9 +83,15 @@ namespace AICalories.ViewModels
 
         #endregion
 
-        public ResultVM(IImageInfo imageInfo)
+        public ResultVM(IViewModelService viewModelService, IImageInfo imageInfo,
+            INavigationService navigationService, IAlertService alertService)
         {
+            _viewModelService = viewModelService;
+            _viewModelService.ResultVM = this;
+            _navigationService = navigationService;
+            _alertService = alertService;
             _imageInfo = imageInfo;
+
             isRefreshing = true;
 
             LoadSecrets();
@@ -91,7 +103,37 @@ namespace AICalories.ViewModels
 
         }
 
-        
+        public async void ProcessImage() //todo
+        {
+            var image = _imageInfo.ImagePath;
+            if (image != null)
+            {
+                var response = await ProcessImage(image);
+                if (response == null)
+                {
+                    LoadAIResponse("Loading error");
+                    return;
+                }
+                LoadAIResponse(response);
+            }
+        }
+
+        public void LoadAIResponse(ResponseData response)
+        {
+            IsRefreshing = false;
+            DishName = response.MealName;
+            Calories = response.Calories.ToString();
+            TotalResultJSON = response.TotalResultJSON;
+        }
+
+        public void LoadAIResponse(string response)
+        {
+            IsRefreshing = false;
+            DishName = response;
+        }
+
+
+
         #region Process Image
 
         public async Task<ResponseData> ProcessImage(string imagePath)
@@ -176,7 +218,7 @@ namespace AICalories.ViewModels
                     Calories = responseData.Calories.ToString(),
                     CaloriesInt = responseData.Calories
                 };
-                await App.Database.SaveItemAsync(newItem);
+                await App.HistoryDatabase.SaveItemAsync(newItem);
 
 
             }

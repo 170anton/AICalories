@@ -6,7 +6,7 @@ namespace AICalories.Models
 {
     public static class EmailService
     {
-        public static async Task<bool> SendEmailAsync(string email, string question)
+        public static async Task<bool> SendEmailAsync(string email, string question, string version)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace AICalories.Models
                 {
                     From = new MailAddress("appaicalories@gmail.com"),
                     Subject = "Support Question",
-                    Body = $"Email: {email}\n\nQuestion:\n{question}",
+                    Body = $"Email: {email}\n\nQuestion:\n{question}\n{version}",
                     IsBodyHtml = false,
                 };
 

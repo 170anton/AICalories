@@ -61,7 +61,7 @@ namespace AICalories.ViewModels
                 IsLoading = true;
                 await Task.Delay(1000);
 
-                var countInDb = await App.Database.GetCountAsync();
+                var countInDb = await App.HistoryDatabase.GetCountAsync();
                 var countInColl = DayGroupedItems.SelectMany(grouped => grouped).Count();
 
                 if (countInDb != countInColl)
@@ -90,7 +90,7 @@ namespace AICalories.ViewModels
                 DayGroupedItems.Clear();
 
                 var dateTimeNow = DateTime.Now;
-                var items = await App.Database.GetItemsAsync();
+                var items = await App.HistoryDatabase.GetItemsAsync();
 
                 var grouped = items.GroupBy(i => i.Date.Date)
                                    .Select(g => new DayGroupedItem(g.Key))
@@ -129,7 +129,7 @@ namespace AICalories.ViewModels
                     ImagePath = "pasta1.jpg",
                     Calories = "Calories"
                 };
-                await App.Database.SaveItemAsync(newItem);
+                await App.HistoryDatabase.SaveItemAsync(newItem);
                 SaveToHistory(dateTimeNow, newItem);
                 //OnPropertyChanged(nameof(DayGroupedItems));
             }
@@ -161,7 +161,7 @@ namespace AICalories.ViewModels
                 var dateTimeNow = DateTime.Now;
                 if (item != null)
                 {
-                    await App.Database.DeleteItemAsync(item);
+                    await App.HistoryDatabase.DeleteItemAsync(item);
                     var group = DayGroupedItems.FirstOrDefault(g => g.Date == item.Date.Date);
                     if (group != null)
                     {
@@ -186,7 +186,7 @@ namespace AICalories.ViewModels
         {
             try
             {
-                await App.Database.ClearItemsAsync();
+                await App.HistoryDatabase.ClearItemsAsync();
                 DayGroupedItems.Clear();
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Maui.Controls;
 
-namespace AICalories.Models
+namespace AICalories.CustomControls
 {
 	public class HistoryItemFrame : Frame
 	{

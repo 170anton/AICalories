@@ -37,13 +37,6 @@ public partial class MainPage : ContentPage
 
     #endregion
 
-    #region FirstFrame
-
-    #endregion
-
-    #region SecondFrame
-
-    #endregion
 
     #region Photo selection buttons
 
@@ -100,19 +93,6 @@ public partial class MainPage : ContentPage
             await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
         }
     }
-
-    //private async void OnSelectImageClicked(object sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        //var image = await MediaPicker.PickPhotoAsync();
-    //        //ProcessImage(image);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-    //    }
-    //}
 
     private async Task<bool> CheckAndRequestCameraPermissionAsync()
     {

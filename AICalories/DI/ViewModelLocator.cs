@@ -1,6 +1,8 @@
 ﻿using System;
 using AICalories.Interfaces;
+using AICalories.Services;
 using AICalories.ViewModels;
+using Camera.MAUI;
 
 namespace AICalories.DI
 {
@@ -16,7 +18,19 @@ namespace AICalories.DI
         }
 
         public MainVM GetMainViewModel() => _serviceProvider.GetRequiredService<MainVM>();
+        public TakeImageVM GetTakeImageViewModel(CameraView cameraView)
+        {
+            // Create CameraService with cameraView
+            var cameraService = new CameraService(cameraView);
+            var viewModelService = _serviceProvider.GetService<IViewModelService>();
+            var imageInfo = _serviceProvider.GetService<IImageInfo>();
+            var navigationService = _serviceProvider.GetService<INavigationService>();
+            var alertService = _serviceProvider.GetService<IAlertService>();
+
+            return new TakeImageVM(viewModelService, imageInfo, cameraService, navigationService, alertService);
+        }
         public ContextVM GetContextViewModel() => _serviceProvider.GetRequiredService<ContextVM>();
+        public ResultVM GetResultViewModel() => _serviceProvider.GetRequiredService<ResultVM>();
         public AppSettingsVM GetAppSettingsViewModel() => _serviceProvider.GetRequiredService<AppSettingsVM>();
 
     }

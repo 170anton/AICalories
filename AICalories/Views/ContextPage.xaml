@@ -14,7 +14,7 @@
             <VerticalStackLayout  Margin="0,0,0,80">
                 <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFit"/>
 
-                <Frame Style="{StaticResource MainFrameStyle}"
+                <!--<Frame Style="{StaticResource MainFrameStyle}"
                        Margin="10,10,10,0" Padding="0">
                     <Grid RowDefinitions="Auto,*" >
                         <Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
@@ -41,22 +41,31 @@
                                    IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter}, ConverterParameter='Regular', Mode=TwoWay}"
                                    Value="Regular"/>
                 
-                            <!--<Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                            <Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
                                    HorizontalTextAlignment="Start"/> 
-                            <RadioButton Grid.Column="1" Grid.Row="3"/>-->
+                            <RadioButton Grid.Column="1" Grid.Row="3"/>
                         </Grid>
                     </Grid>
-                </Frame>
+                </Frame>-->
 
                 <Frame Style="{StaticResource MainFrameStyle}"
                        Margin="10,5,10,0" Padding="0">
-                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                         <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
                                HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
-                        <Button Grid.Column="1"
+                        <Button Grid.Column="1" 
+                                Command="{Binding AddNewContextCommand}" 
+                                CommandParameter="{x:Reference contextLayout}" 
                                 Text="Add" Margin="20,20,20,0"
-                            />
-                        <Grid Grid.Row="1" Grid.ColumnSpan="2"
+                                />
+                        <VerticalStackLayout x:Name="contextLayout" Grid.Row="1" Grid.ColumnSpan="2"
+                                             Padding="10,20,40,20" Spacing="0"
+                                             >
+                            
+
+                        </VerticalStackLayout>
+
+                        <!--<Grid Grid.Row="2" Grid.ColumnSpan="2"
                               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
                               Padding="30,20,40,20" RowSpacing="0">
                             <Label Text="Empty mug" Style="{StaticResource LabelAppStyle}"
@@ -92,7 +101,7 @@
                             <CheckBox Grid.Column="1" Grid.Row="7"/>
                                 
 
-                        </Grid>
+                        </Grid>-->
                     </Grid>
 
                 </Frame>
@@ -103,7 +112,7 @@
             <Button  Style="{StaticResource ImageOptionStyle}" Padding="13"
                 ImageSource="refresh_white.png" Margin="10,10,0,10" Clicked="OnNewImageClicked"/>
             <Button Grid.Column="1" Style="{StaticResource ImageOptionStyle}"
-                Text="Confirm" Margin="10" Clicked="OnConfirmClicked"/>
+                Text="Confirm" Margin="10" Command="{Binding ConfirmCommand}"/>
         </Grid>
     </Grid>
 </ContentPage>

@@ -1,4 +1,5 @@
-﻿using AICalories.Interfaces;
+﻿using AICalories.DI;
+using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.ViewModels;
 
@@ -8,40 +9,18 @@ public partial class ResultPage : ContentPage
 {
 	private ResultVM _viewModel;
 
-    public ResultPage(ResultVM viewModel)
+    public ResultPage()
 	{
 		InitializeComponent();
-		_viewModel = viewModel;
-		BindingContext = _viewModel;
-    }
 
-
-    public async void ProcessImage(string image)
-    {
-        if (image != null)
+        var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
+        if (viewModelLocator == null)
         {
-            var response = await _viewModel.ProcessImage(image);
-            if (response == null)
-            {
-                LoadAIResponse("Loading error");
-                return;
-            }
-            LoadAIResponse(response);
+            return;
         }
-    }
 
-    public void LoadAIResponse(ResponseData response)
-    {
-        _viewModel.IsRefreshing = false;
-        _viewModel.DishName = response.MealName;
-        _viewModel.Calories = response.Calories.ToString();
-        _viewModel.TotalResultJSON = response.TotalResultJSON;
-    }
-
-    public void LoadAIResponse(string response)
-    {
-        _viewModel.IsRefreshing = false;
-        _viewModel.DishName = response;
+        _viewModel = viewModelLocator.GetResultViewModel();
+        BindingContext = _viewModel;
     }
 
     protected override bool OnBackButtonPressed()
@@ -51,5 +30,14 @@ public partial class ResultPage : ContentPage
             Navigation.PopModalAsync();
         }
         return true;
+    }
+
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        _viewModel.ProcessImage();
+
+
     }
 }

@@ -72,7 +72,7 @@ namespace AICalories.ViewModels
             try
             {
                 IsSending = true; 
-                var success = await EmailService.SendEmailAsync(Email, Question);
+                var success = await EmailService.SendEmailAsync(Email, Question, "Version");
 
                 if (success)
                 {

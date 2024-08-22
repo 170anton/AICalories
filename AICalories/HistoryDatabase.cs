@@ -8,11 +8,11 @@ using System.Windows.Input;
 
 namespace AICalories
 {
-	public class DatabaseHelper
+	public class HistoryDatabase
     {
         private readonly SQLiteAsyncConnection _database;
 
-        public DatabaseHelper(string dbPath)
+        public HistoryDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<HistoryItem>().Wait();
