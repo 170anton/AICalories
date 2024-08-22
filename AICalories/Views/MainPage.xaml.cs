@@ -154,15 +154,15 @@ public partial class MainPage : ContentPage
 
     protected async override void OnAppearing()
     {
-        _viewModel.LastHistoryItemName = null;
-        _viewModel.LastHistoryItemCalories = null;
-        _viewModel.LastHistoryItemImage = null;
+        //_viewModel.LastHistoryItemName = null;
+        //_viewModel.LastHistoryItemCalories = null;
+        //_viewModel.LastHistoryItemImage = null;
 
         base.OnAppearing();
 
-        _viewModel.LoadLastHistoryItem();
-        _viewModel.GetTotalCalories();
-        _viewModel.IsHistoryGridVisible = true;
+        //_viewModel.LoadLastHistoryItem();
+        //_viewModel.GetTotalCalories();
+        //_viewModel.IsHistoryGridVisible = true;
     }
     #endregion
 

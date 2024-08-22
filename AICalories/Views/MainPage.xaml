@@ -7,20 +7,112 @@
     </ContentPage.ToolbarItems>-->
     
     <ScrollView>
-        <Grid RowDefinitions=".3*,.6*,.1*"
-              Padding="20,10" RowSpacing="10" ColumnSpacing="10">
+        <Grid RowDefinitions=".25*,.65*,.1*"
+              Padding="20,10" RowSpacing="10">
 
             
-            <Frame Grid.Row="0" Padding="40" Style="{StaticResource MainFrameStyle}">
+            <Frame Grid.Row="0" Padding="10" Style="{StaticResource MainFrameStyle}">
                 <AbsoluteLayout>
-                    <Grid RowDefinitions=".5*,.5*" Padding="20"
+                    <Grid RowDefinitions=".2*,.8*" Padding="10"
                             AbsoluteLayout.LayoutBounds="0,0,1,1"
                             AbsoluteLayout.LayoutFlags="All">
                         <Label Text="Today:" Style="{StaticResource LabelAppStyle}"
-                                />
-                        <Label Grid.Row="1"
-                                Text="{Binding TotalCalories}" Style="{StaticResource LabelAppStyle}"
-                                FontSize="30"/>
+                                Margin="0"/>
+                        <Grid Grid.Row="1"
+                              ColumnDefinitions="*,*,*,*">
+                                <Frame Grid.Column="0" Opacity="1"
+                                       Style="{StaticResource MainFrameStyle}" 
+                                       BackgroundColor="#e8736b" Padding="5"
+                                       BorderColor="#e8736b"
+                                       WidthRequest="90" HeightRequest="90" CornerRadius="50"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                    <VerticalStackLayout
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                        
+                                        <Label Opacity="1"
+                                            Text="Calories" Style="{StaticResource LabelAppStyle}"
+                                            FontSize="Medium" LineBreakMode="NoWrap" />
+                                
+                                        <Label Opacity="1"
+                                            Text="{Binding TotalCalories}" Style="{StaticResource LabelAppStyle}"
+                                            VerticalOptions="CenterAndExpand" 
+                                            HorizontalOptions="CenterAndExpand"/>
+
+                                    </VerticalStackLayout>
+                                </Frame>
+                                
+                                <Frame Grid.Column="1" Opacity="1"
+                                       Style="{StaticResource MainFrameStyle}" 
+                                       BackgroundColor="#6b97e8" Padding="5"
+                                       BorderColor="#6b97e8"
+                                       WidthRequest="90" HeightRequest="90" CornerRadius="50"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                    <VerticalStackLayout
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                        
+                                        <Label Opacity="1"
+                                            Text="Proteins" Style="{StaticResource LabelAppStyle}"
+                                            FontSize="Medium" LineBreakMode="NoWrap" />
+                                
+                                        <Label Opacity="1"
+                                            Text="{Binding TotalProteins}" Style="{StaticResource LabelAppStyle}"
+                                            VerticalOptions="CenterAndExpand" 
+                                            HorizontalOptions="CenterAndExpand"/>
+
+                                    </VerticalStackLayout>
+                                </Frame>
+                                
+                                <Frame Grid.Column="2" Opacity="1"
+                                       Style="{StaticResource MainFrameStyle}" 
+                                       BackgroundColor="#e8736b" Padding="5"
+                                       BorderColor="#e8736b"
+                                       WidthRequest="90" HeightRequest="90" CornerRadius="50"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                    <VerticalStackLayout
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                        
+                                        <Label Opacity="1"
+                                            Text="Fats" Style="{StaticResource LabelAppStyle}"
+                                            FontSize="Medium" LineBreakMode="NoWrap" />
+                                
+                                        <Label Opacity="1"
+                                            Text="{Binding TotalFats}" Style="{StaticResource LabelAppStyle}"
+                                            VerticalOptions="CenterAndExpand" 
+                                            HorizontalOptions="CenterAndExpand"/>
+
+                                    </VerticalStackLayout>
+                                </Frame>
+                                
+                                <Frame Grid.Column="3" Opacity="1"
+                                       Style="{StaticResource MainFrameStyle}" 
+                                       BackgroundColor="#e8736b" Padding="5"
+                                       BorderColor="#e8736b"
+                                       WidthRequest="90" HeightRequest="90" CornerRadius="50"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                    <VerticalStackLayout
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand">
+                                        
+                                        <Label Opacity="1"
+                                            Text="Carbs" Style="{StaticResource LabelAppStyle}"
+                                            FontSize="Medium" LineBreakMode="NoWrap" />
+                                
+                                        <Label Opacity="1"
+                                            Text="{Binding TotalCarbohydrates}" Style="{StaticResource LabelAppStyle}"
+                                            VerticalOptions="CenterAndExpand" 
+                                            HorizontalOptions="CenterAndExpand"/>
+
+                                    </VerticalStackLayout>
+                                </Frame>
+
+                        </Grid>
                             
                     </Grid>
 

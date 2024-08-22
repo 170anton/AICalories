@@ -282,7 +282,10 @@ namespace AICalories.ViewModels
                     Time = dateTimeNow.ToString("HH:mm"),
                     ImagePath = imagePath,
                     Calories = responseData.Calories.ToString(),
-                    CaloriesInt = responseData.Calories
+                    CaloriesInt = responseData.Calories,
+                    Proteins = responseData.Proteins,
+                    Fats = responseData.Fats,
+                    Carbohydrates = responseData.Carbohydrates,
                 };
                 await App.HistoryDatabase.SaveItemAsync(newItem);
 

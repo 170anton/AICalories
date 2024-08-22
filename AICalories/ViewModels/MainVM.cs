@@ -18,6 +18,9 @@ public class MainVM : INotifyPropertyChanged
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
     private string _totalCalories;
+    private string _totalProteins;
+    private string _totalFats;
+    private string _totalCarbohydrates;
     private bool _isLoading;
     private bool _isLabelVisible;
     private bool _isHistoryGridVisible;
@@ -39,6 +42,36 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _totalCalories = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string TotalProteins
+    {
+        get => _totalProteins;
+        set
+        {
+            _totalProteins = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string TotalFats
+    {
+        get => _totalFats;
+        set
+        {
+            _totalFats = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string TotalCarbohydrates
+    {
+        get => _totalCarbohydrates;
+        set
+        {
+            _totalCarbohydrates = value;
             OnPropertyChanged();
         }
     }
@@ -118,6 +151,15 @@ public class MainVM : INotifyPropertyChanged
         _alertService = alertService;
 
         NewImageCommand = new Command(async () => await NewImageClicked());
+
+
+        LoadLastHistoryItem();
+        GetTotalCalories();
+        GetTotalProteins();
+        GetTotalFats();
+        GetTotalCarbohydrates();
+        IsHistoryGridVisible = true;
+
     }
     #endregion
 
@@ -132,6 +174,42 @@ public class MainVM : INotifyPropertyChanged
                               .ToString();
 
         TotalCalories = calorieSum;
+    }
+
+    public async void GetTotalProteins()
+    {
+
+        var dateTimeNow = DateTime.Now;
+        var items = await App.HistoryDatabase.GetItemsAsync();
+        var proteinsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
+                              .Sum(i => i.Proteins)
+                              .ToString();
+
+        TotalProteins = proteinsSum;
+    }
+
+    public async void GetTotalFats()
+    {
+
+        var dateTimeNow = DateTime.Now;
+        var items = await App.HistoryDatabase.GetItemsAsync();
+        var fatsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
+                              .Sum(i => i.Fats)
+                              .ToString();
+
+        TotalFats = fatsSum;
+    }
+
+    public async void GetTotalCarbohydrates()
+    {
+
+        var dateTimeNow = DateTime.Now;
+        var items = await App.HistoryDatabase.GetItemsAsync();
+        var carbohydratesSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
+                              .Sum(i => i.Carbohydrates)
+                              .ToString();
+
+        TotalCarbohydrates = carbohydratesSum;
     }
 
     public async void LoadLastHistoryItem()
