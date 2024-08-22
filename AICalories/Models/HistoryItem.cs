@@ -16,6 +16,9 @@ namespace AICalories.Models
         public string ImagePath { get; set; }
         public string Calories { get => calories; set => calories = value; } //+ " cals"
         public int CaloriesInt { get; set; }
+        public int Proteins { get; set; }
+        public int Fats { get; set; }
+        public int Carbohydrates { get; set; }
 
     }
 }

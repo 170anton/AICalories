@@ -151,8 +151,10 @@
 	  <Compile Remove="Models\KeyVaultService.cs" />
 	  <Compile Remove="Models\CutImage.cs" />
 	  <Compile Remove="Views\BlurEffectView.xaml.cs" />
+	  <Compile Remove="Views\LoadingScreenPage.xaml.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Remove="Views\BlurEffectView.xaml" />
+	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	</ItemGroup>
 </Project>

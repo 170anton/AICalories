@@ -7,7 +7,7 @@ namespace AICalories.Models
         private static object secondPrompt;
 
 
-        public static object GetFirstPrompt(string base64Image, string dishType)
+        public static object GetFirstPrompt(string base64Image, string mealType)
         {
             firstPrompt = new
             {
@@ -32,8 +32,10 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = $"What ingredients are in this meal? There are {dishType} ingredients. " +
-                                "Weight and calories of ingredients must be calculated as precise as possible. " +
+                                text = $"Is there any meal or food in this image? " +
+                                $"If no, set is_meal to false and set other properties to 0 or null. " +
+                                $"What ingredients are in this meal? There are {mealType} ingredients. " +
+                                "Weight, calories, proteins, fats, carbohydrates of ingredients must be calculated as precise as possible. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
                                 "Then summarize all calories of all ingredients as precise as possible. " +
                                 "Output result in a JSON format. "
@@ -62,9 +64,14 @@ namespace AICalories.Models
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "ingredients", "meal_name", "calories",  },
+                                required = new[] { "is_meal", "ingredients", "meal_name", "calories", "proteins", "fats", "carbohydrates" },
                                 properties = new
                                 {
+                                    is_meal = new
+                                    {
+                                        type = "boolean",
+                                        description = "Is this a meal or a type of food"
+                                    },
                                     ingredients = new
                                     {
                                         type = "array",
@@ -72,6 +79,8 @@ namespace AICalories.Models
                                         items = new
                                         {
                                             type = "object",
+                                            required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories",
+                                                "ingredient_proteins", "ingredient_fats", "ingredient_carbohydrates" },
                                             properties = new
                                             {
                                                 ingredient_name = new
@@ -98,9 +107,23 @@ namespace AICalories.Models
                                                 {
                                                     type = "integer",
                                                     description = "Calories of the ingredient"
+                                                },
+                                                ingredient_proteins = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Proteins of the ingredient"
+                                                },
+                                                ingredient_fats = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Fats of the ingredient"
+                                                },
+                                                ingredient_carbohydrates = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Carbohydrates of the ingredient"
                                                 }
                                             },
-                                            required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories" }
                                         },
                                     },
                                     meal_name = new
@@ -113,10 +136,26 @@ namespace AICalories.Models
                                         type = "integer",
                                         description = "Summarize all ingredient_calories which you calculated"
                                     },
+                                    proteins = new
+                                    {
+                                        type = "integer",
+                                        description = "Summarize all ingredient_proteins which you calculated"
+                                    },
+                                    fats = new
+                                    {
+                                        type = "integer",
+                                        description = "Summarize all ingredient_fats which you calculated"
+                                    },
+                                    carbohydrates = new
+                                    {
+                                        type = "integer",
+                                        description = "Summarize all ingredient_carbohydrates which you calculated"
+                                    },
                                 }
                             },
                         }
-                    }
+                    },
+
                 }
             //functions = new
             //{

@@ -16,10 +16,13 @@ namespace AICalories.ViewModels
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
-        private bool isRefreshing;
-        private string mealName;
-        private string calories;
-        private string totalResultJSON;
+        private bool _isRefreshing;
+        private string _mealName;
+        private string _calories;
+        private string _proteins;
+        private string _fats;
+        private string _carbohydrates;
+        private string _totalResultJSON;
 
         private ApiKeys _apiKeys;
         private readonly HttpClient _client = new HttpClient();
@@ -31,13 +34,13 @@ namespace AICalories.ViewModels
 
         public string DishName
         {
-            get => mealName;
+            get => _mealName;
             set
             {
-                if (mealName != value)
+                if (_mealName != value)
                 {
 
-                    mealName = value;
+                    _mealName = value;
                     OnPropertyChanged();
                 }
             }
@@ -45,12 +48,51 @@ namespace AICalories.ViewModels
 
         public string Calories
         {
-            get => calories;
+            get => _calories;
             set
             {
-                if (calories != value)
+                if (_calories != value)
                 {
-                    calories = value;
+                    _calories = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Proteins
+        {
+            get => _proteins;
+            set
+            {
+                if (_proteins != value)
+                {
+                    _proteins = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Fats
+        {
+            get => _fats;
+            set
+            {
+                if (_fats != value)
+                {
+                    _fats = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Carbohydrates
+        {
+            get => _carbohydrates;
+            set
+            {
+                if (_carbohydrates != value)
+                {
+                    _carbohydrates = value;
                     OnPropertyChanged();
                 }
             }
@@ -58,24 +100,24 @@ namespace AICalories.ViewModels
 
         public string TotalResultJSON
         {
-            get => totalResultJSON;
+            get => _totalResultJSON;
             set
             {
-                if (totalResultJSON != value)
+                if (_totalResultJSON != value)
                 {
-                    totalResultJSON = value;
+                    _totalResultJSON = value;
                     OnPropertyChanged();
                 }
             }
         }
         public bool IsRefreshing
         {
-            get => isRefreshing;
+            get => _isRefreshing;
             set
             {
-                if (isRefreshing != value)
+                if (_isRefreshing != value)
                 {
-                    isRefreshing = value;
+                    _isRefreshing = value;
                     OnPropertyChanged();
                 }
             }
@@ -92,7 +134,7 @@ namespace AICalories.ViewModels
             _alertService = alertService;
             _imageInfo = imageInfo;
 
-            isRefreshing = true;
+            _isRefreshing = true;
 
             LoadSecrets();
             if (_apiKeys.OpenAIAPIKey == null)
@@ -105,15 +147,32 @@ namespace AICalories.ViewModels
 
         public async void ProcessImage() //todo
         {
-            var image = _imageInfo.ImagePath;
-            if (image != null)
+            var imagePath = _imageInfo.ImagePath;
+            if (imagePath != null)
             {
-                var response = await ProcessImage(image);
+                //var response = await ProcessImage(imagePath);
+
+                ResponseData response = await AnalyzeLocalImage(imagePath);
+                //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
+                //ResponseData resultFinal = new ResponseData()
+                //{
+                //    DishName = resultTwo.DishName,
+                //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
+                //};
+
                 if (response == null)
                 {
                     LoadAIResponse("Loading error");
                     return;
                 }
+                if (response.IsMeal == false)
+                {
+                    _alertService.ShowError("There is no food in this image.");
+                    _navigationService.PopModalAsync();
+                    return;
+                }
+                await AddItemToDB(imagePath, response);
+
                 LoadAIResponse(response);
             }
         }
@@ -123,6 +182,9 @@ namespace AICalories.ViewModels
             IsRefreshing = false;
             DishName = response.MealName;
             Calories = response.Calories.ToString();
+            Proteins = response.Proteins.ToString();
+            Fats = response.Fats.ToString();
+            Carbohydrates = response.Carbohydrates.ToString();
             TotalResultJSON = response.TotalResultJSON;
         }
 
@@ -136,30 +198,30 @@ namespace AICalories.ViewModels
 
         #region Process Image
 
-        public async Task<ResponseData> ProcessImage(string imagePath)
-        {
-            try
-            {
+        //public async Task<ResponseData> ProcessImage(string imagePath)
+        //{
+        //    try
+        //    {
 
-                //var imagePath = image.Path;
-                //imagePath = await ResizeImage(image.FullPath, 1000);
+        //        //var imagePath = image.Path;
+        //        //imagePath = await ResizeImage(image.FullPath, 1000);
 
-                ResponseData resultOne = await AnalyzeLocalImage(imagePath);
-                //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
-                //ResponseData resultFinal = new ResponseData()
-                //{
-                //    DishName = resultTwo.DishName,
-                //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
-                //};
-                await AddItemToDB(imagePath, resultOne);
-                return resultOne;
-            }
-            catch (Exception)
-            {
-                //RequestShowAlert("No connection to OpenAI");
-                throw;
-            }
-        }
+        //        ResponseData resultOne = await AnalyzeLocalImage(imagePath);
+        //        //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
+        //        //ResponseData resultFinal = new ResponseData()
+        //        //{
+        //        //    DishName = resultTwo.DishName,
+        //        //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
+        //        //};
+        //        await AddItemToDB(imagePath, resultOne);
+        //        return resultOne;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        //RequestShowAlert("No connection to OpenAI");
+        //        throw;
+        //    }
+        //}
 
         private async Task<ResponseData> AnalyzeLocalImage(string imagePath)
         {
@@ -172,8 +234,12 @@ namespace AICalories.ViewModels
             dynamic result = JsonConvert.DeserializeObject(stringRawResult);
 
             var responseData = new ResponseData();
+            responseData.IsMeal = result.is_meal;
             responseData.MealName = result.meal_name;
             responseData.Calories = result.calories;
+            responseData.Proteins = result.proteins;
+            responseData.Fats = result.fats;
+            responseData.Carbohydrates = result.carbohydrates;
             responseData.TotalResultJSON = stringRawResult;
 
             return responseData;

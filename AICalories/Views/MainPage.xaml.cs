@@ -38,83 +38,83 @@ public partial class MainPage : ContentPage
     #endregion
 
 
-    #region Photo selection buttons
+    //#region Photo selection buttons
 
-    private async void OnTakeImageClicked(System.Object sender, System.EventArgs e)
-    {
-        try
-        {
-            bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
-            if (isCameraAvailable)
-            {
-                try
-                {
-                    //var image = await MediaPicker.Default.CapturePhotoAsync();
-                    //await CrossMedia.Current.Initialize();
+    //private async void OnTakeImageClicked(System.Object sender, System.EventArgs e)
+    //{
+    //    try
+    //    {
+    //        bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
+    //        if (isCameraAvailable)
+    //        {
+    //            try
+    //            {
+    //                //var image = await MediaPicker.Default.CapturePhotoAsync();
+    //                //await CrossMedia.Current.Initialize();
 
-                    //var takeImagePage = new TakeImagePage();
+    //                //var takeImagePage = new TakeImagePage();
 
-                    if (!InternetConnection.CheckInternetConnection())
-                    {
-                        DisplayAlertConfiguration.ShowError("No internet connection");
-                        return;
-                    }
+    //                if (!InternetConnection.CheckInternetConnection())
+    //                {
+    //                    DisplayAlertConfiguration.ShowError("No internet connection");
+    //                    return;
+    //                }
                     
 
-                    var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
-                    await Shell.Current.Navigation.PushModalAsync(takeImagePage);
+    //                var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+    //                await Shell.Current.Navigation.PushModalAsync(takeImagePage);
 
 
-                    //await CrossMedia.Current.Initialize();
+    //                //await CrossMedia.Current.Initialize();
 
-                    //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                    //{
-                    //    PhotoSize = PhotoSize.Medium,
-                    //    //SaveToAlbum = true
-                    //});
+    //                //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+    //                //{
+    //                //    PhotoSize = PhotoSize.Medium,
+    //                //    //SaveToAlbum = true
+    //                //});
 
-                }
-                catch (ArgumentNullException ex)
-                {
-                    DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
-                }
-                catch (Exception ex)
-                {
-                    DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
-                }
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
-            }
-        }
-        catch (Exception ex)
-        {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
-        }
-    }
+    //            }
+    //            catch (ArgumentNullException ex)
+    //            {
+    //                DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
+    //            }
+    //        }
+    //        else
+    //        {
+    //            await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+    //    }
+    //}
 
-    private async Task<bool> CheckAndRequestCameraPermissionAsync()
-    {
-        try
-        {
-            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted)
-            {
-                status = await Permissions.RequestAsync<Permissions.Camera>();
-            }
+    //private async Task<bool> CheckAndRequestCameraPermissionAsync()
+    //{
+    //    try
+    //    {
+    //        var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+    //        if (status != PermissionStatus.Granted)
+    //        {
+    //            status = await Permissions.RequestAsync<Permissions.Camera>();
+    //        }
 
-            return status == PermissionStatus.Granted;
-        }
-        catch (Exception ex)
-        {
-            // Handle the exception as needed
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
-            return false;
-        }
-    }
+    //        return status == PermissionStatus.Granted;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Handle the exception as needed
+    //        await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+    //        return false;
+    //    }
+    //}
 
-    #endregion
+    //#endregion
 
 
     #region View

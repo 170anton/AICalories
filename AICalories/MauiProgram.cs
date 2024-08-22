@@ -35,7 +35,7 @@ public static class MauiProgram
 
         // Register the view model service
         builder.Services.AddSingleton<IViewModelService, ViewModelService>();
-        builder.Services.AddSingleton<IImageInfo, ImageInfo>();
+        builder.Services.AddSingleton<IImageInfo, ImageInfo>();  //todo try Transient
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IAlertService, AlertService>();
         //builder.Services.AddSingleton<ICameraService, CameraService>();
@@ -53,7 +53,7 @@ public static class MauiProgram
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<TakeImagePage>();
         builder.Services.AddTransient<ContextPage>();
-        builder.Services.AddTransient<ResultPage>(); //todo try singleton
+        builder.Services.AddTransient<ResultPage>();
 
 
 
