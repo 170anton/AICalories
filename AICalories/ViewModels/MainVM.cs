@@ -245,7 +245,7 @@ public class MainVM : INotifyPropertyChanged
             }
 
             LastHistoryItemImage = lastItem.ImagePath;
-            LastHistoryItemName = lastItem.Name;
+            LastHistoryItemName = lastItem.MealName;
             LastHistoryItemCalories = lastItem.Calories.ToString();
         }
         catch (Exception ex)

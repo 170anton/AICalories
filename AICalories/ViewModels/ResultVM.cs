@@ -152,7 +152,7 @@ namespace AICalories.ViewModels
             {
                 //var response = await ProcessImage(imagePath);
 
-                ResponseData response = await AnalyzeLocalImage(imagePath);
+                MealItem response = await AnalyzeLocalImage(imagePath);
                 //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
                 //ResponseData resultFinal = new ResponseData()
                 //{
@@ -177,15 +177,15 @@ namespace AICalories.ViewModels
             }
         }
 
-        public void LoadAIResponse(ResponseData response)
+        public void LoadAIResponse(MealItem mealItem)
         {
             IsRefreshing = false;
-            DishName = response.MealName;
-            Calories = response.Calories.ToString();
-            Proteins = response.Proteins.ToString();
-            Fats = response.Fats.ToString();
-            Carbohydrates = response.Carbohydrates.ToString();
-            TotalResultJSON = response.TotalResultJSON;
+            DishName = mealItem.MealName;
+            Calories = mealItem.Calories.ToString();
+            Proteins = mealItem.Proteins.ToString();
+            Fats = mealItem.Fats.ToString();
+            Carbohydrates = mealItem.Carbohydrates.ToString();
+            TotalResultJSON = mealItem.TotalResultJSON;
         }
 
         public void LoadAIResponse(string response)
@@ -223,7 +223,7 @@ namespace AICalories.ViewModels
         //    }
         //}
 
-        private async Task<ResponseData> AnalyzeLocalImage(string imagePath)
+        private async Task<MealItem> AnalyzeLocalImage(string imagePath)
         {
             string base64Image = ConvertToBase64(imagePath);
 
@@ -233,9 +233,10 @@ namespace AICalories.ViewModels
 
             dynamic result = JsonConvert.DeserializeObject(stringRawResult);
 
-            var responseData = new ResponseData();
+            var responseData = new MealItem();
             responseData.IsMeal = result.is_meal;
             responseData.MealName = result.meal_name;
+            //responseData.Weight = result.weight;
             responseData.Calories = result.calories;
             responseData.Proteins = result.proteins;
             responseData.Fats = result.fats;
@@ -270,24 +271,17 @@ namespace AICalories.ViewModels
             return stringRawResult;
         }
 
-        private async Task AddItemToDB(string imagePath, ResponseData responseData)
+        private async Task AddItemToDB(string imagePath, MealItem mealItem)
         {
             try
             {
                 var dateTimeNow = DateTime.Now;
-                var newItem = new MealItem
-                {
-                    Name = responseData.MealName,
-                    Date = dateTimeNow,
-                    Time = dateTimeNow.ToString("HH:mm"),
-                    ImagePath = imagePath,
-                    //Calories = responseData.Calories.ToString(),
-                    Calories = responseData.Calories,
-                    Proteins = responseData.Proteins,
-                    Fats = responseData.Fats,
-                    Carbohydrates = responseData.Carbohydrates,
-                };
-                await App.HistoryItemRepository.SaveMealItemAsync(newItem);
+
+                mealItem.Date = dateTimeNow;
+                mealItem.Time = dateTimeNow.ToString("HH:mm");
+                mealItem.ImagePath = imagePath;
+
+                await App.HistoryItemRepository.SaveMealItemAsync(mealItem);
 
 
             }

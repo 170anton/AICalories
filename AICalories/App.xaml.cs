@@ -10,9 +10,11 @@ namespace AICalories;
 public partial class App : Application
 {
     private static HistoryDatabase<MealItem> _historyDatabase;
+    private static IngredientsDatabase<IngredientItem> _ingredientsDatabase;
     private static ContextDatabase<ContextItem> _contextDatabase;
 
     public static IHistoryItemRepository HistoryItemRepository { get; private set; }
+    public static IIngredientItemRepository IngredientItemRepository { get; private set; }
     public static IContextItemRepository ContextItemRepository { get; private set; }
 
 
@@ -25,6 +27,18 @@ public partial class App : Application
                 _historyDatabase = new HistoryDatabase<MealItem>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesDatabase.db3")); //todo change to AICaloriesHistoryDatabase
             }
             return _historyDatabase;
+        }
+    }
+
+    public static IngredientsDatabase<IngredientItem> IngredientsDatabase
+    {
+        get
+        {
+            if (_ingredientsDatabase == null)
+            {
+                _ingredientsDatabase = new IngredientsDatabase<IngredientItem>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesIngredientsDatabase.db3")); 
+            }
+            return _ingredientsDatabase;
         }
     }
 
@@ -46,6 +60,7 @@ public partial class App : Application
         MainPage = serviceProvider.GetRequiredService<AppShell>();
 
         HistoryItemRepository = new HistoryItemRepository(HistoryDatabase);
+        IngredientItemRepository = new IngredientItemRepository(IngredientsDatabase);
         ContextItemRepository = new ContextItemRepository(ContextDatabase);
 
         // Ensure ContextPage is initialized

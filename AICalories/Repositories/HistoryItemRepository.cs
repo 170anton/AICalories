@@ -5,41 +5,41 @@ namespace AICalories.Repositories
 {
     public class HistoryItemRepository : IHistoryItemRepository
     {
-        private readonly HistoryDatabase<MealItem> _contextDatabase;
+        private readonly HistoryDatabase<MealItem> _historyDatabase;
 
-        public HistoryItemRepository(HistoryDatabase<MealItem> contextDatabase)
+        public HistoryItemRepository(HistoryDatabase<MealItem> _historyDatabase)
         {
-            _contextDatabase = contextDatabase;
+            _historyDatabase = _historyDatabase;
         }
 
         public Task SaveMealItemAsync(MealItem item)
         {
-            return _contextDatabase.SaveItemAsync(item);
+            return _historyDatabase.SaveItemAsync(item);
         }
 
         public Task<MealItem> GetLastMealItemAsync()
         {
-            return _contextDatabase.GetLastItemAsync();
+            return _historyDatabase.GetLastItemAsync();
         }
 
         public Task<List<MealItem>> GetAllMealItemsAsync()
         {
-            return _contextDatabase.GetAllItemsAsync();
+            return _historyDatabase.GetAllItemsAsync();
         }
 
         public Task<int> GetMealItemsCountAsync()
         {
-            return _contextDatabase.GetCountAsync();
+            return _historyDatabase.GetCountAsync();
         }
 
         public Task DeleteMealItemAsync(MealItem item)
         {
-            return _contextDatabase.DeleteAsync(item);
+            return _historyDatabase.DeleteAsync(item);
         }
 
         public Task DeleteAllMealItemsAsync()
         {
-            return _contextDatabase.DeleteAllAsync();
+            return _historyDatabase.DeleteAllAsync();
         }
     }
 }
