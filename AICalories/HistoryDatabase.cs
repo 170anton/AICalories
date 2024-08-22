@@ -5,85 +5,58 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using AICalories.Interfaces;
 
 namespace AICalories
 {
-	public class HistoryDatabase
+	public class HistoryDatabase<T> where T : class, IMealItem, new()
     {
         private readonly SQLiteAsyncConnection _database;
 
         public HistoryDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
-            _database.CreateTableAsync<HistoryItem>().Wait();
-            //_database.CreateTableAsync<HistorySubItem>().Wait();
+            _database.CreateTableAsync<T>().Wait();
         }
 
-        public async Task<List<HistoryItem>> GetItemsAsync()
+        public Task<List<T>> GetAllItemsAsync()
         {
-            return await _database.Table<HistoryItem>().ToListAsync();
+            return _database.Table<T>().ToListAsync();
         }
 
-        public async Task<HistoryItem> GetLastItemAsync()
+        public Task<T> GetLastItemAsync()
         {
-            return await _database.Table<HistoryItem>()
+            return _database.Table<T>()
                 .OrderByDescending(i => i.Date)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<int> GetCountAsync()
+        public Task<int> GetCountAsync()
         {
-            return await _database.Table<HistoryItem>().CountAsync();
+            return _database.Table<T>().CountAsync();
         }
 
-        public async Task<int> SaveItemAsync(HistoryItem item)
+        public Task<int> SaveItemAsync(T item)
         {
             if (item.Id != 0)
             {
-                return await _database.UpdateAsync(item);
+                return _database.UpdateAsync(item);
             }
             else
             {
-                return await _database.InsertAsync(item);
+                return _database.InsertAsync(item);
             }
         }
 
-        public async Task<int> DeleteItemAsync(HistoryItem item)
+        public Task<int> DeleteAsync(T item)
         {
-            return await _database.DeleteAsync(item);
+            return _database.DeleteAsync(item);
         }
 
-        public async Task<int> ClearItemsAsync()
+        public async Task<int> DeleteAllAsync()
         {
-            return await _database.DeleteAllAsync<HistoryItem>();
+            return await _database.DeleteAllAsync<T>();
         }
-
-        //public Task<List<HistorySubItem>> GetSubItemsAsync(int itemId)
-        //{
-        //    return _database.Table<HistorySubItem>().Where(si => si.ItemId == itemId).ToListAsync();
-        //}
-
-        //public Task<int> SaveSubItemAsync(HistorySubItem subItem)
-        //{
-        //    if (subItem.Id != 0)
-        //    {
-        //        return _database.UpdateAsync(subItem);
-        //    }
-        //    else
-        //    {
-        //        return _database.InsertAsync(subItem);
-        //    }
-        //}
-
-        //public Task<int> DeleteSubItemAsync(HistorySubItem subItem)
-        //{
-        //    return _database.DeleteAsync(subItem);
-        //}
-
-        //public Task<int> ClearSubItemsAsync()
-        //{
-        //    return _database.DeleteAllAsync<HistorySubItem>();
-        //}
     }
 }
 

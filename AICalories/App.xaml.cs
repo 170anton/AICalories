@@ -9,19 +9,20 @@ namespace AICalories;
 
 public partial class App : Application
 {
-    private static HistoryDatabase _historyDatabase;
+    private static HistoryDatabase<MealItem> _historyDatabase;
     private static ContextDatabase<ContextItem> _contextDatabase;
 
+    public static IHistoryItemRepository HistoryItemRepository { get; private set; }
     public static IContextItemRepository ContextItemRepository { get; private set; }
 
 
-    public static HistoryDatabase HistoryDatabase
+    public static HistoryDatabase<MealItem> HistoryDatabase
     {
         get
         {
             if (_historyDatabase == null)
             {
-                _historyDatabase = new HistoryDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesDatabase.db3")); //todo change to AICaloriesHistoryDatabase
+                _historyDatabase = new HistoryDatabase<MealItem>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AICaloriesDatabase.db3")); //todo change to AICaloriesHistoryDatabase
             }
             return _historyDatabase;
         }
@@ -44,13 +45,14 @@ public partial class App : Application
 		InitializeComponent();
         MainPage = serviceProvider.GetRequiredService<AppShell>();
 
+        HistoryItemRepository = new HistoryItemRepository(HistoryDatabase);
         ContextItemRepository = new ContextItemRepository(ContextDatabase);
 
         // Ensure ContextPage is initialized
         InitializeViewModels(serviceProvider);
     }
 
-    private void InitializeViewModels(IServiceProvider serviceProvider)
+    private void InitializeViewModels(IServiceProvider serviceProvider) //todo Try to use it
     {
         var contextVM = serviceProvider.GetRequiredService<ContextVM>();
         var appSettingsVM = serviceProvider.GetRequiredService<AppSettingsVM>();

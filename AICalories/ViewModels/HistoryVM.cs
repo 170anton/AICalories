@@ -47,7 +47,7 @@ namespace AICalories.ViewModels
             //OnClearAll();
             DayGroupedItems = new ObservableCollection<DayGroupedItem>();
             AddItemCommand = new Command(OnAddItem);
-            DeleteItemCommand = new Command<HistoryItem>(OnDeleteItem);
+            DeleteItemCommand = new Command<MealItem>(OnDeleteItem);
             ClearAllCommand = new Command(OnClearAll);
             //Task.Run(() => LoadData());
         }
@@ -59,9 +59,9 @@ namespace AICalories.ViewModels
             {
                 IsLabelVisible = false;
                 IsLoading = true;
-                await Task.Delay(1000);
+                await Task.Delay(500);
 
-                var countInDb = await App.HistoryDatabase.GetCountAsync();
+                var countInDb = await App.HistoryItemRepository.GetMealItemsCountAsync();
                 var countInColl = DayGroupedItems.SelectMany(grouped => grouped).Count();
 
                 if (countInDb != countInColl)
@@ -90,7 +90,7 @@ namespace AICalories.ViewModels
                 DayGroupedItems.Clear();
 
                 var dateTimeNow = DateTime.Now;
-                var items = await App.HistoryDatabase.GetItemsAsync();
+                var items = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
                 var grouped = items.GroupBy(i => i.Date.Date)
                                    .Select(g => new DayGroupedItem(g.Key))
@@ -122,14 +122,14 @@ namespace AICalories.ViewModels
             try
             {
                 var dateTimeNow = DateTime.Now;
-                var newItem = new HistoryItem
+                var newItem = new MealItem
                 {
                     Date = dateTimeNow,
                     Time = dateTimeNow.ToString("HH:mm"),
                     ImagePath = "pasta1.jpg",
-                    Calories = "Calories"
+                    Calories = 500
                 };
-                await App.HistoryDatabase.SaveItemAsync(newItem);
+                await App.HistoryItemRepository.SaveMealItemAsync(newItem);
                 SaveToHistory(dateTimeNow, newItem);
                 //OnPropertyChanged(nameof(DayGroupedItems));
             }
@@ -140,7 +140,7 @@ namespace AICalories.ViewModels
 
         }
 
-        private async void SaveToHistory(DateTime dateTimeNow, HistoryItem newItem)
+        private async void SaveToHistory(DateTime dateTimeNow, MealItem newItem)
         {
             var group = DayGroupedItems.FirstOrDefault(g => g.Date == dateTimeNow.Date);
             if (group == null)
@@ -154,14 +154,14 @@ namespace AICalories.ViewModels
             group.Add(newItem);
         }
 
-        private async void OnDeleteItem(HistoryItem item)
+        private async void OnDeleteItem(MealItem item)
         {
             try
             {
                 var dateTimeNow = DateTime.Now;
                 if (item != null)
                 {
-                    await App.HistoryDatabase.DeleteItemAsync(item);
+                    await App.HistoryItemRepository.DeleteMealItemAsync(item);
                     var group = DayGroupedItems.FirstOrDefault(g => g.Date == item.Date.Date);
                     if (group != null)
                     {
@@ -186,7 +186,7 @@ namespace AICalories.ViewModels
         {
             try
             {
-                await App.HistoryDatabase.ClearItemsAsync();
+                await App.HistoryItemRepository.DeleteAllMealItemsAsync();
                 DayGroupedItems.Clear();
             }
             catch (Exception ex)

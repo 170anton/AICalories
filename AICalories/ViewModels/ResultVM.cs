@@ -275,19 +275,19 @@ namespace AICalories.ViewModels
             try
             {
                 var dateTimeNow = DateTime.Now;
-                var newItem = new HistoryItem
+                var newItem = new MealItem
                 {
                     Name = responseData.MealName,
                     Date = dateTimeNow,
                     Time = dateTimeNow.ToString("HH:mm"),
                     ImagePath = imagePath,
-                    Calories = responseData.Calories.ToString(),
-                    CaloriesInt = responseData.Calories,
+                    //Calories = responseData.Calories.ToString(),
+                    Calories = responseData.Calories,
                     Proteins = responseData.Proteins,
                     Fats = responseData.Fats,
                     Carbohydrates = responseData.Carbohydrates,
                 };
-                await App.HistoryDatabase.SaveItemAsync(newItem);
+                await App.HistoryItemRepository.SaveMealItemAsync(newItem);
 
 
             }

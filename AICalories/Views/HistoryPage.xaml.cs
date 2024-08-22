@@ -54,7 +54,7 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
                 return;
             }
 
-            if (item.FirstOrDefault() is HistoryItem selectedItem)
+            if (item.FirstOrDefault() is MealItem selectedItem)
             {
                 bool delete = await DisplayAlert("Delete Item", "Do you want to delete this item?", "Yes", "No");
                 if (delete)

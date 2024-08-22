@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using AICalories.DI;
+using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
 using Microsoft.Maui.Graphics.Platform;
@@ -153,34 +154,54 @@ public class MainVM : INotifyPropertyChanged
         NewImageCommand = new Command(async () => await NewImageClicked());
 
 
-        LoadLastHistoryItem();
-        GetTotalCalories();
-        GetTotalProteins();
-        GetTotalFats();
-        GetTotalCarbohydrates();
-        IsHistoryGridVisible = true;
+        //LoadLastHistoryItem();
+        //GetTotalCalories();
+        //GetTotalProteins();
+        //GetTotalFats();
+        //GetTotalCarbohydrates();
+        //IsHistoryGridVisible = true;
 
     }
     #endregion
 
+    public async Task OnPageAppearingAsync()
+    {
+        // Clear or reset properties if needed
+        LastHistoryItemName = null;
+        LastHistoryItemCalories = null;
+        LastHistoryItemImage = null;
 
-    public async void GetTotalCalories()
+        await LoadLastHistoryItem();
+        LoadTodayStats();
+
+        IsHistoryGridVisible = true;
+    }
+
+    #region Today Stats
+
+    public async Task LoadTodayStats()
     {
 
         var dateTimeNow = DateTime.Now;
-        var items = await App.HistoryDatabase.GetItemsAsync();
+        List<MealItem> items = await App.HistoryItemRepository.GetAllMealItemsAsync();
+
+        GetTotalCalories(items, dateTimeNow);
+        GetTotalProteins(items, dateTimeNow);
+        GetTotalFats(items, dateTimeNow);
+        GetTotalCarbohydrates(items, dateTimeNow);
+    }
+
+    public async Task GetTotalCalories(List<MealItem> items, DateTime dateTimeNow)
+    {
         var calorieSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
-                              .Sum(i => i.CaloriesInt)
+                              .Sum(i => i.Calories)
                               .ToString();
 
         TotalCalories = calorieSum;
     }
 
-    public async void GetTotalProteins()
+    public async Task GetTotalProteins(List<MealItem> items, DateTime dateTimeNow)
     {
-
-        var dateTimeNow = DateTime.Now;
-        var items = await App.HistoryDatabase.GetItemsAsync();
         var proteinsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
                               .Sum(i => i.Proteins)
                               .ToString();
@@ -188,11 +209,8 @@ public class MainVM : INotifyPropertyChanged
         TotalProteins = proteinsSum;
     }
 
-    public async void GetTotalFats()
+    public async Task GetTotalFats(List<MealItem> items, DateTime dateTimeNow)
     {
-
-        var dateTimeNow = DateTime.Now;
-        var items = await App.HistoryDatabase.GetItemsAsync();
         var fatsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
                               .Sum(i => i.Fats)
                               .ToString();
@@ -200,25 +218,23 @@ public class MainVM : INotifyPropertyChanged
         TotalFats = fatsSum;
     }
 
-    public async void GetTotalCarbohydrates()
+    public async Task GetTotalCarbohydrates(List<MealItem> items, DateTime dateTimeNow)
     {
-
-        var dateTimeNow = DateTime.Now;
-        var items = await App.HistoryDatabase.GetItemsAsync();
         var carbohydratesSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
                               .Sum(i => i.Carbohydrates)
                               .ToString();
 
         TotalCarbohydrates = carbohydratesSum;
     }
+    #endregion
 
-    public async void LoadLastHistoryItem()
+    public async Task LoadLastHistoryItem()
     {
         try
         {
             IsLabelVisible = false;
             IsLoading = true;
-            await Task.Delay(1000);
+            await Task.Delay(500);
             var lastItem = await App.HistoryDatabase.GetLastItemAsync();
             IsLoading = false;
 
@@ -230,7 +246,7 @@ public class MainVM : INotifyPropertyChanged
 
             LastHistoryItemImage = lastItem.ImagePath;
             LastHistoryItemName = lastItem.Name;
-            LastHistoryItemCalories = lastItem.Calories;
+            LastHistoryItemCalories = lastItem.Calories.ToString();
         }
         catch (Exception ex)
         {

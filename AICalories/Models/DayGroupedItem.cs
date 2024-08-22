@@ -5,7 +5,7 @@ using SQLite;
 
 namespace AICalories.Models
 {
-    public class DayGroupedItem : ObservableCollection<HistoryItem>
+    public class DayGroupedItem : ObservableCollection<MealItem>
     {
         public string Title { get; protected set; }
         public DateTime Date { get; protected set; }
