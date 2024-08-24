@@ -14,7 +14,11 @@ namespace AICalories
             _database.CreateTableAsync<T>().Wait();
         }
 
-        // Create or Update an ingredient
+        public async Task<List<T>> GetIngredientsByMealIdAsync(int mealId)
+        {
+            return await _database.Table<T>().Where(i => i.MealItemId == mealId).ToListAsync();
+        }
+
         public async Task<int> SaveIngredientAsync(T ingredient)
         {
             if (ingredient.Id != 0)

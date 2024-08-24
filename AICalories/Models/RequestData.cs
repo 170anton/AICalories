@@ -1,4 +1,6 @@
 ﻿using System;
+using Android.Hardware.Lights;
+
 namespace AICalories.Models
 {
     public static class RequestData
@@ -7,7 +9,7 @@ namespace AICalories.Models
         private static object secondPrompt;
 
 
-        public static object GetFirstPrompt(string base64Image, string mealType)
+        public static object GetFirstPrompt(string base64Image, string mealType, string userInfo)
         {
             firstPrompt = new
             {
@@ -34,11 +36,12 @@ namespace AICalories.Models
                                 type = "text",
                                 text = $"Is there any meal or food in this image? " +
                                 $"If no, set is_meal to false and set other properties to 0 or null. " +
-                                $"What ingredients are in this meal? There are {mealType} ingredients. " +
+                                $"{mealType}. What ingredients are in this meal? " +
                                 "Weight, calories, proteins, fats, carbohydrates of ingredients must be calculated as precise as possible. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
-                                "Then summarize all calories of all ingredients as precise as possible. " +
-                                "Output result in a JSON format. "
+                                "Then summarize all calories and weight of all ingredients. " +
+                                "Output result in a JSON format. " +
+                                $"{userInfo}. "
                             },
                             new
                             {
@@ -64,7 +67,7 @@ namespace AICalories.Models
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "is_meal", "ingredients", "meal_name", "calories", "proteins", "fats", "carbohydrates" },
+                                required = new[] { "is_meal", "ingredients", "meal_name", "weight", "calories", "proteins", "fats", "carbohydrates" },
                                 properties = new
                                 {
                                     is_meal = new
@@ -130,6 +133,11 @@ namespace AICalories.Models
                                     {
                                         type = "string",
                                         description = "Summarize and give the name of the meal"
+                                    },
+                                    weight = new
+                                    {
+                                        type = "integer",
+                                        description = "Summarize all ingredient_weight which you calculated"
                                     },
                                     calories = new
                                     {

@@ -3,6 +3,9 @@ using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Services;
+using Android.Content;
+using Android.Provider;
+using Java.Util.Streams;
 
 namespace AICalories.ViewModels
 {
@@ -18,6 +21,7 @@ namespace AICalories.ViewModels
         public ICommand CaptureCommand { get; }
         public ICommand GalleryCommand { get; }
         public ICommand ToggleTorchCommand { get; }
+
 
         public TakeImageVM(IViewModelService viewModelService, IImageInfo imageInfo, ICameraService cameraService,
             INavigationService navigationService, IAlertService alertService)
@@ -53,6 +57,7 @@ namespace AICalories.ViewModels
             {
                 await stream.CopyToAsync(fileStream);
             }
+            SaveToGallery(imagePath);
 
             SetImage(imagePath);
 
@@ -102,6 +107,41 @@ namespace AICalories.ViewModels
             else
             {
                 _cameraService.EnableTorch();
+            }
+        }
+
+        private void SaveToGallery(string imagePath)
+        {
+            if (Preferences.Get(App.SaveToGalleryKey, true))
+            {
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    var fileName = Path.GetFileName(imagePath);
+                    var mimeType = "image/jpeg";
+                    var values = new ContentValues();
+                    values.Put(MediaStore.IMediaColumns.DisplayName, fileName);
+                    values.Put(MediaStore.IMediaColumns.MimeType, mimeType);
+                    values.Put(MediaStore.Images.ImageColumns.RelativePath, Android.OS.Environment.DirectoryPictures);
+
+                    var contentResolver = Platform.CurrentActivity.ContentResolver;
+                    var uri = contentResolver.Insert(MediaStore.Images.Media.ExternalContentUri, values);
+
+                    if (uri != null)
+                    {
+                        using (var inputStream = File.OpenRead(imagePath))
+                        using (var outputStream = contentResolver.OpenOutputStream(uri))
+                        {
+                            inputStream.CopyTo(outputStream);
+                        }
+                    }
+                    //File.Delete(imagePath);
+                }
+                else if (DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    var picturesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                    var destinationPath = Path.Combine(picturesDirectory, Path.GetFileName(imagePath));
+                    File.Copy(imagePath, destinationPath, true);
+                }
             }
         }
 

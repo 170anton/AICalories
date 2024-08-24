@@ -12,6 +12,11 @@ namespace AICalories.Repositories
             _ingredientsDatabase = ingredientsDatabase;
         }
 
+        public async Task<List<IngredientItem>> GetIngredientsByMealIdAsync(int mealId)
+        {
+            return await _ingredientsDatabase.GetIngredientsByMealIdAsync(mealId);
+        }
+
         public async Task<int> SaveIngredientAsync(IngredientItem ingredient)
         {
             return await _ingredientsDatabase.SaveIngredientAsync(ingredient);

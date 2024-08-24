@@ -10,9 +10,10 @@ namespace AICalories.ViewModels
     public class AppSettingsVM : INotifyPropertyChanged
     {
         private readonly IViewModelService _viewModelService;
-        private const string DarkModeKey = "DarkModeKey";
-        private const string SaveToGalleryKey = "SaveToGalleryKey";
+        //private const string DarkModeKey = "DarkModeKey";
+        //private const string SaveToGalleryKey = "SaveToGalleryKey";
         private bool _isDarkMode;
+        private bool _isShowReview;
         private bool _isSaveToGallery;
 
         private string _email;
@@ -33,8 +34,22 @@ namespace AICalories.ViewModels
                 if (_isDarkMode != value)
                 {
                     _isDarkMode = value;
-                    OnPropertyChanged();
                     UpdateDarkMode();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsShowReview
+        {
+            get => _isShowReview;
+            set
+            {
+                if (_isShowReview != value)
+                {
+                    _isShowReview = value;
+                    UpdateShowReview();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -47,8 +62,8 @@ namespace AICalories.ViewModels
                 if (_isSaveToGallery != value)
                 {
                     _isSaveToGallery = value;
+                    UpdateSaveToGallery();
                     OnPropertyChanged();
-                    SaveToGallery();
                 }
             }
         }
@@ -105,6 +120,7 @@ namespace AICalories.ViewModels
             SendQuestionCommand = new Command(async () => await Send());
 
             LoadSelectedDarkMode();
+            LoadSelectedShowReview();
             LoadSelectedSaveToGallery();
         }
         #endregion
@@ -121,35 +137,43 @@ namespace AICalories.ViewModels
             //});
             Application.Current.UserAppTheme = IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 
-            Preferences.Set(DarkModeKey, IsDarkMode);
+            Preferences.Set(App.DarkModeKey, IsDarkMode);
+            //Preferences.Set(App.SaveToGalleryKey, IsSaveToGallery);
 
         }
 
-        private void SaveToGallery()
+        private void UpdateSaveToGallery()
         {
             //Application.Current.UserAppTheme = IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 
-            Preferences.Set(SaveToGalleryKey, IsSaveToGallery);
+            Preferences.Set(App.SaveToGalleryKey, IsSaveToGallery);
         }
 
+        private void UpdateShowReview()
+        {
+            //Application.Current.UserAppTheme = IsDarkMode ? AppTheme.Dark : AppTheme.Light;
+
+            Preferences.Set(App.ShowReviewKey, IsShowReview);
+        }
+        
 
         private void LoadSelectedDarkMode()
         {
-            var savedOption = Preferences.Get(DarkModeKey, false);
-            if (savedOption != null)
-            {
-                IsDarkMode = savedOption;
-            }
+            var savedOption = Preferences.Get(App.DarkModeKey, false);
+            IsDarkMode = savedOption;
+        }
+
+        private void LoadSelectedShowReview()
+        {
+            var savedOption = Preferences.Get(App.ShowReviewKey, true);
+            IsShowReview = savedOption;
         }
 
 
         private void LoadSelectedSaveToGallery()
         {
-            var savedOption = Preferences.Get(SaveToGalleryKey, false);
-            if (savedOption != null)
-            {
-                IsSaveToGallery = savedOption;
-            }
+            var savedOption = Preferences.Get(App.SaveToGalleryKey, false);
+            IsSaveToGallery = savedOption;
         }
         #endregion
 

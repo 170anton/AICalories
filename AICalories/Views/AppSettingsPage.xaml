@@ -27,17 +27,18 @@
                                         IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
+                                <Label Text="Image review" Style="{StaticResource LabelAppStyle}"
                                        HorizontalOptions="Start"
                                        FontSize="Large"/>
                                 <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
-                                        Scale="1.3"/>
+                                        Scale="1.3"
+                                        IsToggled="{Binding IsShowReview, Mode=TwoWay}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
                                 <Label Text="Save to gallery" Style="{StaticResource LabelAppStyle}"
-                                       HorizontalOptions="Start"
+                                       HorizontalOptions="Start" 
                                        FontSize="Large"/>
-                                <Switch Grid.Column="1"
+                                <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
                                         Scale="1.3"
                                         IsToggled="{Binding IsSaveToGallery, Mode=TwoWay}" />
                             </Grid>
@@ -66,7 +67,7 @@
                                PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
                                />
                             
-                        <Editor Text="{Binding Question}" Placeholder="Enter your question"  FontSize="Large"
+                        <Editor Text="{Binding Question}" Placeholder="Enter your problem"  FontSize="Large"
                                 x:Name="editor" MaxLength="1000" MaximumHeightRequest="800" AutoSize="TextChanges"
                                 TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                 PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"

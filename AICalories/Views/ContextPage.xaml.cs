@@ -30,7 +30,7 @@ public partial class ContextPage : ContentPage
 
         if (BindingContext is ContextVM viewModel)
         {
-            viewModel.ContextGridAdded += OnContextGridAdded;
+            //viewModel.ContextGridAdded += OnContextGridAdded;
         }
         //_viewModel.UpdateContextList(contextLayout);
     }
@@ -48,11 +48,11 @@ public partial class ContextPage : ContentPage
     //    //await _viewModel.UpdateContextList(contextLayout);
     //}
 
-    private void OnContextGridAdded(ContextGrid contextGrid)
-    {
-        // Add the new ContextGrid to the VerticalStackLayout
-        contextLayout.Children.Add(contextGrid);
-    }
+    //private void OnContextGridAdded(ContextGrid contextGrid) //todo do not delete
+    //{
+    //    // Add the new ContextGrid to the VerticalStackLayout
+    //    contextLayout.Children.Add(contextGrid);
+    //}
 
 
     //private async void OnConfirmClicked(System.Object sender, System.EventArgs e)
@@ -90,7 +90,7 @@ public partial class ContextPage : ContentPage
             var selectedOption = radioButton?.Value?.ToString();
             
             Preferences.Set(SelectedOptionKey, selectedOption);
-
+            
             _viewModel.SelectedOption = selectedOption;
         }
     }
@@ -108,7 +108,7 @@ public partial class ContextPage : ContentPage
 
         if (BindingContext is ContextVM viewModel)
         {
-            viewModel.ContextGridAdded -= OnContextGridAdded;
+            //viewModel.ContextGridAdded -= OnContextGridAdded;
         }
     }
 
@@ -116,7 +116,7 @@ public partial class ContextPage : ContentPage
     {
         base.OnAppearing();
 
-        await _viewModel.UpdateContextList(contextLayout);
+        //await _viewModel.UpdateContextList(contextLayout);
         
 
     }

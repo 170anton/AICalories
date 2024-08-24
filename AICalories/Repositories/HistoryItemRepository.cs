@@ -7,9 +7,9 @@ namespace AICalories.Repositories
     {
         private readonly HistoryDatabase<MealItem> _historyDatabase;
 
-        public HistoryItemRepository(HistoryDatabase<MealItem> _historyDatabase)
+        public HistoryItemRepository(HistoryDatabase<MealItem> historyDatabase)
         {
-            _historyDatabase = _historyDatabase;
+            _historyDatabase = historyDatabase;
         }
 
         public Task SaveMealItemAsync(MealItem item)

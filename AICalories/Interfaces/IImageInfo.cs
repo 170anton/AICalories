@@ -5,7 +5,8 @@ namespace AICalories.Interfaces
 	{
 		public string ImagePath { get; set; }
 		public string MealType { get; set; }
-		public List<string> Hints { get; set; }
+        public string UserInfo { get; set; }
+        public List<string> Hints { get; set; }
 	}
 }
 

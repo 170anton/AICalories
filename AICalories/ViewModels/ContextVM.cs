@@ -19,6 +19,7 @@ namespace AICalories.ViewModels
         private const string SelectedOptionKey = "SelectedOption";
 
         private string _selectedOption;
+        private string _userInfo;
         private string _mainImage;
         private IImageInfo _imageInfo;
 
@@ -37,6 +38,19 @@ namespace AICalories.ViewModels
             }
         }
 
+
+        public string UserInfo
+        {
+            get => _userInfo;
+            set
+            {
+                if (_userInfo != value)
+                {
+                    _userInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         //public string MainImage
         //{
         //    get => _imageInfo.ImagePath;
@@ -97,6 +111,7 @@ namespace AICalories.ViewModels
         public async Task SetAdditionalInfo()
         {
             _imageInfo.MealType = SelectedOption;
+            _imageInfo.UserInfo = UserInfo;
         }
 
         private async Task LoadSelectedOption()

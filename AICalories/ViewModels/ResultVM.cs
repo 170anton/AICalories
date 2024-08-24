@@ -7,6 +7,7 @@ using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
 using AndroidX.Lifecycle;
+using GoogleGson;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
@@ -18,6 +19,7 @@ namespace AICalories.ViewModels
         private readonly IAlertService _alertService;
         private bool _isRefreshing;
         private string _mealName;
+        private string _weight;
         private string _calories;
         private string _proteins;
         private string _fats;
@@ -34,7 +36,7 @@ namespace AICalories.ViewModels
 
         public string DishName
         {
-            get => _mealName;
+            get => "Name: " + _mealName;
             set
             {
                 if (_mealName != value)
@@ -46,9 +48,23 @@ namespace AICalories.ViewModels
             }
         }
 
+        public string Weight
+        {
+            get => "Weight: " + _weight + "g";
+            set
+            {
+                if (_weight != value)
+                {
+
+                    _weight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string Calories
         {
-            get => _calories;
+            get => "Calories: " + _calories + "Cal";
             set
             {
                 if (_calories != value)
@@ -61,7 +77,7 @@ namespace AICalories.ViewModels
 
         public string Proteins
         {
-            get => _proteins;
+            get => "Protein: " + _proteins + "g";
             set
             {
                 if (_proteins != value)
@@ -74,7 +90,7 @@ namespace AICalories.ViewModels
 
         public string Fats
         {
-            get => _fats;
+            get => "Fat: " + _fats + "g";
             set
             {
                 if (_fats != value)
@@ -87,7 +103,7 @@ namespace AICalories.ViewModels
 
         public string Carbohydrates
         {
-            get => _carbohydrates;
+            get => "Carbs: " + _carbohydrates + "g";
             set
             {
                 if (_carbohydrates != value)
@@ -110,6 +126,7 @@ namespace AICalories.ViewModels
                 }
             }
         }
+
         public bool IsRefreshing
         {
             get => _isRefreshing;
@@ -147,33 +164,45 @@ namespace AICalories.ViewModels
 
         public async void ProcessImage() //todo
         {
-            var imagePath = _imageInfo.ImagePath;
-            if (imagePath != null)
+            try
             {
-                //var response = await ProcessImage(imagePath);
 
-                MealItem response = await AnalyzeLocalImage(imagePath);
-                //ResponseData resultTwo = await AnalyzeLocalImage(imagePath);
-                //ResponseData resultFinal = new ResponseData()
-                //{
-                //    DishName = resultTwo.DishName,
-                //    Calories = (resultOne.Calories + resultTwo.Calories) / 2
-                //};
-
-                if (response == null)
+                var imagePath = _imageInfo.ImagePath;
+                if (imagePath != null)
                 {
-                    LoadAIResponse("Loading error");
-                    return;
-                }
-                if (response.IsMeal == false)
-                {
-                    _alertService.ShowError("There is no food in this image.");
-                    _navigationService.PopModalAsync();
-                    return;
-                }
-                await AddItemToDB(imagePath, response);
+                    MealItem mealItem = await AnalyzeLocalImage(imagePath);
 
-                LoadAIResponse(response);
+                    if (mealItem == null)
+                    {
+                        LoadAIResponse("Loading error");
+                        return;
+                    }
+                    if (mealItem.IsMeal == false)
+                    {
+                        _alertService.ShowError("There is no food in this image.");
+                        _navigationService.PopModalAsync();
+                        return;
+                    }
+                    await AddItemToDB(imagePath, mealItem);
+
+                    LoadAIResponse(mealItem);
+                }
+            }
+            catch (JsonSerializationException)
+            {
+                _alertService.ShowError("Decoding error occurred");
+            }
+            catch (BadImageFormatException)
+            {
+                _alertService.ShowError("No connection to AI server");
+            }
+            catch (FileLoadException)
+            {
+                _alertService.ShowError("Error saving to database");
+            }
+            catch (Exception)
+            {
+                _alertService.ShowUnexpectedError();
             }
         }
 
@@ -181,6 +210,7 @@ namespace AICalories.ViewModels
         {
             IsRefreshing = false;
             DishName = mealItem.MealName;
+            Weight = mealItem.Weight.ToString();
             Calories = mealItem.Calories.ToString();
             Proteins = mealItem.Proteins.ToString();
             Fats = mealItem.Fats.ToString();
@@ -225,25 +255,34 @@ namespace AICalories.ViewModels
 
         private async Task<MealItem> AnalyzeLocalImage(string imagePath)
         {
-            string base64Image = ConvertToBase64(imagePath);
+            try
+            {
+                string base64Image = ConvertToBase64(imagePath);
 
-            HttpResponseMessage response = await SendRequestToApi(base64Image);
+                HttpResponseMessage response = await SendRequestToApi(base64Image);
 
-            string stringRawResult = await ExtractValidResponse(response);
+                string stringRawResult = await ExtractValidResponse(response);
 
-            dynamic result = JsonConvert.DeserializeObject(stringRawResult);
+                //dynamic mealItemJson = JsonConvert.DeserializeObject(stringRawResult);
+                var mealItem = JsonConvert.DeserializeObject<MealItem>(stringRawResult);
+                //var mealItem = new MealItem();
+                //mealItem.IsMeal = mealItemJson.is_meal;
+                //mealItem.MealName = mealItemJson.meal_name;
+                //mealItem.Weight = mealItemJson.weight;
+                //mealItem.Calories = mealItemJson.calories;
+                //mealItem.Proteins = mealItemJson.proteins;
+                //mealItem.Fats = mealItemJson.fats;
+                //mealItem.Carbohydrates = mealItemJson.carbohydrates;
+                mealItem.TotalResultJSON = stringRawResult;
+                //mealItem.Ingredients = 
 
-            var responseData = new MealItem();
-            responseData.IsMeal = result.is_meal;
-            responseData.MealName = result.meal_name;
-            //responseData.Weight = result.weight;
-            responseData.Calories = result.calories;
-            responseData.Proteins = result.proteins;
-            responseData.Fats = result.fats;
-            responseData.Carbohydrates = result.carbohydrates;
-            responseData.TotalResultJSON = stringRawResult;
+                return mealItem;
 
-            return responseData;
+            }
+            catch (Exception)
+            {
+                throw new JsonSerializationException();
+            }
 
         }
 
@@ -256,11 +295,20 @@ namespace AICalories.ViewModels
 
         private async Task<HttpResponseMessage> SendRequestToApi(string base64Image)
         {
-            var requestData = RequestData.GetFirstPrompt(base64Image, _imageInfo.MealType);
-            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(OpenAIAPIUrl, content);
-            response.EnsureSuccessStatusCode();
-            return response;
+            try
+            {
+                var requestData = RequestData.GetFirstPrompt(base64Image, _imageInfo.MealType, _imageInfo.UserInfo);
+                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+                var response = await _client.PostAsync(OpenAIAPIUrl, content);
+                response.EnsureSuccessStatusCode();
+                return response;
+
+            }
+            catch (Exception)
+            {
+                //DisplayAlertConfiguration.ShowError("This image is too big");
+                throw new BadImageFormatException();
+            }
         }
 
         private static async Task<string> ExtractValidResponse(HttpResponseMessage response)
@@ -283,11 +331,17 @@ namespace AICalories.ViewModels
 
                 await App.HistoryItemRepository.SaveMealItemAsync(mealItem);
 
+                var mealItemId = (await App.HistoryItemRepository.GetLastMealItemAsync()).Id;
+                foreach (var ingredient in mealItem.Ingredients)
+                {
+                    ingredient.MealItemId = mealItemId;
+                    App.IngredientItemRepository.SaveIngredientAsync(ingredient);
+                }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Sad");
+                throw new FileLoadException();
             }
 
         }
@@ -312,7 +366,7 @@ namespace AICalories.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading secrets: {ex.Message}");
-                throw;
+                _alertService.ShowError("No connection to AI server");
             }
         }
 

@@ -12,7 +12,7 @@
     <Color x:Key="SoftYellow">#EBD87F</Color><!--f5df73-->
 
 
-    <Color x:Key="Primary">#512BD4</Color>
+    <Color x:Key="Primary">#512BD4</Color><!--#512BD4-->
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>

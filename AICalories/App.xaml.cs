@@ -13,6 +13,9 @@ public partial class App : Application
     private static IngredientsDatabase<IngredientItem> _ingredientsDatabase;
     private static ContextDatabase<ContextItem> _contextDatabase;
 
+    public const string DarkModeKey = "DarkModeKey";
+    public const string ShowReviewKey = "ShowReviewKey";
+    public const string SaveToGalleryKey = "SaveToGalleryKey";
     public static IHistoryItemRepository HistoryItemRepository { get; private set; }
     public static IIngredientItemRepository IngredientItemRepository { get; private set; }
     public static IContextItemRepository ContextItemRepository { get; private set; }

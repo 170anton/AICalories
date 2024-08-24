@@ -14,6 +14,7 @@ namespace AICalories.CustomControls
         private int _id;
         private string _text;
         private bool _isSelected;
+        private VerticalStackLayout _parentLayout;
 
         public int Id
         {
@@ -62,12 +63,14 @@ namespace AICalories.CustomControls
             Text = text;
             IsSelected = isSelected;
             _contextItemRepository = contextItemRepository;
+            _parentLayout = parentLayout;
 
-            InitializeGrid(parentLayout);
+            InitializeGrid();
+            
         }
 
 
-        private void InitializeGrid(VerticalStackLayout parentLayout)
+        private void InitializeGrid()
         {
             Padding = new Thickness(0);
 
@@ -79,14 +82,23 @@ namespace AICalories.CustomControls
             this.ColumnDefinitions.Add(column1);
             this.ColumnDefinitions.Add(column2);
 
-            var delete = new Button
+            //var dropdownMenu = new DropdownMenu
+            //{
+            //    //Padding = 0,
+            //    //BackgroundColor = Colors.Transparent,
+            //    //BorderColor = Colors.Transparent,
+            //    //TextColor = Colors.Black,
+            //    //FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+            //    //Text = "⋮", //"✖"
+
+            //};
+            var showOptionsButton = new Button
             {
-                //Padding = 0,
+                Text = "⋮",
                 BackgroundColor = Colors.Transparent,
                 BorderColor = Colors.Transparent,
                 TextColor = Colors.Black,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                Text = "✖"
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
             };
 
             var textLabel = new Label
@@ -98,17 +110,35 @@ namespace AICalories.CustomControls
 
             var checkBox = new CheckBox { IsChecked = IsSelected };
 
-            Grid.SetColumn(delete, 0);
+            Grid.SetColumn(showOptionsButton, 0);
             Grid.SetColumn(textLabel, 1);
             Grid.SetColumn(checkBox, 2);
 
-            this.Children.Add(delete);
+            //optionsButton.AddMenuItem("Delete", OnOption1Clicked);
+
+            this.Children.Add(showOptionsButton);
             this.Children.Add(textLabel);
             this.Children.Add(checkBox);
 
-            delete.Clicked += async (sender, e) =>
+            //overflowButton.Clicked += async (sender, e) =>
+            //{
+            //    await DeleteFromDatabaseAsync(parentLayout);
+            //};
+
+            showOptionsButton.Clicked += async (sender, e) =>
             {
-                await DeleteFromDatabaseAsync(parentLayout);
+                // Show an ActionSheet with multiple options
+                string action = await App.Current.MainPage.DisplayActionSheet("Select an option", null, null, "Update", "Delete");
+
+                // You can handle the selected option here
+                if (action == "Update")
+                {
+                    await App.Current.MainPage.DisplayAlert("Selected", "You selected Option 1", "OK");
+                }
+                else if (action == "Delete")
+                {
+                    await App.Current.MainPage.DisplayAlert("Selected", "You selected Option 2", "OK");
+                }
             };
 
             checkBox.CheckedChanged += async (sender, e) =>
@@ -119,6 +149,11 @@ namespace AICalories.CustomControls
 
         }
 
+        private void OnOption1Clicked(object sender, EventArgs e)
+        {
+            DeleteFromDatabaseAsync(_parentLayout);
+        }
+
         private async Task DeleteFromDatabaseAsync(VerticalStackLayout parentLayout)
         {
             var contextItem = ToContextItem();
@@ -127,6 +162,15 @@ namespace AICalories.CustomControls
 
             parentLayout.Children.Remove(this);
         }
+
+        //private async Task DeleteFromDatabaseAsync(VerticalStackLayout parentLayout)
+        //{
+        //    var contextItem = ToContextItem();
+
+        //    await _contextItemRepository.DeleteContextItemAsync(contextItem);
+
+        //    parentLayout.Children.Remove(this);
+        //}
 
         private async Task SaveToDatabaseAsync()
         {

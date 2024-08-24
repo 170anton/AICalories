@@ -8,23 +8,42 @@ namespace AICalories.Models
 {
     public class MealItem : IMealItem
     {
-        //private string calories;
+        private string mealName;
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
+
+        [JsonProperty("is_meal")]
         public bool IsMeal { get; set; }
-        public string MealName { get; set; }
+
+        [JsonProperty("meal_name")]
+        public string MealName { get => mealName; set => mealName = char.ToUpper(value[0]) + value.Substring(1); }
+
         public DateTime Date { get; set; }
+
         public string Time { get; set; }
+
         public string ImagePath { get; set; }
-        //public string Calories { get => calories; set => calories = value; } //+ " cals"
+
+        [JsonProperty("weight")]
         public int Weight { get; set; }
+
+        [JsonProperty("calories")]
         public int Calories { get; set; }
+
+        [JsonProperty("proteins")]
         public int Proteins { get; set; }
+
+        [JsonProperty("fats")]
         public int Fats { get; set; }
+
+        [JsonProperty("carbohydrates")]
         public int Carbohydrates { get; set; }
+
         public string TotalResultJSON { get; set; } //todo remove
+
         [Ignore]
+        [JsonProperty("ingredients")]
         public List<IngredientItem> Ingredients { get; set; }
 
     }

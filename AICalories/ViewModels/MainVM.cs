@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -29,6 +30,7 @@ public class MainVM : INotifyPropertyChanged
     private readonly IViewModelService _viewModelService;
     private readonly INavigationService _navigationService;
     private readonly IAlertService _alertService;
+    private ObservableCollection<IngredientItem> _ingredients;
 
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
@@ -36,6 +38,16 @@ public class MainVM : INotifyPropertyChanged
     public ICommand NewImageCommand { get; }
 
     #region Properties
+
+    public ObservableCollection<IngredientItem> Ingredients
+    {
+        get => _ingredients;
+        set
+        {
+            _ingredients = value;
+            OnPropertyChanged();
+        }
+    }
 
     public string TotalCalories
     {
@@ -87,7 +99,6 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-
     public string LastHistoryItemName
     {
         get => _lastHistoryItemName;
@@ -118,8 +129,6 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-
-
     public bool IsLabelVisible
     {
         get => _isLabelVisible;
@@ -139,6 +148,7 @@ public class MainVM : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
     #endregion
 
     #region Constructor
@@ -153,7 +163,7 @@ public class MainVM : INotifyPropertyChanged
 
         NewImageCommand = new Command(async () => await NewImageClicked());
 
-
+        Ingredients = new ObservableCollection<IngredientItem>();
         //LoadLastHistoryItem();
         //GetTotalCalories();
         //GetTotalProteins();
@@ -171,8 +181,9 @@ public class MainVM : INotifyPropertyChanged
         LastHistoryItemCalories = null;
         LastHistoryItemImage = null;
 
-        await LoadLastHistoryItem();
         LoadTodayStats();
+
+        await LoadLastMeal();
 
         IsHistoryGridVisible = true;
     }
@@ -228,30 +239,45 @@ public class MainVM : INotifyPropertyChanged
     }
     #endregion
 
-    public async Task LoadLastHistoryItem()
+    public async Task LoadLastMeal()
     {
         try
         {
             IsLabelVisible = false;
             IsLoading = true;
             await Task.Delay(500);
-            var lastItem = await App.HistoryDatabase.GetLastItemAsync();
+            var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
             IsLoading = false;
 
-            if (lastItem == null)
+            if (lastMeal == null)
             {
                 IsLabelVisible = true;
                 return;
             }
 
-            LastHistoryItemImage = lastItem.ImagePath;
-            LastHistoryItemName = lastItem.MealName;
-            LastHistoryItemCalories = lastItem.Calories.ToString();
+
+            LastHistoryItemImage = lastMeal.ImagePath;
+            LastHistoryItemName = lastMeal.MealName;
+            LastHistoryItemCalories = lastMeal.Calories.ToString();
+
+            await LoadLastMealIngredients(lastMeal.Id);
+
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
             throw;
+        }
+    }
+
+    private async Task LoadLastMealIngredients(int lastMealId)
+    {
+        var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
+
+        Ingredients.Clear();
+        foreach (var ingredient in lastMealIngredients)
+        {
+            Ingredients.Add(ingredient);
         }
     }
 
