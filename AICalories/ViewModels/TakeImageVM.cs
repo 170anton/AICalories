@@ -5,7 +5,6 @@ using AICalories.Interfaces;
 using AICalories.Services;
 using Android.Content;
 using Android.Provider;
-using Java.Util.Streams;
 
 namespace AICalories.ViewModels
 {
@@ -33,6 +32,7 @@ namespace AICalories.ViewModels
             _cameraService = cameraService;
 
             _imageInfo = imageInfo;
+            _imageInfo.Clear();
 
             CaptureCommand = new Command(async () => await OnCaptureButtonClicked());
             GalleryCommand = new Command(async () => await OnGalleryButtonClicked());
@@ -40,61 +40,74 @@ namespace AICalories.ViewModels
         }
 
 
+        public async void SetImage(string imagePath)
+        {
+            _imageInfo.ImagePath = imagePath;
+        }
 
         private async Task OnCaptureButtonClicked() //todo add try catch
         {
-            var stream = await _cameraService.TakePhotoAsync();
-
-            if (stream == null)
+            try
             {
-                return; // Handle no photo taken
+                var stream = await _cameraService.TakePhotoAsync();
+
+                if (stream == null)
+                {
+                    return;
+                }
+
+                string imagePath = await SaveImage(stream);
+
+                SaveToGallery(imagePath);
+
+                SetImage(imagePath);
+
+                await CheckShowReviewKey();
             }
-
-            var imageName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
-            var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
-
-            await using (var fileStream = File.Create(imagePath))
+            catch (Exception)
             {
-                await stream.CopyToAsync(fileStream);
+                _navigationService.PopModalAsync();
+                _alertService.ShowError("Failed to load image");
             }
-            SaveToGallery(imagePath);
-
-            SetImage(imagePath);
-
-            _navigationService.PopModalAsync();
-            await _navigationService.NavigateToContextPageAsync();
         }
 
         private async Task OnGalleryButtonClicked()
         {
-            var image = await FilePicker.PickAsync(new PickOptions
+            try
             {
-                FileTypes = FilePickerFileType.Images,
-                PickerTitle = "Please select an image"
-            });
 
-            if (image == null)
-            {
-                // Handle the case when no image was selected
-                return;
-            }
-
-            // Copy the selected image to the local cache
-            var imageName = $"gallery_image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
-            var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
-
-            using (var fileStream = File.Create(imagePath))
-            {
-                using (var pickedStream = await image.OpenReadAsync())
+                var image = await FilePicker.PickAsync(new PickOptions
                 {
-                    await pickedStream.CopyToAsync(fileStream);
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Please select an image"
+                });
+
+                if (image == null)
+                {
+                    return;
                 }
+
+                var imageName = $"gallery_image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+                var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
+
+                using (var fileStream = File.Create(imagePath))
+                {
+                    using (var pickedStream = await image.OpenReadAsync())
+                    {
+                        await pickedStream.CopyToAsync(fileStream);
+                    }
+                }
+
+                SetImage(imagePath);
+
+                await CheckShowReviewKey();
+            }
+            catch (Exception)
+            {
+                _navigationService.PopModalAsync();
+                _alertService.ShowError("Failed to load image");
             }
 
-            SetImage(imagePath);
-
-            _navigationService.PopModalAsync();
-            await _navigationService.NavigateToContextPageAsync();
         }
 
 
@@ -110,9 +123,23 @@ namespace AICalories.ViewModels
             }
         }
 
+
+        private async Task<string> SaveImage(Stream stream)
+        {
+            var imageName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+            var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
+
+            await using (var fileStream = File.Create(imagePath))
+            {
+                await stream.CopyToAsync(fileStream);
+            }
+
+            return imagePath;
+        }
+
         private void SaveToGallery(string imagePath)
         {
-            if (Preferences.Get(App.SaveToGalleryKey, true))
+            if (Preferences.Get(App.SaveToGalleryKey, false))
             {
                 if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
@@ -145,10 +172,18 @@ namespace AICalories.ViewModels
             }
         }
 
-
-        public async void SetImage(string imagePath)
+        private async Task CheckShowReviewKey()
         {
-            _imageInfo.ImagePath = imagePath;
+            if (Preferences.Get(App.ShowReviewKey, true))
+            {
+                _navigationService.PopModalAsync();
+                await _navigationService.NavigateToContextPageAsync();
+            }
+            else
+            {
+                _navigationService.PopModalAsync();
+                await _navigationService.NavigateToResultPageAsync();
+            }
         }
     }
 }

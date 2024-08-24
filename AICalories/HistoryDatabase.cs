@@ -21,7 +21,7 @@ namespace AICalories
 
         public Task<List<T>> GetAllItemsAsync()
         {
-            return _database.Table<T>().ToListAsync();
+            return _database.Table<T>().OrderByDescending(i => i.Date).ToListAsync();
         }
 
         public Task<T> GetLastItemAsync()

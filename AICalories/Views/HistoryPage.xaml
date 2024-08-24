@@ -25,22 +25,43 @@
                     <DataTemplate>
                     
                         <Frame
-                               Padding="0" Margin="0,20,0,5"
-                               BorderColor="{StaticResource Primary}"
-                               HeightRequest="60">
-                            <Grid ColumnDefinitions="*,Auto,Auto"
-                                Padding="5"
-                                ColumnSpacing="5">
+                               Padding="0" Margin="0,20,0,5" CornerRadius="10"
+                               Style="{StaticResource MainFrameStyle}">
+                            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
+                                Margin="5" Padding="5"
+                                RowSpacing="5" ColumnSpacing="5">
                                 <Label
                                     Grid.Column="0"
                                     Style="{StaticResource LabelAppStyle}"
                                     HorizontalOptions="Start"
                                     Margin="10,0,0,0"
-                                    Text="{Binding Title}"
-                                    FontSize="Large"/>
+                                    Text="{Binding Title}" FontAttributes="Bold"
+                                    FontSize="Medium"/>
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0">
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
+                                        Margin="10,1,0,0"
+                                        Text="Total: "
+                                        FontSize="Small"/>
 
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        Margin="10,0,0,0"
+                                        Text="{Binding TotalCalories}"
+                                        FontSize="Medium"/>
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        Margin="5,0,0,0"
+                                        Text="cals"
+                                        FontSize="Medium"/>
+
+                                </HorizontalStackLayout>
                                 <Button
-                                    Grid.Column="1"
+                                    Grid.Column="2" Grid.RowSpan="2"
                                     Text="Add"
                                     Clicked="OnAddToHeaderButton_Clicked"/>
                             </Grid>

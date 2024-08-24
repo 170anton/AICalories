@@ -10,16 +10,19 @@
             <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>-->
-    <Grid RowDefinitions=".9*,.1*">
+    <AbsoluteLayout>
+    <Grid RowDefinitions=".9*,.11*" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
         <ScrollView Grid.RowSpan="2">
-            <VerticalStackLayout  Margin="0,0,0,80">
+            <VerticalStackLayout x:Name="mainLayout"  Margin="0,0,0,90">
                 <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFit"/>
 
                 <custom:CustomAutoHeightFrame  AutoHeight="True" Padding="30,20"
                                                Style="{StaticResource MainFrameStyle}"
                                                Margin="10,10,10,0">
                     <Editor Text="{Binding UserInfo}" Placeholder="Help AI"  FontSize="Large"
-                                x:Name="editor" MaxLength="1000" MaximumHeightRequest="800" AutoSize="TextChanges"
+                                x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
                                 TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                                 PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
                                 />
@@ -27,7 +30,7 @@
                 </custom:CustomAutoHeightFrame>
 
 
-
+                <!--Types-->
                 <Frame Style="{StaticResource MainFrameStyle}"
                        Margin="10,10,10,0" Padding="0">
                     <Grid RowDefinitions="Auto,*" >
@@ -98,4 +101,5 @@
                 Text="Confirm" Margin="10" Command="{Binding ConfirmCommand}"/>
         </Grid>
     </Grid>
+    </AbsoluteLayout>
 </ContentPage>

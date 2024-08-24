@@ -7,8 +7,9 @@ namespace AICalories.Models
 {
     public class DayGroupedItem : ObservableCollection<MealItem>
     {
-        public string Title { get; protected set; }
-        public DateTime Date { get; protected set; }
+        public string Title { get; set; }
+        public DateTime Date { get; set; }
+        public int TotalCalories { get; set; }
 
 
         public DayGroupedItem(DateTime date)

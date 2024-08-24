@@ -1,5 +1,4 @@
 ﻿using System;
-using Android.Hardware.Lights;
 
 namespace AICalories.Models
 {

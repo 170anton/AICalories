@@ -1,4 +1,5 @@
 ﻿using AICalories.DI;
+using AICalories.Interfaces;
 using AICalories.ViewModels;
 
 namespace AICalories.Views;
@@ -19,7 +20,8 @@ public partial class AppSettingsPage : ContentPage
         _viewModel = viewModelLocator.GetAppSettingsViewModel();
         BindingContext = _viewModel;
 
-        editor.SizeChanged += OnEditorSizeChanged;
+        //editor.SizeChanged += OnEditorSizeChanged;
+
     }
 
 

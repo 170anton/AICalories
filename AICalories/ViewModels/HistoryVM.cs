@@ -107,6 +107,8 @@ namespace AICalories.ViewModels
                         }
                     }
 
+                    group.TotalCalories = group.Sum(i => i.Calories);
+
                     DayGroupedItems.Add(group);
                 }
             }

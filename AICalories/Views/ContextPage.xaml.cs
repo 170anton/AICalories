@@ -4,21 +4,21 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.ViewModels;
-using AndroidX.Lifecycle;
 
 namespace AICalories.Views;
 
 public partial class ContextPage : ContentPage
 {
     private const string SelectedOptionKey = "SelectedOption";
+    private readonly IKeyboardHelper _keyboardHelper;
 
     private ContextVM _viewModel;
 
-    public ContextPage()
+    public ContextPage(IKeyboardHelper keyboardHelper)
 	{
 		InitializeComponent();
 
-        var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
+        var viewModelLocator = Microsoft.Maui.Controls.Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
         if (viewModelLocator == null)
         {
             return;
@@ -26,6 +26,7 @@ public partial class ContextPage : ContentPage
 
         _viewModel = viewModelLocator.GetContextViewModel();
         BindingContext = _viewModel;
+        _keyboardHelper = keyboardHelper;
 
 
         if (BindingContext is ContextVM viewModel)
@@ -33,6 +34,12 @@ public partial class ContextPage : ContentPage
             //viewModel.ContextGridAdded += OnContextGridAdded;
         }
         //_viewModel.UpdateContextList(contextLayout);
+
+
+
+        var tapToHideKeyboard = new TapGestureRecognizer();
+        tapToHideKeyboard.Tapped += OnHideKeyboardTapped;
+        mainLayout.GestureRecognizers.Add(tapToHideKeyboard);
     }
 
     //private async void AddNewContextClicked(System.Object sender, System.EventArgs e) //todo move to vm
@@ -93,6 +100,13 @@ public partial class ContextPage : ContentPage
             
             _viewModel.SelectedOption = selectedOption;
         }
+    }
+
+    private void OnHideKeyboardTapped(object sender, EventArgs e)
+    {
+        //var keyboardHelper = DependencyService.Get<IKeyboardHelper>();
+        _keyboardHelper?.HideKeyboard();
+        userInfoEditor.Unfocus();
     }
 
     protected override bool OnBackButtonPressed()

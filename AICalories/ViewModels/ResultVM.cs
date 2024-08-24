@@ -6,8 +6,6 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
-using AndroidX.Lifecycle;
-using GoogleGson;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
