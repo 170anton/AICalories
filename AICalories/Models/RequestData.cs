@@ -36,7 +36,7 @@ namespace AICalories.Models
                                 text = $"Is there any meal or food in this image? " +
                                 $"If no, set is_meal to false and set other properties to 0 or null. " +
                                 $"{mealType}. What ingredients are in this meal? " +
-                                "Weight, calories, proteins, fats, carbohydrates of ingredients must be calculated as precise as possible. " +
+                                "Weight, calories, proteins, fats, carbohydrates, sugar of ingredients must be calculated as precise as possible in grams. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
                                 "Then summarize all calories and weight of all ingredients. " +
                                 "Output result in a JSON format. " +
@@ -66,7 +66,7 @@ namespace AICalories.Models
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "is_meal", "ingredients", "meal_name", "weight", "calories", "proteins", "fats", "carbohydrates" },
+                                required = new[] { "is_meal", "ingredients", "meal_name", "weight", "calories", "proteins", "fats", "carbohydrates", "sugar" },
                                 properties = new
                                 {
                                     is_meal = new
@@ -82,7 +82,7 @@ namespace AICalories.Models
                                         {
                                             type = "object",
                                             required = new[] { "ingredient_name", "ingredient_weight", "ingredient_calories",
-                                                "ingredient_proteins", "ingredient_fats", "ingredient_carbohydrates" },
+                                                "ingredient_proteins", "ingredient_fats", "ingredient_carbohydrates", "ingredient_sugar" },
                                             properties = new
                                             {
                                                 ingredient_name = new
@@ -124,6 +124,11 @@ namespace AICalories.Models
                                                 {
                                                     type = "integer",
                                                     description = "Carbohydrates of the ingredient"
+                                                },
+                                                ingredient_sugar = new
+                                                {
+                                                    type = "integer",
+                                                    description = "Sugar of the ingredient"
                                                 }
                                             },
                                         },
@@ -136,27 +141,32 @@ namespace AICalories.Models
                                     weight = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_weight which you calculated"
+                                        description = "Summarize all ingredient_weight you calculated"
                                     },
                                     calories = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_calories which you calculated"
+                                        description = "Summarize all ingredient_calories you calculated"
                                     },
                                     proteins = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_proteins which you calculated"
+                                        description = "Summarize all ingredient_proteins you calculated"
                                     },
                                     fats = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_fats which you calculated"
+                                        description = "Summarize all ingredient_fats you calculated"
                                     },
                                     carbohydrates = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_carbohydrates which you calculated"
+                                        description = "Summarize all ingredient_carbohydrates you calculated"
+                                    },
+                                    sugar = new
+                                    {
+                                        type = "integer",
+                                        description = "Summarize all ingredient_sugar you calculated"
                                     },
                                 }
                             },

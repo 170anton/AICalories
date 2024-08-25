@@ -10,8 +10,7 @@
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
             
-            Padding="10"
-            RowSpacing="10">
+            Padding="10">
             <Button IsVisible="False" Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
             <Button IsVisible="False" Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
             <CollectionView Grid.Row="2"

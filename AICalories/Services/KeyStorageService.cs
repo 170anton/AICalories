@@ -41,6 +41,12 @@ namespace AICalories.Models
             var decryptedKeys = _encryptionHelper.Decrypt(encryptedKeys);
 
             var keys = JsonSerializer.Deserialize<ApiKeys>(decryptedKeys);
+
+            if (keys == null)
+            {
+                return new ApiKeys();
+            }
+
             return keys;
         }
     }

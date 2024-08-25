@@ -9,6 +9,12 @@ namespace AICalories.Models
     public class MealItem : IMealItem
     {
         private string mealName;
+        private double weight;
+        private double calories;
+        private double proteins;
+        private double fats;
+        private double carbohydrates;
+        private double sugar;
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -26,19 +32,22 @@ namespace AICalories.Models
         public string ImagePath { get; set; }
 
         [JsonProperty("weight")]
-        public int Weight { get; set; }
+        public double Weight { get => weight; set => weight = Math.Round(value); }
 
         [JsonProperty("calories")]
-        public int Calories { get; set; }
+        public double Calories { get => calories; set => calories = Math.Round(value); }
 
         [JsonProperty("proteins")]
-        public int Proteins { get; set; }
+        public double Proteins { get => proteins; set => proteins = Math.Round(value); }
 
         [JsonProperty("fats")]
-        public int Fats { get; set; }
+        public double Fats { get => fats; set => fats = Math.Round(value); }
 
         [JsonProperty("carbohydrates")]
-        public int Carbohydrates { get; set; }
+        public double Carbohydrates { get => carbohydrates; set => carbohydrates = Math.Round(value); }
+
+        [JsonProperty("sugar")]
+        public double Sugar { get => sugar; set => sugar = Math.Round(value); }
 
         public string TotalResultJSON { get; set; } //todo remove
 

@@ -116,7 +116,7 @@ namespace AICalories.ViewModels
 
         private async Task LoadSelectedOption()
         {
-            var savedOption = Preferences.Get(SelectedOptionKey, "Regular");
+            var savedOption = Preferences.Get(SelectedOptionKey, "This is a regular food");
             if (savedOption != null)
             {
                 SelectedOption = savedOption;
@@ -166,7 +166,7 @@ namespace AICalories.ViewModels
 
         private async Task OnConfirmAsync()
         {
-            SetAdditionalInfo();
+            await SetAdditionalInfo();
 
             if (!InternetConnection.CheckInternetConnection())
             {

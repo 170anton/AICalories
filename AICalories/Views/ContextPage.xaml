@@ -36,7 +36,8 @@
                     <Grid RowDefinitions="Auto,*" >
                         <!--<Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
                                HorizontalTextAlignment="Start" Margin="20,20,20,0"/>-->
-                        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" Padding="30,20" RowSpacing="0">
+                        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
+                              Padding="50,20" RowSpacing="0">
                             <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
                                    HorizontalTextAlignment="Start"/> 
                             <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
@@ -46,7 +47,7 @@
                                    Value="This is a diet food with ONLY diet ingredients. Count only the ingredients you see. Fat and sugar amount is significantly reduced"/>
 
                             <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
-                                   HorizontalTextAlignment="Start"/> 
+                                   HorizontalTextAlignment="Start" /> 
                             <RadioButton Grid.Column="1" Grid.Row="1"
                                    CheckedChanged="RadioButton_CheckedChanged" 
                                    IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
@@ -59,7 +60,7 @@
                                    CheckedChanged="RadioButton_CheckedChanged" 
                                    IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
                                                 ConverterParameter='This is a regular food', Mode=TwoWay}"
-                                   Value="This is a regular food"/>
+                                   Value="This is a regular food"/>  <!--Set to LoadSelectedOption() if changed-->
                 
                             <Label Text="Junk" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
                                    HorizontalTextAlignment="Start"/> 

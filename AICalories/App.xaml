@@ -17,6 +17,7 @@
             
             <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:MaxLengthConverter x:Key="MaxLengthConverter"/>
 
             <Style TargetType="Label">
                 <Setter Property="FontFamily" Value="UbuntuRegular" />
@@ -63,10 +64,25 @@
 
                 </Setter>-->
             </Style>
+            
+            <Style x:Key="IngredientsStyle" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+
+            </Style>
+            
+            <Style x:Key="IngredientsStyleBlack" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            </Style>
 
             
             <Style x:Key="LabelAppStyle" TargetType="Label">
-                <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="FontSize" Value="Large"/>
@@ -94,13 +110,16 @@
             
             <Style x:Key="TodayStatsFrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="False"/>
-                <Setter Property="CornerRadius" Value="50"/>
-                <Setter Property="WidthRequest" Value="90"/>
-                <Setter Property="HeightRequest" Value="90"/>
+                <Setter Property="CornerRadius" Value="35"/>
+                <!--<Setter Property="WidthRequest" Value="80"/>
+                <Setter Property="HeightRequest" Value="80"/>-->
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="2"/>
                 <Setter Property="Padding" Value="5"/>
                 <Setter Property="Opacity" Value="1" />
-                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
-                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="BorderColor" Value="Transparent" />
 
             </Style>
             

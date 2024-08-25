@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,6 +17,11 @@ namespace AICalories.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
         private bool _isRefreshing;
+        private bool _isLoading;
+        private bool _isLabelVisible;
+        private string _lastHistoryItemImage;
+        private string _lastHistoryItemName;
+        private string _lastHistoryItemCalories;
         private string _mealName;
         private string _weight;
         private string _calories;
@@ -23,6 +29,7 @@ namespace AICalories.ViewModels
         private string _fats;
         private string _carbohydrates;
         private string _totalResultJSON;
+        private ObservableCollection<IngredientItem> _ingredients;
 
         private ApiKeys _apiKeys;
         private readonly HttpClient _client = new HttpClient();
@@ -31,6 +38,67 @@ namespace AICalories.ViewModels
         private IImageInfo _imageInfo;
 
         #region Properties
+
+        public bool IsLabelVisible
+        {
+            get => _isLabelVisible;
+            set
+            {
+                _isLabelVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IngredientItem> Ingredients
+        {
+            get => _ingredients;
+            set
+            {
+                _ingredients = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LastHistoryItemImage
+        {
+            get => _lastHistoryItemImage;
+            set
+            {
+                _lastHistoryItemImage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LastHistoryItemName
+        {
+            get => _lastHistoryItemName;
+            set
+            {
+                _lastHistoryItemName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LastHistoryItemCalories
+        {
+            get => _lastHistoryItemCalories;
+            set
+            {
+                _lastHistoryItemCalories = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public string DishName
         {
@@ -150,20 +218,15 @@ namespace AICalories.ViewModels
             _imageInfo = imageInfo;
 
             _isRefreshing = true;
-
-            LoadSecrets();
-            if (_apiKeys.OpenAIAPIKey == null)
-            {
-                throw new ArgumentNullException();
-            }
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys.OpenAIAPIKey}");
+            Ingredients = new ObservableCollection<IngredientItem>();
 
         }
 
-        public async void ProcessImage() //todo
+        public async Task ProcessImage() //todo
         {
             try
             {
+                await LoadSecrets();
 
                 var imagePath = _imageInfo.ImagePath;
                 if (imagePath != null)
@@ -184,15 +247,18 @@ namespace AICalories.ViewModels
                     await AddItemToDB(imagePath, mealItem);
 
                     LoadAIResponse(mealItem);
+                    await OnPageAppearingAsync();
                 }
             }
             catch (JsonSerializationException)
             {
                 _alertService.ShowError("Decoding error occurred");
+                await _navigationService.NavigateToMainPageAsync();
             }
             catch (BadImageFormatException)
             {
                 _alertService.ShowError("No connection to AI server");
+                await _navigationService.NavigateToMainPageAsync();
             }
             catch (FileLoadException)
             {
@@ -201,6 +267,7 @@ namespace AICalories.ViewModels
             catch (Exception)
             {
                 _alertService.ShowUnexpectedError();
+                await _navigationService.NavigateToMainPageAsync();
             }
         }
 
@@ -209,9 +276,9 @@ namespace AICalories.ViewModels
             IsRefreshing = false;
             DishName = mealItem.MealName;
             Weight = mealItem.Weight.ToString();
-            Calories = mealItem.Calories.ToString();
+            Calories = ((IMealItem)mealItem).Calories.ToString();
             Proteins = mealItem.Proteins.ToString();
-            Fats = mealItem.Fats.ToString();
+            Fats = ((IMealItem)mealItem).Fats.ToString();
             Carbohydrates = mealItem.Carbohydrates.ToString();
             TotalResultJSON = mealItem.TotalResultJSON;
         }
@@ -222,6 +289,68 @@ namespace AICalories.ViewModels
             DishName = response;
         }
 
+
+        public async Task OnPageAppearingAsync()
+        {
+            try
+            {
+                LastHistoryItemName = null;
+                LastHistoryItemCalories = null;
+                LastHistoryItemImage = null;
+
+                await LoadLastMeal();
+
+                //IsHistoryGridVisible = true;
+
+            }
+            catch (Exception)
+            {
+                //_alertService.ShowError("Loading error occurred");
+            }
+        }
+
+        public async Task LoadLastMeal()
+        {
+            try
+            {
+                IsLabelVisible = false;
+                IsLoading = true;
+                await Task.Delay(500);
+                var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
+                IsLoading = false;
+
+                if (lastMeal == null)
+                {
+                    IsLabelVisible = true;
+                    return;
+                }
+
+
+                LastHistoryItemImage = lastMeal.ImagePath;
+                LastHistoryItemName = lastMeal.MealName;
+                LastHistoryItemCalories = ((IMealItem)lastMeal).Calories.ToString();
+
+                await LoadLastMealIngredients(lastMeal.Id);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        private async Task LoadLastMealIngredients(int lastMealId)
+        {
+            var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
+
+            Ingredients.Clear();
+            foreach (var ingredient in lastMealIngredients)
+            {
+                Ingredients.Add(ingredient);
+            }
+        }
 
 
         #region Process Image
@@ -277,8 +406,9 @@ namespace AICalories.ViewModels
                 return mealItem;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 throw new JsonSerializationException();
             }
 
@@ -348,23 +478,33 @@ namespace AICalories.ViewModels
 
 
 
-        private void LoadSecrets()
+        private async Task LoadSecrets()
         {
             try
             {
+                _client.DefaultRequestHeaders.Clear();
                 var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
-
                 var keyStorageService = new KeyStorageService(encryptionKey);
-                
+
+
+
                 _apiKeys = keyStorageService.RetrieveKeys();
+                if (_apiKeys?.OpenAIAPIKey == null)
+                {
+                    if (_apiKeys?.OpenAIAPIKeyReserved == null)
+                    {
+                        throw new Exception();
+                    }
+                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys?.OpenAIAPIKeyReserved}");
+                    return;
+                }
+                _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys?.OpenAIAPIKey}");
+                return;
 
-
-                //HasRecievedSecrets = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error loading secrets: {ex.Message}");
-                _alertService.ShowError("No connection to AI server");
+                throw;
             }
         }
 

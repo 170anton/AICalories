@@ -36,7 +36,7 @@ public partial class ResultPage : ContentPage
     {
         base.OnAppearing();
 
-        _viewModel.ProcessImage();
+        await _viewModel.ProcessImage();
 
 
     }

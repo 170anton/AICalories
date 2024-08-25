@@ -3,23 +3,120 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AICalories.Views.ResultPage"
              Title="ResultPage">
-    <Frame Margin="10" Padding="30" CornerRadius="20" Style="{StaticResource MainFrameStyle}">
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
-            <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
+    
+    <AbsoluteLayout>
+        <ScrollView
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All">
+            <Grid RowDefinitions="*,*" Padding="10" RowSpacing="10">
+                <Frame Padding="30" CornerRadius="20" Style="{StaticResource MainFrameStyle}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
+                        <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
 
-            <ActivityIndicator x:Name="RefreshIndicator" Grid.Row="2"
-                           IsRunning="{Binding IsRefreshing}"
-                           IsVisible="{Binding IsRefreshing}"
-                           Style="{StaticResource MainActivityIndicatorStyle}"/>
+                        <ActivityIndicator x:Name="RefreshIndicator" Grid.Row="2"
+                                       IsRunning="{Binding IsRefreshing}"
+                                       IsVisible="{Binding IsRefreshing}"
+                                       Style="{StaticResource MainActivityIndicatorStyle}"/>
 
-            <Label Grid.Row="1" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="2" Text="{Binding Weight}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="3" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="4" Text="{Binding Proteins}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="5" Text="{Binding Fats}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="6" Text="{Binding Carbohydrates}" Style="{StaticResource LabelAppStyle}"/>
-            <Label Grid.Row="7" Text="{Binding TotalResultJSON}" FontSize="13"
-                   Style="{StaticResource LabelAppStyle}"/>
-        </Grid>
-    </Frame>
+                        <Label Grid.Row="1" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="2" Text="{Binding Weight}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="3" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="4" Text="{Binding Proteins}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="5" Text="{Binding Fats}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="6" Text="{Binding Carbohydrates}" Style="{StaticResource LabelAppStyle}"/>
+                        <Label Grid.Row="7" Text="{Binding TotalResultJSON}" FontSize="13"
+                               Style="{StaticResource LabelAppStyle}"/>
+                    </Grid>
+                </Frame>
+
+    
+                <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
+                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,*" Padding="10"
+                                IsVisible="{Binding IsHistoryGridVisible}"
+                                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All" >
+                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}"
+                                    MaximumHeightRequest="200">
+                        
+                                <Image x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"/>
+
+                            </Frame>
+                            <Grid Grid.Row="1" RowDefinitions="Auto,*">
+                                <Grid  Grid.Row="0"
+                                        RowDefinitions="*,*,*,*" ColumnDefinitions="*,*">
+                                
+                                    <Label Grid.Row="0" Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
+                                    <Label Grid.Row="1" Text="{Binding LastHistoryItemCalories}" Style="{StaticResource LabelAppStyle}"/>
+
+                                </Grid>
+
+                                <!--Ingredients-->
+
+                                <CollectionView Grid.Row="1" x:Name="ingredientsCollectionView"
+                                                ItemsSource="{Binding Ingredients}"
+                                                ItemsLayout="GridItemsLayout"
+                                                Margin="10">
+
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="10">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="Name:" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+
+                                                <Label Text="Weight:" Grid.Row="1" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Weight}" Grid.Row="1" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+
+                                                <Label Text="Calories:" Grid.Row="2" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Calories}" Grid.Row="2" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+
+                                                <Label Text="Proteins:" Grid.Row="3" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Proteins}" Grid.Row="3" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+
+                                                <Label Text="Fats:" Grid.Row="4" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Fats}" Grid.Row="4" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+
+                                                <Label Text="Carbohydrates:" Grid.Row="5" Grid.Column="0" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}" />
+                                                <Label Text="{Binding Carbohydrates}" Grid.Row="5" Grid.Column="1" Style="{StaticResource LabelAppStyle}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </Grid>
+                        </Grid>
+                </Frame>
+            </Grid>
+        </ScrollView>
+        
+        <!--Loading-->
+        <Label x:Name="MakeFirstRecordLabel"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            MaximumWidthRequest="200"
+            FontSize="Title" FontAttributes="Bold"
+            Text="Make your first record" Style="{StaticResource LabelAppStyle}"
+            IsVisible="{Binding IsLabelVisible}"/>
+
+        <ActivityIndicator
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            IsVisible="{Binding IsLoading}"
+            IsRunning="{Binding IsLoading}"
+            Style="{StaticResource MainActivityIndicatorStyle}"
+        
+            />
+    </AbsoluteLayout>
 </ContentPage>

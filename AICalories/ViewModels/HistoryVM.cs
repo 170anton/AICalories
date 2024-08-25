@@ -168,9 +168,15 @@ namespace AICalories.ViewModels
                     if (group != null)
                     {
                         group.Remove(item);
+                        group.TotalCalories = group.Sum(i => i.Calories);
+                        //OnPropertyChanged();
                         if (group.Count == 0)
                         {
                             DayGroupedItems.Remove(group);
+                            if (DayGroupedItems.Count() == 0)
+                            {
+                                IsLabelVisible = true;
+                            }
                         }
 
                         //OnPropertyChanged(nameof(DayGroupedItems));

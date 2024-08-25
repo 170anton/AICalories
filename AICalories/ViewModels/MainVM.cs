@@ -19,10 +19,15 @@ public class MainVM : INotifyPropertyChanged
     private string _lastHistoryItemImage;
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
+    private string _lastHistoryItemProtein;
+    private string _lastHistoryItemFat;
+    private string _lastHistoryItemCarbs;
+    private string _lastHistoryItemSugar;
     private string _totalCalories;
     private string _totalProteins;
     private string _totalFats;
     private string _totalCarbohydrates;
+    private string _totalSugar;
     private bool _isLoading;
     private bool _isLabelVisible;
     private bool _isHistoryGridVisible;
@@ -89,6 +94,16 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
+    public string TotalSugar
+    {
+        get => _totalSugar;
+        set
+        {
+            _totalSugar = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string LastHistoryItemImage
     {
         get => _lastHistoryItemImage;
@@ -115,6 +130,46 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _lastHistoryItemCalories = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastHistoryItemProtein
+    {
+        get => _lastHistoryItemProtein;
+        set
+        {
+            _lastHistoryItemProtein = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastHistoryItemFat
+    {
+        get => _lastHistoryItemFat;
+        set
+        {
+            _lastHistoryItemFat = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastHistoryItemCarbs
+    {
+        get => _lastHistoryItemCarbs;
+        set
+        {
+            _lastHistoryItemCarbs = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastHistoryItemSugar
+    {
+        get => _lastHistoryItemSugar;
+        set
+        {
+            _lastHistoryItemSugar = value;
             OnPropertyChanged();
         }
     }
@@ -176,16 +231,20 @@ public class MainVM : INotifyPropertyChanged
 
     public async Task OnPageAppearingAsync()
     {
-        // Clear or reset properties if needed
-        LastHistoryItemName = null;
-        LastHistoryItemCalories = null;
-        LastHistoryItemImage = null;
+        try
+        {
+            LastHistoryItemName = null;
+            LastHistoryItemCalories = null;
+            LastHistoryItemImage = null;
 
-        LoadTodayStats();
+            LoadTodayStats();
 
-        await LoadLastMeal();
-
-        IsHistoryGridVisible = true;
+            await LoadLastMeal();
+        }
+        catch (Exception)
+        {
+            //_alertService.ShowError("Loading error occurred");
+        }
     }
 
     #region Today Stats
@@ -200,12 +259,13 @@ public class MainVM : INotifyPropertyChanged
         GetTotalProteins(items, dateTimeNow);
         GetTotalFats(items, dateTimeNow);
         GetTotalCarbohydrates(items, dateTimeNow);
+        GetTotalSugar(items, dateTimeNow);
     }
 
     public async Task GetTotalCalories(List<MealItem> items, DateTime dateTimeNow)
     {
         var calorieSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
-                              .Sum(i => i.Calories)
+                              .Sum(i => ((IMealItem)i).Calories)
                               .ToString();
 
         TotalCalories = calorieSum;
@@ -223,7 +283,7 @@ public class MainVM : INotifyPropertyChanged
     public async Task GetTotalFats(List<MealItem> items, DateTime dateTimeNow)
     {
         var fatsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
-                              .Sum(i => i.Fats)
+                              .Sum(i => ((IMealItem)i).Fats)
                               .ToString();
 
         TotalFats = fatsSum;
@@ -236,6 +296,15 @@ public class MainVM : INotifyPropertyChanged
                               .ToString();
 
         TotalCarbohydrates = carbohydratesSum;
+    }
+
+    public async Task GetTotalSugar(List<MealItem> items, DateTime dateTimeNow)
+    {
+        var sugarSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
+                              .Sum(i => i.Sugar)
+                              .ToString();
+
+        TotalSugar = sugarSum;
     }
     #endregion
 
@@ -251,6 +320,7 @@ public class MainVM : INotifyPropertyChanged
 
             if (lastMeal == null)
             {
+                IsHistoryGridVisible = false;
                 IsLabelVisible = true;
                 return;
             }
@@ -259,8 +329,14 @@ public class MainVM : INotifyPropertyChanged
             LastHistoryItemImage = lastMeal.ImagePath;
             LastHistoryItemName = lastMeal.MealName;
             LastHistoryItemCalories = lastMeal.Calories.ToString();
+            LastHistoryItemProtein = lastMeal.Proteins.ToString();
+            LastHistoryItemFat = lastMeal.Fats.ToString();
+            LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
+            LastHistoryItemSugar = lastMeal.Sugar.ToString();
 
             await LoadLastMealIngredients(lastMeal.Id);
+
+            IsHistoryGridVisible = true;
 
         }
         catch (Exception ex)

@@ -112,7 +112,10 @@ public partial class ContextPage : ContentPage
     protected override bool OnBackButtonPressed()
     {
         //Shell.Current.GoToAsync("//main");
+        var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+
         Shell.Current.Navigation.PopModalAsync();
+        Shell.Current.Navigation.PushModalAsync(takeImagePage);
         return true;
     }
 

@@ -9,11 +9,11 @@
     <ScrollView
            AbsoluteLayout.LayoutBounds="0,0,1,1"
            AbsoluteLayout.LayoutFlags="All" >
-        <VerticalStackLayout  Padding="20,10" Spacing="10">
+        <VerticalStackLayout  Padding="10" Spacing="10">
 
             <Grid RowDefinitions="Auto,*" >
                 <Label Text="Settings" FontSize="Title" Grid.Row="0" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                        HorizontalTextAlignment="Start" Margin="20,20,20,10"/>
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>
                 
                 <Frame Grid.Row="1" Style="{StaticResource MainFrameStyle}" >
                     <VerticalStackLayout Padding="10,10" Spacing="20">
@@ -57,7 +57,7 @@
 
             <Grid  x:Name="supportGrid" RowDefinitions="Auto,*">
                 <Label Text="Support" FontSize="Title"  Grid.Row="0" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
-                        HorizontalTextAlignment="Start" Margin="20,20,20,10"/>
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>
                 
                 <custom:CustomAutoHeightFrame AutoHeight="True"  Grid.Row="1" Style="{StaticResource MainFrameStyle}" >
                     <VerticalStackLayout x:Name="supportLayout" Padding="10,10" Spacing="20">

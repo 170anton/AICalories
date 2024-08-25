@@ -30,6 +30,9 @@ namespace AICalories.Models
 
         [JsonProperty("ingredient_carbohydrates")]
         public double Carbohydrates { get; set; }
+
+        [JsonProperty("ingredient_sugar")]
+        public double Sugar { get; set; }
     }
 }
 

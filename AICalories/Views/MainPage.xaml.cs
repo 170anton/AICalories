@@ -38,7 +38,6 @@ public partial class MainPage : ContentPage
     #endregion
 
 
-
     #region View
 
     private void OnSwipedLeft(object sender, SwipedEventArgs e)
