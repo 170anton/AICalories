@@ -11,9 +11,9 @@
     <Color x:Key="TertiaryMain">Black</Color>
     <Color x:Key="SoftYellow">#EBD87F</Color><!--f5df73-->
     
-    <Color x:Key="CaloriesColor">#e8736b</Color>
+    <Color x:Key="CaloriesColor">#EBD87F</Color>
     <Color x:Key="ProteinColor">#6b97e8</Color>
-    <Color x:Key="FatColor">#e8cb6b</Color>
+    <Color x:Key="FatColor">#e8736b</Color><!--e8cb6b-->
     <Color x:Key="CarbsColor">#6be893</Color>
     <Color x:Key="SugarColor">#AAAAAA</Color>
 

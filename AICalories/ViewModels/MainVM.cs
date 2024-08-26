@@ -28,10 +28,12 @@ public class MainVM : INotifyPropertyChanged
     private string _totalFats;
     private string _totalCarbohydrates;
     private string _totalSugar;
+    private string _showMoreTodayStatsText;
     private bool _isLoading;
     private bool _isLabelVisible;
     private bool _isHistoryGridVisible;
-    
+    private bool _isPfcsInfoGridVisible;
+
     private readonly IViewModelService _viewModelService;
     private readonly INavigationService _navigationService;
     private readonly IAlertService _alertService;
@@ -41,6 +43,7 @@ public class MainVM : INotifyPropertyChanged
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
     public ICommand NewImageCommand { get; }
+    public ICommand ShowMoreTodayStatsCommand { get; }
 
     #region Properties
 
@@ -50,6 +53,16 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _ingredients = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string ShowMoreTodayStatsText
+    {
+        get => _showMoreTodayStatsText;
+        set
+        {
+            _showMoreTodayStatsText = value;
             OnPropertyChanged();
         }
     }
@@ -204,6 +217,16 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
+    public bool IsPfcsGridVisible
+    {
+        get => _isPfcsInfoGridVisible;
+        set
+        {
+            _isPfcsInfoGridVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     #region Constructor
@@ -217,8 +240,12 @@ public class MainVM : INotifyPropertyChanged
         _alertService = alertService;
 
         NewImageCommand = new Command(async () => await NewImageClicked());
+        ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
 
         Ingredients = new ObservableCollection<IngredientItem>();
+
+        LoadShowMoreTodayStatsOption();
+
         //LoadLastHistoryItem();
         //GetTotalCalories();
         //GetTotalProteins();
@@ -306,6 +333,29 @@ public class MainVM : INotifyPropertyChanged
 
         TotalSugar = sugarSum;
     }
+
+
+    private void ShowMoreTodayStatsClicked()
+    {
+        Preferences.Set(App.ShowMoreTodayStatsKey, !Preferences.Get(App.ShowMoreTodayStatsKey, false));
+        LoadShowMoreTodayStatsOption();
+    }
+
+    private void LoadShowMoreTodayStatsOption()
+    {
+        var savedOption = Preferences.Get(App.ShowMoreTodayStatsKey, false);
+        if (!savedOption)
+        {
+            ShowMoreTodayStatsText = "show more";
+            IsPfcsGridVisible = savedOption;
+        }
+        else
+        {
+            ShowMoreTodayStatsText = "show less";
+            IsPfcsGridVisible = savedOption;
+        }
+    }
+
     #endregion
 
     public async Task LoadLastMeal()

@@ -16,6 +16,7 @@ public partial class App : Application
     public const string DarkModeKey = "DarkModeKey";
     public const string ShowReviewKey = "ShowReviewKey";
     public const string SaveToGalleryKey = "SaveToGalleryKey";
+    public const string ShowMoreTodayStatsKey = "ShowMoreTodayStatsKey";
     public static IHistoryItemRepository HistoryItemRepository { get; private set; }
     public static IIngredientItemRepository IngredientItemRepository { get; private set; }
     public static IContextItemRepository ContextItemRepository { get; private set; }

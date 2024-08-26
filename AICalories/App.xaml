@@ -69,7 +69,8 @@
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="FontSize" Value="Medium"/>
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+                <!--<Setter Property="BackgroundColor" Value="Transparent"/>-->
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
             
@@ -120,8 +121,28 @@
                 <Setter Property="Opacity" Value="1" />
                 <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
                 <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
 
             </Style>
+            
+            <Style x:Key="TodayStatsBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="35" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="StrokeThickness" Value="5" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Opacity" Value="1" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="Stroke" Value="{StaticResource SoftYellow}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+
+            </Style>
+            
             
             <Style x:Key="RadioButtonAppStyle" TargetType="RadioButton">
                 <!--<Setter Property="FontFamily" Value="UbuntuRegular"/>-->
