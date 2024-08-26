@@ -38,7 +38,7 @@ namespace AICalories.Models
                                 $"{mealType}. What ingredients are in this meal? " +
                                 "Weight, calories, proteins, fats, carbohydrates, sugar of ingredients must be calculated as precise as possible in grams. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
-                                "Then summarize all calories and weight of all ingredients. " +
+                                "Then precisely summarize all calories and weight of all ingredients. " +
                                 "Output result in a JSON format. " +
                                 $"{userInfo}. "
                             },
@@ -113,12 +113,12 @@ namespace AICalories.Models
                                                 ingredient_proteins = new
                                                 {
                                                     type = "integer",
-                                                    description = "Proteins of the ingredient"
+                                                    description = "Protein of the ingredient"
                                                 },
                                                 ingredient_fats = new
                                                 {
                                                     type = "integer",
-                                                    description = "Fats of the ingredient"
+                                                    description = "Fat of the ingredient"
                                                 },
                                                 ingredient_carbohydrates = new
                                                 {
@@ -141,32 +141,32 @@ namespace AICalories.Models
                                     weight = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_weight you calculated"
+                                        description = "Precisely summarize all ingredient_weight "
                                     },
                                     calories = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_calories you calculated"
+                                        description = "Precisely summarize all ingredient_calories"
                                     },
                                     proteins = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_proteins you calculated"
+                                        description = "Precisely summarize all ingredient_proteins"
                                     },
                                     fats = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_fats you calculated"
+                                        description = "Precisely summarize all ingredient_fats"
                                     },
                                     carbohydrates = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_carbohydrates you calculated"
+                                        description = "Precisely summarize all ingredient_carbohydrates"
                                     },
                                     sugar = new
                                     {
                                         type = "integer",
-                                        description = "Summarize all ingredient_sugar you calculated"
+                                        description = "Precisely summarize all ingredient_sugar"
                                     },
                                 }
                             },

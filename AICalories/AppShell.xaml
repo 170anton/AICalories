@@ -30,13 +30,13 @@
             <views:HistoryPage/>
         </ShellContent>
     </TabBar>-->
-    <TabBar>
-        <Tab Title="Other" Icon="other_black.png">
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings"/>
+    <TabBar >
+        <Tab Title="Settings" Icon="settings.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings" />
 
 
         </Tab>
-        <Tab Title="Photo" Icon="settings.png">
+        <Tab Title="Today" Icon="dashboard.png">
             <ShellContent Title="Image" ContentTemplate="{DataTemplate views:MainPage}"
                           Shell.NavBarIsVisible="False" Route="main">
                 <!--<views:PhotoSelectionPage/>-->
@@ -47,7 +47,7 @@
             </ShellContent>-->
         </Tab>
         <Tab Title="History"
-             Icon="history2.png">
+             Icon="history_clocks.png">
             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="history"/>
         </Tab>
     </TabBar>

@@ -19,9 +19,14 @@ namespace AICalories.ViewModels
         private bool _isRefreshing;
         private bool _isLoading;
         private bool _isLabelVisible;
+        private bool _isHistoryGridVisible;
         private string _lastHistoryItemImage;
         private string _lastHistoryItemName;
         private string _lastHistoryItemCalories;
+        private string _lastHistoryItemProtein;
+        private string _lastHistoryItemFat;
+        private string _lastHistoryItemCarbs;
+        private string _lastHistoryItemSugar;
         private string _mealName;
         private string _weight;
         private string _calories;
@@ -99,110 +104,161 @@ namespace AICalories.ViewModels
             }
         }
 
-
-        public string DishName
+        public string LastHistoryItemProtein
         {
-            get => "Name: " + _mealName;
+            get => _lastHistoryItemProtein;
             set
             {
-                if (_mealName != value)
-                {
-
-                    _mealName = value;
-                    OnPropertyChanged();
-                }
+                _lastHistoryItemProtein = value;
+                OnPropertyChanged();
             }
         }
 
-        public string Weight
+        public string LastHistoryItemFat
         {
-            get => "Weight: " + _weight + "g";
+            get => _lastHistoryItemFat;
             set
             {
-                if (_weight != value)
-                {
-
-                    _weight = value;
-                    OnPropertyChanged();
-                }
+                _lastHistoryItemFat = value;
+                OnPropertyChanged();
             }
         }
 
-        public string Calories
+        public string LastHistoryItemCarbs
         {
-            get => "Calories: " + _calories + "Cal";
+            get => _lastHistoryItemCarbs;
             set
             {
-                if (_calories != value)
-                {
-                    _calories = value;
-                    OnPropertyChanged();
-                }
+                _lastHistoryItemCarbs = value;
+                OnPropertyChanged();
             }
         }
 
-        public string Proteins
+        public string LastHistoryItemSugar
         {
-            get => "Protein: " + _proteins + "g";
+            get => _lastHistoryItemSugar;
             set
             {
-                if (_proteins != value)
-                {
-                    _proteins = value;
-                    OnPropertyChanged();
-                }
+                _lastHistoryItemSugar = value;
+                OnPropertyChanged();
             }
         }
 
-        public string Fats
-        {
-            get => "Fat: " + _fats + "g";
-            set
-            {
-                if (_fats != value)
-                {
-                    _fats = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        public string Carbohydrates
-        {
-            get => "Carbs: " + _carbohydrates + "g";
-            set
-            {
-                if (_carbohydrates != value)
-                {
-                    _carbohydrates = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        public string TotalResultJSON
-        {
-            get => _totalResultJSON;
-            set
-            {
-                if (_totalResultJSON != value)
-                {
-                    _totalResultJSON = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        //public string DishName
+        //{
+        //    get => "Name: " + _mealName;
+        //    set
+        //    {
+        //        if (_mealName != value)
+        //        {
 
-        public bool IsRefreshing
+        //            _mealName = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string Weight
+        //{
+        //    get => "Weight: " + _weight + "g";
+        //    set
+        //    {
+        //        if (_weight != value)
+        //        {
+
+        //            _weight = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string Calories
+        //{
+        //    get => "Calories: " + _calories + "Cal";
+        //    set
+        //    {
+        //        if (_calories != value)
+        //        {
+        //            _calories = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string Proteins
+        //{
+        //    get => "Protein: " + _proteins + "g";
+        //    set
+        //    {
+        //        if (_proteins != value)
+        //        {
+        //            _proteins = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string Fats
+        //{
+        //    get => "Fat: " + _fats + "g";
+        //    set
+        //    {
+        //        if (_fats != value)
+        //        {
+        //            _fats = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string Carbohydrates
+        //{
+        //    get => "Carbs: " + _carbohydrates + "g";
+        //    set
+        //    {
+        //        if (_carbohydrates != value)
+        //        {
+        //            _carbohydrates = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public string TotalResultJSON
+        //{
+        //    get => _totalResultJSON;
+        //    set
+        //    {
+        //        if (_totalResultJSON != value)
+        //        {
+        //            _totalResultJSON = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //public bool IsRefreshing
+        //{
+        //    get => _isRefreshing;
+        //    set
+        //    {
+        //        if (_isRefreshing != value)
+        //        {
+        //            _isRefreshing = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        public bool IsHistoryGridVisible
         {
-            get => _isRefreshing;
+            get => _isHistoryGridVisible;
             set
             {
-                if (_isRefreshing != value)
-                {
-                    _isRefreshing = value;
-                    OnPropertyChanged();
-                }
+                _isHistoryGridVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -217,7 +273,6 @@ namespace AICalories.ViewModels
             _alertService = alertService;
             _imageInfo = imageInfo;
 
-            _isRefreshing = true;
             Ingredients = new ObservableCollection<IngredientItem>();
 
         }
@@ -226,6 +281,8 @@ namespace AICalories.ViewModels
         {
             try
             {
+                IsLoading = true;
+                IsHistoryGridVisible = false;
                 await LoadSecrets();
 
                 var imagePath = _imageInfo.ImagePath;
@@ -235,24 +292,27 @@ namespace AICalories.ViewModels
 
                     if (mealItem == null)
                     {
-                        LoadAIResponse("Loading error");
                         return;
                     }
                     if (mealItem.IsMeal == false)
                     {
                         _alertService.ShowError("There is no food in this image.");
-                        _navigationService.PopModalAsync();
+                        await _navigationService.PopModalAsync();
                         return;
                     }
-                    await AddItemToDB(imagePath, mealItem);
 
-                    LoadAIResponse(mealItem);
-                    await OnPageAppearingAsync();
+                    //LoadAIResponse(mealItem);
+                    await LoadMealResponse(mealItem);
+
+                    await AddItemToDB(mealItem);
+
+                    IsHistoryGridVisible = true;
+                    IsLoading = false;
                 }
             }
             catch (JsonSerializationException)
             {
-                _alertService.ShowError("Decoding error occurred");
+                _alertService.ShowError("Decoding error occurred.");
                 await _navigationService.NavigateToMainPageAsync();
             }
             catch (BadImageFormatException)
@@ -263,6 +323,7 @@ namespace AICalories.ViewModels
             catch (FileLoadException)
             {
                 _alertService.ShowError("Error saving to database");
+                IsLoading = false;
             }
             catch (Exception)
             {
@@ -271,86 +332,59 @@ namespace AICalories.ViewModels
             }
         }
 
-        public void LoadAIResponse(MealItem mealItem)
-        {
-            IsRefreshing = false;
-            DishName = mealItem.MealName;
-            Weight = mealItem.Weight.ToString();
-            Calories = ((IMealItem)mealItem).Calories.ToString();
-            Proteins = mealItem.Proteins.ToString();
-            Fats = ((IMealItem)mealItem).Fats.ToString();
-            Carbohydrates = mealItem.Carbohydrates.ToString();
-            TotalResultJSON = mealItem.TotalResultJSON;
-        }
+        //public void LoadAIResponse(MealItem mealItem)
+        //{
+        //    DishName = mealItem.MealName;
+        //    Weight = mealItem.Weight.ToString();
+        //    Calories = ((IMealItem)mealItem).Calories.ToString();
+        //    Proteins = mealItem.Proteins.ToString();
+        //    Fats = ((IMealItem)mealItem).Fats.ToString();
+        //    Carbohydrates = mealItem.Carbohydrates.ToString();
+        //    TotalResultJSON = mealItem.TotalResultJSON;
+        //    IsRefreshing = false;
+        //}
 
-        public void LoadAIResponse(string response)
-        {
-            IsRefreshing = false;
-            DishName = response;
-        }
+        //public void LoadAIResponse(string response)
+        //{
+        //    DishName = response;
+        //    IsRefreshing = false;
+        //}
 
 
-        public async Task OnPageAppearingAsync()
+        public async Task LoadMealResponse(MealItem mealItem)
         {
             try
             {
-                LastHistoryItemName = null;
-                LastHistoryItemCalories = null;
-                LastHistoryItemImage = null;
+                LastHistoryItemImage = mealItem.ImagePath;
+                LastHistoryItemName = mealItem.MealName;
+                LastHistoryItemCalories = mealItem.Calories.ToString();
+                LastHistoryItemCalories = mealItem.Calories.ToString();
+                LastHistoryItemProtein = mealItem.Proteins.ToString();
+                LastHistoryItemFat = mealItem.Fats.ToString();
+                LastHistoryItemCarbs = mealItem.Carbohydrates.ToString();
+                LastHistoryItemSugar = mealItem.Sugar.ToString();
 
-                await LoadLastMeal();
+                Ingredients = new ObservableCollection<IngredientItem>(mealItem.Ingredients);
 
-                //IsHistoryGridVisible = true;
-
+                //await LoadLastMealIngredients(mealItem.Id);
             }
             catch (Exception)
             {
-                //_alertService.ShowError("Loading error occurred");
-            }
-        }
-
-        public async Task LoadLastMeal()
-        {
-            try
-            {
-                IsLabelVisible = false;
-                IsLoading = true;
-                await Task.Delay(500);
-                var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
-                IsLoading = false;
-
-                if (lastMeal == null)
-                {
-                    IsLabelVisible = true;
-                    return;
-                }
-
-
-                LastHistoryItemImage = lastMeal.ImagePath;
-                LastHistoryItemName = lastMeal.MealName;
-                LastHistoryItemCalories = ((IMealItem)lastMeal).Calories.ToString();
-
-                await LoadLastMealIngredients(lastMeal.Id);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
-                throw;
+                _alertService.ShowError("Loading error occurred");
             }
         }
 
 
-        private async Task LoadLastMealIngredients(int lastMealId)
-        {
-            var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
+        //private async Task LoadLastMealIngredients(int lastMealId)
+        //{
+        //    var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
 
-            Ingredients.Clear();
-            foreach (var ingredient in lastMealIngredients)
-            {
-                Ingredients.Add(ingredient);
-            }
-        }
+        //    Ingredients.Clear();
+        //    foreach (var ingredient in lastMealIngredients)
+        //    {
+        //        Ingredients.Add(ingredient);
+        //    }
+        //}
 
 
         #region Process Image
@@ -400,6 +434,7 @@ namespace AICalories.ViewModels
                 //mealItem.Proteins = mealItemJson.proteins;
                 //mealItem.Fats = mealItemJson.fats;
                 //mealItem.Carbohydrates = mealItemJson.carbohydrates;
+                mealItem.ImagePath = imagePath;
                 mealItem.TotalResultJSON = stringRawResult;
                 //mealItem.Ingredients = 
 
@@ -447,7 +482,7 @@ namespace AICalories.ViewModels
             return stringRawResult;
         }
 
-        private async Task AddItemToDB(string imagePath, MealItem mealItem)
+        private async Task AddItemToDB(MealItem mealItem)
         {
             try
             {
@@ -455,7 +490,6 @@ namespace AICalories.ViewModels
 
                 mealItem.Date = dateTimeNow;
                 mealItem.Time = dateTimeNow.ToString("HH:mm");
-                mealItem.ImagePath = imagePath;
 
                 await App.HistoryItemRepository.SaveMealItemAsync(mealItem);
 

@@ -16,7 +16,8 @@
             AbsoluteLayout.LayoutFlags="All">
         <ScrollView Grid.RowSpan="2">
             <VerticalStackLayout x:Name="mainLayout"  Margin="0,0,0,90">
-                <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFit"/>
+                <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFill"
+                       MaximumHeightRequest="1600"/>
 
                 <custom:CustomAutoHeightFrame  AutoHeight="True" Padding="30,20"
                                                Style="{StaticResource MainFrameStyle}"
@@ -62,13 +63,13 @@
                                                 ConverterParameter='This is a regular food', Mode=TwoWay}"
                                    Value="This is a regular food"/>  <!--Set to LoadSelectedOption() if changed-->
                 
-                            <Label Text="Junk" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                            <Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
                                    HorizontalTextAlignment="Start"/> 
                             <RadioButton Grid.Column="1" Grid.Row="3"
                                    CheckedChanged="RadioButton_CheckedChanged" 
                                    IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
-                                                ConverterParameter='This is a typical junk food with junk ingredients', Mode=TwoWay}"
-                                   Value="This is a typical junk food with junk ingredients"/>
+                                                ConverterParameter='This is a junk food. Fat and sugar amount is increased', Mode=TwoWay}"
+                                   Value="This is a junk food. Fat and sugar amount is increased"/>
                         </Grid>
                     </Grid>
                 </Frame>

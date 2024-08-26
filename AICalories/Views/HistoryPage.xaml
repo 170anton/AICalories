@@ -55,13 +55,14 @@
                                         Style="{StaticResource LabelAppStyle}"
                                         HorizontalOptions="Start"
                                         Margin="5,0,0,0"
-                                        Text="cals"
+                                        Text="calories"
                                         FontSize="Medium"/>
 
                                 </HorizontalStackLayout>
                                 <Button
                                     Grid.Column="2" Grid.RowSpan="2"
                                     Text="Add"
+                                    IsVisible="False"
                                     Clicked="OnAddToHeaderButton_Clicked"/>
                             </Grid>
                         </Frame>
@@ -71,7 +72,7 @@
                     <DataTemplate>
                     
                             <Grid ColumnDefinitions="*,*, 2.5*"
-                                  HeightRequest="50"
+                                  HeightRequest="80"
                                   Padding="0,0,0,0">
                                 <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
@@ -81,7 +82,7 @@
                                        Margin="0,0,10,0"/>
                                 <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
                                        HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                       Opacity="0.5"/>
+                                       Opacity="0.6"/>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
                             </Grid>

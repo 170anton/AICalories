@@ -16,7 +16,6 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         InitializeComponent();
         _viewModel = new HistoryVM();
         BindingContext = _viewModel;
-        //Task.Run(() => §.LoadData()); //do not await
     }
 
     private void ShowOverlay()
@@ -56,13 +55,10 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
 
             if (item.FirstOrDefault() is MealItem selectedItem)
             {
-                bool delete = await DisplayAlert("Delete Item", "Do you want to delete this item?", "Yes", "No");
+                bool delete = await DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
                 if (delete)
                 {
-                    if (_viewModel != null)
-                    {
-                        _viewModel.DeleteItemCommand.Execute(selectedItem);
-                    }
+                    _viewModel.DeleteItemCommand.Execute(selectedItem);
                 }
             }
             // Deselect the item

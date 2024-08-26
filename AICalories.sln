@@ -34,6 +34,34 @@ Global
 		$0.TextStylePolicy = $5
 		$5.inheritsSet = null
 		$5.scope = text/x-json
-		version = 0.5.0
+		$0.TextStylePolicy = $6
+		$6.inheritsSet = null
+		$6.scope = application/xaml
+		$0.XmlFormattingPolicy = $7
+		$7.inheritsSet = null
+		$7.scope = application/xaml
+		$0.TextStylePolicy = $8
+		$8.FileWidth = 80
+		$8.TabsToSpaces = True
+		$8.scope = text/plain
+		$0.TextStylePolicy = $9
+		$9.inheritsSet = null
+		$9.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $10
+		$10.scope = text/x-csharp
+		$0.TextStylePolicy = $11
+		$11.inheritsSet = null
+		$11.scope = application/manifest+xml
+		$0.XmlFormattingPolicy = $12
+		$12.inheritsSet = null
+		$12.scope = application/manifest+xml
+		$0.TextStylePolicy = $13
+		$13.inheritsSet = null
+		$13.scope = text/x-web
+		$0.TextStylePolicy = $14
+		$14.inheritsSet = null
+		$14.scope = text/x-vs
+		$0.StandardHeader = $15
+		version = 0.9.0
 	EndGlobalSection
 EndGlobal

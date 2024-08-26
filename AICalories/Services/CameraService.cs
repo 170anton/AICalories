@@ -20,16 +20,24 @@ namespace AICalories.Services
         public void EnableTorch()
         {
             _cameraView.TorchEnabled = true;
+            _cameraView.FlashMode = FlashMode.Enabled;
         }
 
         public void DisableTorch()
         {
             _cameraView.TorchEnabled = false;
+            _cameraView.FlashMode = FlashMode.Disabled;
         }
 
         public bool IsTorchEnabled()
         {
             return _cameraView.TorchEnabled;
+        }
+
+        public async Task DisposeCamera()
+        {
+            await _cameraView.StopCameraAsync();
+            
         }
     }
 

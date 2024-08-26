@@ -129,6 +129,7 @@ public partial class TakeImagePage : ContentPage
         {
             cameraView.TorchEnabled = false;
         }
+        cameraView.StopCameraAsync();
     }
 
     protected override void OnAppearing()

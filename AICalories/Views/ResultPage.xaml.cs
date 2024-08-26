@@ -25,7 +25,7 @@ public partial class ResultPage : ContentPage
 
     protected override bool OnBackButtonPressed()
     {
-        if (_viewModel.DishName != null) //should be check on completed result
+        if (_viewModel.IsLoading == false) //should be check on completed result
         {
             Navigation.PopModalAsync();
         }

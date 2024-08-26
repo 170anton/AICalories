@@ -23,7 +23,7 @@ namespace AICalories.Models
         public bool IsMeal { get; set; }
 
         [JsonProperty("meal_name")]
-        public string MealName { get => mealName; set => mealName = char.ToUpper(value[0]) + value.Substring(1); }
+        public string MealName { get => mealName; set => mealName = value; }     //char.ToUpper(value[0]) + value.Substring(1); }
 
         public DateTime Date { get; set; }
 

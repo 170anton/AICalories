@@ -14,17 +14,17 @@
         
 
 
-        <Button x:Name="captureButton" Text=""  Grid.Row="1" Margin="10"
+        <Button x:Name="captureButton" Text=""  Grid.Row="1" Margin="15"
                 Command="{Binding CaptureCommand}" Style="{StaticResource ImageOptionStyle}"
                 HeightRequest="80" WidthRequest="80"
                 CornerRadius="50"/>
         <Button x:Name="galleryButton"
-                ImageSource="gallery_white.png" Padding="10" Grid.Row="1" Margin="10" HorizontalOptions="Start"
+                ImageSource="gallery_white.png" Padding="10" Grid.Row="1" Margin="15" HorizontalOptions="Start"
                 Command="{Binding GalleryCommand}"  Style="{StaticResource ImageOptionStyle}"
                 HeightRequest="60" WidthRequest="60"
                 CornerRadius="50"/>
         <Button x:Name="torchButton"
-                ImageSource="flashlight_white.png" Padding="13" Grid.Row="1" Margin="10" HorizontalOptions="End"
+                ImageSource="flashlight_white.png" Padding="13" Grid.Row="1" Margin="15" HorizontalOptions="End"
                 Command="{Binding ToggleTorchCommand}" Style="{StaticResource ImageOptionStyle}"
                 HeightRequest="60" WidthRequest="60"
                 CornerRadius="50"/>

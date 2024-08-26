@@ -6,8 +6,6 @@ using AICalories.ViewModels;
 using AICalories.Views;
 using Camera.MAUI;
 using Microsoft.Extensions.Logging;
-//using AICalories.Platforms.iOS;
-using AICalories.Platforms.Android;
 
 
 namespace AICalories;
@@ -34,8 +32,12 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
             });
+#if ANDROID
+        builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>(); //todo check for ios
+#elif IOS
+        builder.Services.AddSingleton<IKeyboardHelper, AICalories.Platforms.iOS.KeyboardHelper>();
+#endif
 
-        builder.Services.AddSingleton<IKeyboardHelper, KeyboardHelper>(); //todo check for ios
 
         // Register the view model service
         builder.Services.AddSingleton<IViewModelService, ViewModelService>();

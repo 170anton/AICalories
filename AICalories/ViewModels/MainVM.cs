@@ -8,6 +8,7 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,7 @@ namespace AICalories.ViewModels;
 
 public class MainVM : INotifyPropertyChanged
 {
+    private MealItem _lastHistoryItem;
     private string _lastHistoryItemImage;
     private string _lastHistoryItemName;
     private string _lastHistoryItemCalories;
@@ -43,6 +45,7 @@ public class MainVM : INotifyPropertyChanged
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
 
     public ICommand NewImageCommand { get; }
+    public ICommand DeleteLastMealCommand { get; }
     public ICommand ShowMoreTodayStatsCommand { get; }
 
     #region Properties
@@ -240,6 +243,7 @@ public class MainVM : INotifyPropertyChanged
         _alertService = alertService;
 
         NewImageCommand = new Command(async () => await NewImageClicked());
+        DeleteLastMealCommand = new Command(async () => await DeleteLastMealClicked());
         ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
 
         Ingredients = new ObservableCollection<IngredientItem>();
@@ -260,17 +264,17 @@ public class MainVM : INotifyPropertyChanged
     {
         try
         {
-            LastHistoryItemName = null;
-            LastHistoryItemCalories = null;
-            LastHistoryItemImage = null;
+            //LastHistoryItemName = null;
+            //LastHistoryItemCalories = null;
+            //LastHistoryItemImage = null;
 
-            LoadTodayStats();
+            await LoadTodayStats();
 
             await LoadLastMeal();
         }
         catch (Exception)
         {
-            //_alertService.ShowError("Loading error occurred");
+            _alertService.ShowError("Loading error occurred");
         }
     }
 
@@ -282,17 +286,17 @@ public class MainVM : INotifyPropertyChanged
         var dateTimeNow = DateTime.Now;
         List<MealItem> items = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
-        GetTotalCalories(items, dateTimeNow);
-        GetTotalProteins(items, dateTimeNow);
-        GetTotalFats(items, dateTimeNow);
-        GetTotalCarbohydrates(items, dateTimeNow);
-        GetTotalSugar(items, dateTimeNow);
+        await GetTotalCalories(items, dateTimeNow);
+        await GetTotalProteins(items, dateTimeNow);
+        await GetTotalFats(items, dateTimeNow);
+        await GetTotalCarbohydrates(items, dateTimeNow);
+        await GetTotalSugar(items, dateTimeNow);
     }
 
     public async Task GetTotalCalories(List<MealItem> items, DateTime dateTimeNow)
     {
         var calorieSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
-                              .Sum(i => ((IMealItem)i).Calories)
+                              .Sum(i => i.Calories)
                               .ToString();
 
         TotalCalories = calorieSum;
@@ -310,7 +314,7 @@ public class MainVM : INotifyPropertyChanged
     public async Task GetTotalFats(List<MealItem> items, DateTime dateTimeNow)
     {
         var fatsSum = items.Where(i => i.Date.Date == dateTimeNow.Date)
-                              .Sum(i => ((IMealItem)i).Fats)
+                              .Sum(i => i.Fats)
                               .ToString();
 
         TotalFats = fatsSum;
@@ -375,16 +379,19 @@ public class MainVM : INotifyPropertyChanged
                 return;
             }
 
+            //if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
+            {
+                _lastHistoryItem = lastMeal;
+                LastHistoryItemImage = lastMeal.ImagePath;
+                LastHistoryItemName = lastMeal.MealName;
+                LastHistoryItemCalories = lastMeal.Calories.ToString();
+                LastHistoryItemProtein = lastMeal.Proteins.ToString();
+                LastHistoryItemFat = lastMeal.Fats.ToString();
+                LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
+                LastHistoryItemSugar = lastMeal.Sugar.ToString();
 
-            LastHistoryItemImage = lastMeal.ImagePath;
-            LastHistoryItemName = lastMeal.MealName;
-            LastHistoryItemCalories = lastMeal.Calories.ToString();
-            LastHistoryItemProtein = lastMeal.Proteins.ToString();
-            LastHistoryItemFat = lastMeal.Fats.ToString();
-            LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
-            LastHistoryItemSugar = lastMeal.Sugar.ToString();
-
-            await LoadLastMealIngredients(lastMeal.Id);
+                await LoadLastMealIngredients(lastMeal.Id);
+            }
 
             IsHistoryGridVisible = true;
 
@@ -400,11 +407,12 @@ public class MainVM : INotifyPropertyChanged
     {
         var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
 
-        Ingredients.Clear();
-        foreach (var ingredient in lastMealIngredients)
-        {
-            Ingredients.Add(ingredient);
-        }
+        //Ingredients.Clear();
+        Ingredients = new ObservableCollection<IngredientItem>(lastMealIngredients);
+        //foreach (var ingredient in lastMealIngredients)
+        //{
+        //    Ingredients.Add(ingredient);
+        //}
     }
 
     #region Photo selection buttons
@@ -487,6 +495,17 @@ public class MainVM : INotifyPropertyChanged
 
     #endregion
 
+
+
+    private async Task DeleteLastMealClicked()
+    {
+        bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+        if (delete)
+        {
+            await App.HistoryItemRepository.DeleteMealItemAsync(_lastHistoryItem);
+        }
+        await OnPageAppearingAsync();
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
