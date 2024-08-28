@@ -5,39 +5,64 @@
              xmlns:views="clr-namespace:AICalories.Views"
              x:Class="AICalories.Views.HistoryPage"
              x:Name="root">
-        <Grid RowDefinitions="Auto, Auto, *" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                            BackgroundColor="White"
-            Padding="10"
-            RowSpacing="10">
-            <Button Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
-            <Button Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
+    <AbsoluteLayout>
+        <Grid RowDefinitions="Auto, Auto, *" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            
+            Padding="10">
+            <Button IsVisible="False" Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
+            <Button IsVisible="False" Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
             <CollectionView Grid.Row="2"
                             x:Name="collectionView"
                             ItemsSource="{Binding DayGroupedItems}"
                             IsGrouped="True"
                             SelectionMode="Single"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"
                             SelectionChanged="OnCollectionViewSelectionChanged">
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                     
                         <Frame
-                               BackgroundColor="{StaticResource White}"
-                               Padding="0" Margin="0,20,0,0"
-                               BorderColor="{StaticResource Primary}">
-                            <Grid ColumnDefinitions="*,Auto,Auto"
-                                Padding="5"
-                                ColumnSpacing="5">
+                               Padding="0" Margin="0,10,0,5" CornerRadius="10"
+                               Style="{StaticResource MainFrameStyle}">
+                            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
+                                Margin="5" Padding="10"
+                                RowSpacing="10" ColumnSpacing="5">
                                 <Label
                                     Grid.Column="0"
                                     Style="{StaticResource LabelAppStyle}"
                                     HorizontalOptions="Start"
                                     Margin="10,0,0,0"
-                                    Text="{Binding Title}"
-                                    TextColor="{StaticResource Black}"
+                                    Text="{Binding Title}" FontAttributes="Bold"
                                     FontSize="Large"/>
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0">
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
+                                        Margin="10,1,0,0"
+                                        Text="Total: "
+                                        FontSize="Medium"/>
+
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        Margin="10,0,0,0"
+                                        Text="{Binding TotalCalories}"
+                                        FontSize="Large"/>
+                                    <Label
+                                        Style="{StaticResource LabelAppStyle}"
+                                        HorizontalOptions="Start"
+                                        Margin="5,1,0,0"
+                                        Text="calories"
+                                        FontSize="Medium"/>
+
+                                </HorizontalStackLayout>
                                 <Button
-                                    Grid.Column="1"
+                                    Grid.Column="2" Grid.RowSpan="2"
                                     Text="Add"
+                                    IsVisible="False"
                                     Clicked="OnAddToHeaderButton_Clicked"/>
                             </Grid>
                         </Frame>
@@ -47,18 +72,17 @@
                     <DataTemplate>
                     
                             <Grid ColumnDefinitions="*,*, 2.5*"
-                                  HeightRequest="50"
-                                  Padding="0,1,0,0"
-                                  BackgroundColor="{StaticResource White}">
-                                <Label Grid.Column="0" Text="{Binding Time}" TextColor="{StaticResource Black}"
+                                  HeightRequest="80"
+                                  Padding="0,0,0,0">
+                                <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
-                                <Label Grid.Column="1" Text="{Binding Calories}" TextColor="{StaticResource Black}"
+                                <Label Grid.Column="1" Text="{Binding Calories}"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"
                                        Margin="0,0,10,0"/>
                                 <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
                                        HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                       Opacity="0.3"/>
+                                       Opacity="0.7"/>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
                             </Grid>
@@ -68,6 +92,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+        
+        
+            <Grid.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipedRight"/>
+            </Grid.GestureRecognizers>
         </Grid>
          <!--Blur Effect 
         <BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
@@ -89,4 +118,21 @@
             </StackLayout>
         </Frame>-->
         
+        <Label x:Name="EmptyCollection"
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            MaximumWidthRequest="200"
+            FontSize="Title" FontAttributes="Bold"
+            Text="There is nothing for now" Style="{StaticResource LabelAppStyle}"
+            IsVisible="{Binding IsLabelVisible}"/>
+
+        <ActivityIndicator
+            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            IsVisible="{Binding IsLoading}"
+            IsRunning="{Binding IsLoading}"
+            Style="{StaticResource MainActivityIndicatorStyle}"
+        
+            />
+    </AbsoluteLayout>
 </ContentPage>

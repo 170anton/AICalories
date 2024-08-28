@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AICalories.Views.MainPage">
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Text="Menu" IconImageSource="menu.png" Clicked="OnMenuButtonClicked" />
+    </ContentPage.ToolbarItems>-->
+    
+        <Grid x:Name="mainGrid" RowDefinitions="Auto,.8*,Auto"
+              Padding="10,10" RowSpacing="10">
+            
+            <Grid RowDefinitions="Auto,*"> 
+                <Label Grid.Row="0" Text="Today" Style="{StaticResource LabelAppStyle}"
+                        FontAttributes="Bold" FontSize="Title"
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>
+
+
+                <!--Stats Data-->
+            
+                <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
+                    <!--<AbsoluteLayout>
+                        
+                                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                AbsoluteLayout.LayoutFlags="All">
+                    </AbsoluteLayout>-->
+                    <Grid x:Name="todayStatsGrid" Padding="5" ColumnSpacing="0"
+                          RowDefinitions="Auto,Auto,Auto"
+                          >
+                        <!--Calories-->
+                        <Border Grid.Column="0" Grid.ColumnSpan="4"
+                                Style="{StaticResource TodayStatsBorderStyle}"
+                                HorizontalOptions="Start"
+                                Padding="14,0"
+                                Stroke="Transparent"
+                                >
+                            <HorizontalStackLayout>
+                                        
+                                <Label
+                                    Text="{Binding TotalCalories, StringFormat='{0}', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                    FontSize="30"  FontAttributes="Bold"
+                                    />
+                                <Label
+                                    Text=" calories" Style="{StaticResource IngredientsStyle}"
+                                    FontSize="Large" LineBreakMode="NoWrap" FontAttributes="Bold"
+                                    Margin="0,2,0,0"/>
+                                
+
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Grid x:Name="pfcsInfo" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4"
+                              ColumnDefinitions="*,*,*,*" IsVisible="{Binding IsPfcsGridVisible}"> 
+                            <!--Proteins-->
+                            <Border Grid.Column="0" Grid.Row="1"
+                                    Style="{StaticResource TodayStatsBorderStyle}" 
+                                    Stroke="{StaticResource ProteinColor}"
+                                    >
+                                <VerticalStackLayout
+                                    VerticalOptions="CenterAndExpand" 
+                                    HorizontalOptions="CenterAndExpand">
+                                        
+                                    <Label
+                                        Text="Protein" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Small" LineBreakMode="NoWrap" />
+                                
+                                    <Label
+                                        Text="{Binding TotalProteins, Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Large"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+                                
+                            <!--Fats-->
+                            <Border Grid.Column="1" Grid.Row="1"
+                                    Style="{StaticResource TodayStatsBorderStyle}" 
+                                    Stroke="{StaticResource FatColor}"
+                                    >
+                                <VerticalStackLayout
+                                    VerticalOptions="CenterAndExpand" 
+                                    HorizontalOptions="CenterAndExpand">
+                                        
+                                    <Label
+                                        Text="Fat" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Small"/>
+                                
+                                    <Label
+                                        Text="{Binding TotalFats, Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Large"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+                                
+                            <!--Carbohydrates-->
+                            <Border Grid.Column="2" Grid.Row="1"
+                                    Style="{StaticResource TodayStatsBorderStyle}" 
+                                    Stroke="{StaticResource CarbsColor}"
+                                    >
+                                <VerticalStackLayout
+                                    VerticalOptions="CenterAndExpand" 
+                                    HorizontalOptions="CenterAndExpand">
+                                        
+                                    <Label
+                                        Text="Carbs" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Small" LineBreakMode="NoWrap" />
+                                
+                                    <Label
+                                        Text="{Binding TotalCarbohydrates, Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Large"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        
+                            <!--Sugar-->
+                            <Border Grid.Column="3" Grid.Row="1"
+                                    Style="{StaticResource TodayStatsBorderStyle}" 
+                                    Stroke="{StaticResource SugarColor}"
+                                    >
+                                <VerticalStackLayout
+                                    VerticalOptions="CenterAndExpand" 
+                                    HorizontalOptions="CenterAndExpand">
+                                        
+                                    <Label
+                                        Text="Sugar" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Small" LineBreakMode="NoWrap" />
+                                
+                                    <Label
+                                        Text="{Binding TotalSugar, Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                        FontSize="Large"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <Button Grid.Row="2" Grid.ColumnSpan="4"
+                                Style="{StaticResource ImageOptionStyle}"
+                                BackgroundColor="Transparent"
+                                BorderColor="Transparent"
+                                TextColor="{StaticResource Gray400}"
+                                HorizontalOptions="End"
+                                FontSize="Small"
+                                Margin="15,0"
+                                Padding="0"
+                                Command="{Binding ShowMoreTodayStatsCommand}"
+                                Text="{Binding ShowMoreTodayStatsText}">
+                            
+
+                        </Button>
+                    </Grid>
+                </Frame>
+            </Grid>
+
+
+            <!--Last Meal Data-->
+        <Grid Grid.Row="1"  RowDefinitions="Auto,*">
+            <!--<Label Grid.Row="0" Text="Your last meal" Style="{StaticResource LabelAppStyle}"
+                        FontAttributes="Bold" FontSize="Title"
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>-->
+
+
+            <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
+                <AbsoluteLayout >
+                    <ScrollView
+                            AbsoluteLayout.LayoutBounds="0,0,1,1"
+                            AbsoluteLayout.LayoutFlags="All" >
+                        
+                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,*" Padding="10"
+                                IsVisible="{Binding IsHistoryGridVisible}">
+                            
+                                <!--Image-->
+                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}"
+                                    MaximumHeightRequest="300">
+                                <AbsoluteLayout>
+                                    <Image x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"
+                                        AbsoluteLayout.LayoutBounds="0,0,1,1"
+                                        AbsoluteLayout.LayoutFlags="All" />
+                                    <Button
+                                        AbsoluteLayout.LayoutBounds="0.02,0.98,0.1,0.1"
+                                        AbsoluteLayout.LayoutFlags="All"
+                                        Style="{StaticResource ImageOptionStyle}"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="Transparent"
+                                        Opacity="0.3"
+                                        ImageSource="delete_lastmeal.png"
+                                        Command="{Binding DeleteLastMealCommand}"/>
+                                </AbsoluteLayout>
+                            </Frame>
+
+                                <!--Second frame-->
+                            <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*,Auto"
+                                  >
+                                <!--Name and Total cals-->
+                                <Grid Grid.Row="0"
+                                      RowDefinitions="*,*">
+                                
+                                    <Label Grid.Row="0" Margin="5"
+                                           Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
+                                    <Frame Grid.Row="1"  HorizontalOptions="Center"
+                                            Style="{StaticResource TodayStatsFrameStyle}"
+                                            BackgroundColor="{StaticResource CaloriesColor}"
+                                            Padding="40,5" Margin="10,5,10,10">
+                                        <HorizontalStackLayout >
+                                        
+                                            <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
+                                                    Text="{Binding LastHistoryItemCalories, StringFormat='{0} cals'}" Style="{StaticResource IngredientsStyle}"/>
+                                    
+                                            <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                                    Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
+
+                                        </HorizontalStackLayout>
+                                        </Frame>
+                                </Grid>
+
+                                <!--Ingredients-->
+
+                                <!--<Grid Grid.Row="1" ColumnDefinitions=".4*,.3*,.3*">
+                                    <Label Text="" Grid.Row="0" Grid.Column="0" Style="{StaticResource IngredientsStyle}" />
+                                    <Label Text="Weight" Grid.Row="1" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />
+                                    <Label Text="Calories   " Grid.Row="2" Grid.Column="2" Style="{StaticResource IngredientsStyle}" />
+                                    <Label Text="Protein:" Grid.Row="3" Grid.Column="3" Style="{StaticResource IngredientsStyle}" />
+                                    <Label Text="Fat:" Grid.Row="4" Grid.Column="4" Style="{StaticResource IngredientsStyle}" />
+                                    <Label Text="Carbs:" Grid.Row="5" Grid.Column="5" Style="{StaticResource IngredientsStyle}" />
+
+
+                                </Grid>-->
+
+                                <CollectionView Grid.Row="2" x:Name="ingredientsCollectionView"
+                                                ItemsSource="{Binding Ingredients}"
+                                                ItemsLayout="GridItemsLayout"
+                                                Margin="2" IsEnabled="False">
+
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="2" ColumnDefinitions=".4*,.3*,.3*">
+                                                <!--<Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>-->
+
+                                                <Label Text="{Binding Name}"
+                                                       Grid.Row="0" Grid.Column="0" Style="{StaticResource IngredientsStyleBlack}"
+                                                       />
+
+                                                <Label Text="{Binding Path=Weight, StringFormat='{0} g'}" Grid.Row="0" 
+                                                       Grid.Column="1" Style="{StaticResource IngredientsStyleBlack}" />
+
+                                                <Label Text="{Binding Path=Calories, StringFormat='{0} cal'}" Grid.Row="0" 
+                                                       Grid.Column="2" Style="{StaticResource IngredientsStyleBlack}" />
+
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                                    <!--Protein, Fat, Carbs, Sugar-->
+
+                                    <Grid Grid.Row="3" ColumnDefinitions="*,*,*,*" 
+                                          Margin="10" ColumnSpacing="10">
+                                        <Frame Grid.Column="0" Style="{StaticResource TodayStatsFrameStyle}"
+                                               BackgroundColor="{StaticResource ProteinColor}">
+                                            <Label Text="{Binding LastHistoryItemProtein, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                                   TextColor="White"/>
+                                        </Frame>
+                                    
+                                        <Frame Grid.Column="1" Style="{StaticResource TodayStatsFrameStyle}"
+                                               BackgroundColor="{StaticResource FatColor}">
+                                            <Label Text="{Binding LastHistoryItemFat, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                                   TextColor="White"/>
+                                        </Frame>
+
+                                        <Frame Grid.Column="2" Style="{StaticResource TodayStatsFrameStyle}"
+                                               BackgroundColor="{StaticResource CarbsColor}">
+                                            <Label Text="{Binding LastHistoryItemCarbs, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                                   TextColor="White"/>
+                                        </Frame>
+
+                                        <Frame Grid.Column="3" Style="{StaticResource TodayStatsFrameStyle}"
+                                               BackgroundColor="{StaticResource SugarColor}">
+                                            <Label Text="{Binding LastHistoryItemSugar, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
+                                                   TextColor="White"/>
+                                        </Frame>
+                                    </Grid>
+
+                            </Grid>
+                        </Grid>
+                    </ScrollView>
+                    <!--Loading-->
+                    <Label x:Name="MakeFirstRecordLabel"
+                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        MaximumWidthRequest="200"
+                        FontSize="Title" FontAttributes="Bold"
+                        Text="Make your first record" Style="{StaticResource LabelAppStyle}"
+                        IsVisible="{Binding IsLabelVisible}"/>
+
+                    <ActivityIndicator
+                        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        IsVisible="{Binding IsLoading}"
+                        IsRunning="{Binding IsLoading}"
+                        Style="{StaticResource MainActivityIndicatorStyle}"
+        
+                        />
+                </AbsoluteLayout>
+            </Frame>
+        </Grid>
+
+            <!--Add New-->
+
+            <Button
+                    Text="New &#xFF0B;"
+                    Padding="14"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource ImageOptionStyle}"
+                    Command="{Binding NewImageCommand}">
+            
+
+            </Button>
+                            <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+
+        <!--<Button Text="Select"
+                Padding="0"
+                Grid.Row="2"
+                Grid.Column="0" Grid.ColumnSpan="1"
+                Style="{StaticResource ImageOptionStyle}"
+                Clicked="OnSelectImageClicked"/>-->
+
+
+        
+        <Grid.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Left" Swiped="OnSwipedLeft"/>
+            <SwipeGestureRecognizer Direction="Right" Swiped="OnSwipedRight"/>
+        </Grid.GestureRecognizers>
+    </Grid>
+
+    <!--<VerticalStackLayout
+        VerticalOptions="Center" 
+        HorizontalOptions="Center"
+        WidthRequest="200"
+        Spacing="10">
+        
+        <Frame
+            CornerRadius='20'
+            BorderColor='Black'
+            WidthRequest='200'
+            HeightRequest='100'>
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnFrameTapped"/>
+            </Frame.GestureRecognizers>
+
+            <VerticalStackLayout
+            VerticalOptions="Center" 
+            HorizontalOptions="Center">
+                <Label
+                    Text='Take photo'
+                    Scale='1'/>
+            </VerticalStackLayout>
+        </Frame>
+        
+        <Button Text="Take Image" Clicked="OnTakeImageClicked" Style="{StaticResource ImageOptionStyle}"/>
+        <Button Text="Select Image"
+                Clicked="OnSelectImageClicked"
+                Style="{StaticResource ImageOptionStyle}"
+                Command="{Binding SelectImageCommand}"/>
+
+        <Image x:Name="capturedImage" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
+
+    </VerticalStackLayout>-->
+</ContentPage>

@@ -1,40 +1,81 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="AICalories.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="AICalories.AppShell"
     xmlns:views="clr-namespace:AICalories.Views"
     xmlns:local="clr-namespace:AICalories"
-    Shell.FlyoutBehavior="Flyout"
-    FlyoutItem.IsVisible="True"
-    FlyoutHeader="camera.png"
-    Title="AICalories">
+    Shell.FlyoutBehavior="Disabled"
+    >
+    <!--FlyoutItem.IsVisible="False"
+    FlyoutHeader="camera.png"-->
+    <Shell.NavBarIsVisible>
+        False
+    </Shell.NavBarIsVisible>
+    <Shell.NavBarHasShadow>
+        False
+    </Shell.NavBarHasShadow>
+
+    <!--<TabBar>    
+        <ShellContent Title="Image" Icon="camera.png" Route="main" ContentTemplate="{DataTemplate views:PhotoSelectionPage}">
+            <views:PhotoSelectionPage/>
+        </ShellContent>
+        
+        <ShellContent Title="Context" Route="context"  ContentTemplate="{DataTemplate views:ContextPage}">
+            <views:ContextPage/>
+        </ShellContent>
+
+        <ShellContent Title="History" Route="history"
+             Icon="history2.png">
+            <views:HistoryPage/>
+        </ShellContent>
+    </TabBar>-->
+    <TabBar >
+        <Tab Title="Settings" Icon="settings.png" >
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" Route="settings" />
 
 
-    <TabBar>
-        <Tab Title="Photo"
-             Icon="camera.png">
-             <ShellContent ContentTemplate="{DataTemplate views:PhotoSelectionPage}" />
+        </Tab>
+        <Tab Title="Today" Icon="dashboard.png">
+            <ShellContent Title="Image" ContentTemplate="{DataTemplate views:MainPage}"
+                          Shell.NavBarIsVisible="False" Route="main">
+                <!--<views:PhotoSelectionPage/>-->
+            </ShellContent>
+            <!--<ShellContent Title="Context" ContentTemplate="{DataTemplate views:ContextPage}"
+                          Shell.NavBarIsVisible="False" Route="context">
+                <views:ContextPage/>
+            </ShellContent>-->
         </Tab>
         <Tab Title="History"
-             Icon="history2.png">
-             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+             Icon="history_clocks.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="history"/>
         </Tab>
     </TabBar>
-    
-    <FlyoutItem Title="Settings">
+    <!--<FlyoutItem Title="Settings">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:AppSettings}" />
+            <ShellContent ContentTemplate="{DataTemplate views:AppSettingsPage}" />
+       </Tab>
+    </FlyoutItem>-->
+    
+    <!--<FlyoutItem Title="Donate">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:DonatePage}" />
        </Tab>
     </FlyoutItem>
     
-    <FlyoutItem Title="About">
+    <FlyoutItem Title="Support">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:FlyoutMenuPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:SupportPage}" />
        </Tab>
-    </FlyoutItem>
+    </FlyoutItem>-->
     
-    <Shell.FlyoutHeaderTemplate>
+    <!--<FlyoutItem Title="About">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
+       </Tab>
+    </FlyoutItem>-->
+
+    <!--<Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="Black"
                   HeightRequest="200">
@@ -43,15 +84,33 @@
                        Opacity="0.6" />
                 <Label Text="AICalories"
                        Style="{StaticResource LabelAppStyle}"
+                       TextColor="White"
                        FontAttributes="Bold"
                        FontSize="30"/>
             </Grid>            
         </DataTemplate>
         
-    </Shell.FlyoutHeaderTemplate>
+    </Shell.FlyoutHeaderTemplate>-->
+
+    <!--<Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <VerticalStackLayout>
+                <BoxView Color="{StaticResource Gray100}"
+                         HeightRequest="1" Margin="10,0"/>
+                <Label
+                    Padding="20"
+                    Text="{Binding AppVersionLabel}"
+                    Style="{StaticResource LabelAppStyle}"
+                    FontSize="Caption"
+                    Opacity="0.2"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>-->
     <!--<ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="Views/PhotoSelectionView" />--> 
-
+    
 </Shell>

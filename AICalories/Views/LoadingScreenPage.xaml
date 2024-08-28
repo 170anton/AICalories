@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AICalories.Views.LoadingScreenPage"
+             Shell.NavBarIsVisible="False">
+    <Frame Margin="10" Padding="30" CornerRadius="20" Style="{StaticResource MainFrameStyle}">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
+            <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
+
+            <ActivityIndicator x:Name="RefreshIndicator" Grid.Row="2"
+                           IsRunning="{Binding IsRefreshing}"
+                           IsVisible="{Binding IsRefreshing}"
+                           Style="{StaticResource MainActivityIndicatorStyle}"/>
+
+            <Label Grid.Row="1" Text="{Binding DishName}" Style="{StaticResource LabelAppStyle}"/>
+            <Label Grid.Row="2" Text="{Binding Calories}" Style="{StaticResource LabelAppStyle}"/>
+            <Label Grid.Row="3" Text="{Binding TotalResultJSON}" FontSize="15"
+                   Style="{StaticResource LabelAppStyle}"/>
+        </Grid>
+    </Frame>
+</ContentPage>

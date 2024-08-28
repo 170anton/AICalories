@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:AICalories.CustomControls"
+             x:Class="AICalories.Views.ContextPage"
+             x:Name="Page">
+    
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>-->
+    <AbsoluteLayout>
+    <Grid RowDefinitions=".9*,.11*" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+        <ScrollView Grid.RowSpan="2">
+            <VerticalStackLayout x:Name="mainLayout"  Margin="0,0,0,90">
+                <Image x:Name="imagePreview" Source="{Binding MainImage}" Aspect="AspectFill"
+                       MaximumHeightRequest="1600"/>
+
+                <custom:CustomAutoHeightFrame  AutoHeight="True" Padding="30,20"
+                                               Style="{StaticResource MainFrameStyle}"
+                                               Margin="10,10,10,0">
+                    <Editor Text="{Binding UserInfo}" Placeholder="Help AI"  FontSize="Large"
+                                x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
+                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                                PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
+                                />
+
+                </custom:CustomAutoHeightFrame>
+
+
+                <!--Types-->
+                <Frame Style="{StaticResource MainFrameStyle}"
+                       Margin="10,10,10,0" Padding="0">
+                    <Grid RowDefinitions="Auto,*" >
+                        <!--<Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                               HorizontalTextAlignment="Start" Margin="20,20,20,0"/>-->
+                        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
+                              Padding="50,20" RowSpacing="0">
+                            <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
+                                                ConverterParameter='This is a diet food with ONLY diet ingredients. Count only the ingredients you see. Fat and sugar amount is significantly reduced', Mode=TwoWay}"
+                                   Value="This is a diet food with ONLY diet ingredients. Count only the ingredients you see. Fat and sugar amount is significantly reduced"/>
+
+                            <Label Text="Healthy" Style="{StaticResource LabelAppStyle}" Grid.Row="1"
+                                   HorizontalTextAlignment="Start" /> 
+                            <RadioButton Grid.Column="1" Grid.Row="1"
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
+                                                ConverterParameter='This is healthy food. Count only the ingredients you see. Fat and sugar amount is reduced', Mode=TwoWay}"
+                                   Value="This is healthy food. Count only the ingredients you see. Fat and sugar amount is reduced"/>
+
+                            <Label Text="Regular" Style="{StaticResource LabelAppStyle}" Grid.Row="2"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Grid.Row="2"
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
+                                                ConverterParameter='This is a regular food', Mode=TwoWay}"
+                                   Value="This is a regular food"/>  <!--Set to LoadSelectedOption() if changed-->
+                
+                            <Label Text="Unhealthy" Style="{StaticResource LabelAppStyle}" Grid.Row="3"
+                                   HorizontalTextAlignment="Start"/> 
+                            <RadioButton Grid.Column="1" Grid.Row="3"
+                                   CheckedChanged="RadioButton_CheckedChanged" 
+                                   IsChecked="{Binding SelectedOption, Converter={StaticResource StringEqualsConverter},
+                                                ConverterParameter='This is a junk food. Fat and sugar amount is increased', Mode=TwoWay}"
+                                   Value="This is a junk food. Fat and sugar amount is increased"/>
+                        </Grid>
+                    </Grid>
+                </Frame>
+
+                <!--<Frame Style="{StaticResource MainFrameStyle}"
+                       Margin="10,5,10,0" Padding="0">
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Label Text="Hints" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
+                               HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
+                        <Button Grid.Column="1" 
+                                Command="{Binding AddNewContextCommand}" 
+                                CommandParameter="{x:Reference contextLayout}" 
+                                Text="Add" Margin="20,20,20,0"
+                                />
+                        <VerticalStackLayout x:Name="contextLayout" Grid.Row="1" Grid.ColumnSpan="2"
+                                             Padding="10,20,40,20" Spacing="0"
+                                             >
+                            
+
+                        </VerticalStackLayout>
+                    </Grid>
+
+                </Frame>-->
+            </VerticalStackLayout>
+        </ScrollView>
+        <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
+            
+            <Button  Style="{StaticResource ImageOptionStyle}" Padding="13"
+                ImageSource="refresh_white.png" Margin="10,10,0,10" Clicked="OnNewImageClicked"/>
+            <Button Grid.Column="1" Style="{StaticResource ImageOptionStyle}"
+                Text="Confirm" Margin="10" Command="{Binding ConfirmCommand}"/>
+        </Grid>
+    </Grid>
+    </AbsoluteLayout>
+</ContentPage>

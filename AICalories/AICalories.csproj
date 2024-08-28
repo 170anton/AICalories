@@ -13,6 +13,7 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
+
 		<OutputType>Exe</OutputType>
 		<RootNamespace>AICalories</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -24,11 +25,11 @@
 		<ApplicationTitle>AICalories</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.aicalories</ApplicationId>
+		<ApplicationId>com.auxiliumratio.aicalories</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>0.3.0</ApplicationDisplayVersion>
-		<ApplicationVersion>2</ApplicationVersion>
+		<ApplicationDisplayVersion>0.9.0</ApplicationDisplayVersion>
+		<ApplicationVersion>9</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
@@ -37,26 +38,42 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.3.0</ReleaseVersion>
+		<ReleaseVersion>0.9.0</ReleaseVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>iPhone Developer</CodesignKey>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 	  <WarningLevel>4</WarningLevel>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidDexTool>d8</AndroidDexTool>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	  <DebugSymbols>true</DebugSymbols>
+	  <WarningLevel>4</WarningLevel>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	  <CodesignKey>Mac Developer</CodesignKey>
+	  <PackageSigningKey>3rd Party Mac Developer Installer</PackageSigningKey>
+	</PropertyGroup>
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\icons8-delete.svg" />
+	</ItemGroup>
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
-
-		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
@@ -65,29 +82,32 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiIcon Include="Resources\AppIcon\appicon.jpg">
+		  <Color>#f5df73</Color>
+		</MauiIcon>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.12.0" />
-		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.70" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.70" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="OpenAI" Version="1.11.0" />
-		<PackageReference Include="SkiaSharp" Version="2.88.8" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-		<PackageReference Include="Xam.Plugin.Media" Version="6.0.2" />
-		<PackageReference Include="AWSSDK.S3" Version="3.7.310.8" />
-		<PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400" />
-		<PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="6.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
+		<PackageReference Include="Camera.MAUI" Version="1.5.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Models/" />
+	  <Folder Include="DI\" />
+	  <Folder Include="Converters\" />
+	  <Folder Include="CustomControls\" />
+	  <Folder Include="Resources\Splash\" />
+	  <Folder Include="Resources\xml\" />
+	  <Folder Include="Interfaces\" />
+	  <Folder Include="Services\" />
+	  <Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -100,5 +120,64 @@
 	  <None Remove="Resources\Images\icons8-history-96.png" />
 	  <None Remove="Resources\Images\icons8-history-100.png" />
 	  <None Remove=".gitignore" />
+	  <None Remove="Resources\Layout\activity_main.xml" />
+	  <None Remove="DI\" />
+	  <None Remove="Converters\" />
+	  <None Remove="CustomControls\" />
+	  <None Remove="Resources\Images\icons8-settings.svg" />
+	  <None Remove="Resources\Images\settings.svg" />
+	  <None Remove="Resources\Images\fontello.svg" />
+	  <None Remove="Resources\Images\camera-svgrepo-com.svg" />
+	  <None Remove="Resources\Images\camera3.svg" />
+	  <None Remove="Resources\Images\camera4.svg" />
+	  <None Remove="Resources\Images\camera_whiteold.png" />
+	  <None Remove="Resources\Images\camera_boldold.png" />
+	  <None Remove="Resources\Images\cameraold.png" />
+	  <None Remove="Resources\Images\camera.svg" />
+	  <None Remove="Resources\Images\camera-svgrepo-com.png" />
+	  <None Remove="Resources\Images\camera.png" />
+	  <None Remove="Resources\Images\noun-camera-7084717.svg" />
+	  <None Remove="Resources\Images\camera-svgrepo-com %281%29.png" />
+	  <None Remove="Resources\Images\camera-svgrepo-com %281%29.svg" />
+	  <None Remove="Resources\Images\settings_white.svg" />
+	  <None Remove="Resources\Splash\" />
+	  <None Remove="Resources\Splash\splashmain.jpg" />
+	  <None Remove="Resources\AppIcon\splashmain.jpg" />
+	  <None Remove="Resources\AppIcon\iconmain.jpg" />
+	  <None Remove="Resources\xml\" />
+	  <None Remove="Resources\xml\file_paths.xml" />
+	  <None Remove="Resources\Images\other_white.png" />
+	  <None Remove="Resources\Images\other_black.png" />
+	  <None Remove="Interfaces\" />
+	  <None Remove="Resources\Images\icons8-refresh-100.png" />
+	  <None Remove="Resources\Images\icons8-gallery-96.png" />
+	  <None Remove="Resources\Images\icons8-torch-64.png" />
+	  <None Remove="Services\" />
+	  <None Remove="Repositories\" />
+	  <None Remove="Resources\Images\icons8-delete.svg" />
+	  <None Remove="Resources\Images\dashboard.png" />
+	  <None Remove="Resources\Images\history_clocks.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splashmain.jpg" Color="#f5df73" />
+
+	</ItemGroup>
+	<ItemGroup>
+	  <AndroidResource Include="Resources\xml\file_paths.xml">
+	    <SubType></SubType>
+	    <Generator></Generator>
+	  </AndroidResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Remove="Models\APIManager.cs" />
+	  <Compile Remove="Models\KeyVaultService.cs" />
+	  <Compile Remove="Models\CutImage.cs" />
+	  <Compile Remove="Views\BlurEffectView.xaml.cs" />
+	  <Compile Remove="Views\LoadingScreenPage.xaml.cs" />
+	  <Compile Remove="Models\ResponseData.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Remove="Views\BlurEffectView.xaml" />
+	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:custom="clr-namespace:AICalories.CustomControls"
+             x:Class="AICalories.Views.SupportPage"
+             >
+    
+    <AbsoluteLayout>
+    <ScrollView
+           AbsoluteLayout.LayoutBounds="0,0,1,1"
+           AbsoluteLayout.LayoutFlags="All" >
+    <Grid RowDefinitions="Auto,Auto,Auto" Padding="10" RowSpacing="5">
+            
+        <Frame Style="{StaticResource ShadowFrameStyle}">
+
+            <VerticalStackLayout>
+                <!--<Label Text="Email" />-->
+                <Entry Text="{Binding Email}" Placeholder="Enter your email" FontSize="Large"
+                       />
+
+
+            </VerticalStackLayout>
+        </Frame>
+        <custom:CustomAutoHeightFrame AutoHeight="True" Grid.Row="1" Style="{StaticResource ShadowFrameStyle}">
+            <VerticalStackLayout>
+                
+                <!--<Label Text="Question" />-->
+                <Editor Text="{Binding Question}" Placeholder="Enter your question"  FontSize="Large"
+                        x:Name="editor" MaxLength="1000" MaximumHeightRequest="800" AutoSize="TextChanges" />
+                  
+            </VerticalStackLayout>
+
+        </custom:CustomAutoHeightFrame>
+        
+        <Button Text="Send" Command="{Binding SendCommand}" IsEnabled="{Binding IsSending, Converter={StaticResource InverseBooleanConverter}}" 
+                Grid.Row="2" HeightRequest="50"
+                CornerRadius="20" FontSize="Large"/>
+            
+
+    </Grid>
+
+    </ScrollView>
+        
+    <ActivityIndicator
+        IsRunning="{Binding IsSending}"
+        Color="Black"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        Scale="2"
+        IsVisible="{Binding IsSending}"
+        
+        AbsoluteLayout.LayoutBounds="0.5,0.3,-1,-1"
+        AbsoluteLayout.LayoutFlags="PositionProportional" 
+        />
+    </AbsoluteLayout>
+</ContentPage>

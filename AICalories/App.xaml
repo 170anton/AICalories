@@ -2,31 +2,202 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AICalories"
+             xmlns:converters="clr-namespace:AICalories.Converters"
              x:Class="AICalories.App">
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <!--<ResourceDictionary Source="Resources/Styles/LightTheme.xaml"/>-->
+                <!--<ResourceDictionary Source="Resources/Styles/DarkTheme.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
 
+            
+            <converters:StringEqualsConverter x:Key="StringEqualsConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:MaxLengthConverter x:Key="MaxLengthConverter"/>
+
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Editor">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="UbuntuRegular" />
+            </Style>
+
+
             <Style x:Key="ImageOptionStyle" TargetType="Button">
-                <Setter Property="Margin" Value="20,0,20,20" />
+                <!--<Setter Property="Margin" Value="20,0,20,20" />-->
                 <!--<Setter Property="BackgroundColor" Value="DarkMagenta"/>-->
+                <Setter Property="CornerRadius" Value="30"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="FontSize" Value="Title" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="Padding" Value="0" />
+                
+                <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+                <Setter Property="Opacity" Value="0.8" />
+                <Setter Property="BorderColor" Value="{StaticResource SoftYellow}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource SoftYellow}" />
+
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                
+                <!--<Setter Property="BorderColor" Value="{StaticResource Black}" />
+                <Setter Property="BorderWidth" Value="1" />-->
+                
+                <!--<Setter Property="Shadow">
+                    <Setter.Value>
+                        <Shadow Brush="Black"
+                            Offset="10,10"
+                            Radius="15"
+                            Opacity="0.5"/>
+
+                    </Setter.Value>
+
+                </Setter>-->
+            </Style>
+            
+            <Style x:Key="IngredientsStyle" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="MaxLines" Value="1"/>
+                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <!--<Setter Property="BackgroundColor" Value="Transparent"/>-->
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            </Style>
+            
+            <Style x:Key="IngredientsStyleBlack" TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="MaxLines" Value="3"/>
+                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                <Setter Property="Margin" Value="1,2"/>
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
 
             
             <Style x:Key="LabelAppStyle" TargetType="Label">
-                <Setter Property="FontFamily" Value="UbuntuRegular"/>
                 <Setter Property="VerticalTextAlignment" Value="Center"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
-                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
 
             </Style>
+            
+            <Style x:Key="ShadowFrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="Padding" Value="30"/>
+
+            </Style>
+            
+            
+            <Style x:Key="MainFrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False"/>
+                <Setter Property="CornerRadius" Value="30"/>
+                <Setter Property="Padding" Value="30"/>
+                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+
+            </Style>
+            
+            <Style x:Key="TodayStatsFrameStyle" TargetType="Frame">
+                <Setter Property="HasShadow" Value="False"/>
+                <Setter Property="CornerRadius" Value="35"/>
+                <!--<Setter Property="WidthRequest" Value="80"/>
+                <Setter Property="HeightRequest" Value="80"/>-->
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="2"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Opacity" Value="1" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+
+            </Style>
+            
+            <Style x:Key="TodayStatsBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="35" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="StrokeThickness" Value="5" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Opacity" Value="1" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="Stroke" Value="{StaticResource SoftYellow}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+
+            </Style>
+            
+            
+            <Style x:Key="RadioButtonAppStyle" TargetType="RadioButton">
+                <!--<Setter Property="FontFamily" Value="UbuntuRegular"/>-->
+                <!--<Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>-->
+                <!--<Setter Property="FontSize" Value="Large"/>-->
+                <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+                
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
+                
+                <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+
+            </Style>
+
+
+            
+            
+            <Style x:Key="MainSwitchStyle" TargetType="Switch">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+                                    <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource SoftYellow}, Dark={StaticResource SoftYellow}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+                                    <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            
+            <Style x:Key="MainActivityIndicatorStyle" TargetType="ActivityIndicator">
+                <Setter Property="Color" Value="{StaticResource SoftYellow}"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="Scale" Value="2"/>
+            </Style>
+
+            
+
 
         </ResourceDictionary>
     </Application.Resources>

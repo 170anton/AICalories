@@ -16,12 +16,6 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         InitializeComponent();
         _viewModel = new HistoryVM();
         BindingContext = _viewModel;
-        //Task.Run(() => _viewModel.LoadData()); //do not await
-    }
-    protected async override void OnAppearing()
-    {
-        base.OnAppearing();
-        //_viewModel.LoadData();
     }
 
     private void ShowOverlay()
@@ -59,15 +53,12 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
                 return;
             }
 
-            if (item.FirstOrDefault() is HistoryItem selectedItem)
+            if (item.FirstOrDefault() is MealItem selectedItem)
             {
-                bool delete = await DisplayAlert("Delete Item", "Do you want to delete this item?", "Yes", "No");
+                bool delete = await DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
                 if (delete)
                 {
-                    if (_viewModel != null)
-                    {
-                        _viewModel.DeleteItemCommand.Execute(selectedItem);
-                    }
+                    _viewModel.DeleteItemCommand.Execute(selectedItem);
                 }
             }
             // Deselect the item
@@ -80,4 +71,20 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         
     }
 
+    private void OnSwipedRight(object sender, SwipedEventArgs e)
+    {
+        Shell.Current.GoToAsync("//main");
+    }
+
+    protected override bool OnBackButtonPressed()
+    {
+        Shell.Current.GoToAsync("//main");
+        return true;
+    }
+
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.CheckForUpdate();
+    }
 }
