@@ -151,6 +151,11 @@
 
 
             <!--Last Meal Data-->
+        <Grid Grid.Row="1"  RowDefinitions="Auto,*">
+            <!--<Label Grid.Row="0" Text="Your last meal" Style="{StaticResource LabelAppStyle}"
+                        FontAttributes="Bold" FontSize="Title"
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>-->
+
 
             <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
                 <AbsoluteLayout >
@@ -305,7 +310,7 @@
                         />
                 </AbsoluteLayout>
             </Frame>
-
+        </Grid>
 
             <!--Add New-->
 

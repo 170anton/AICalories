@@ -24,18 +24,18 @@
                     <DataTemplate>
                     
                         <Frame
-                               Padding="0" Margin="0,20,0,5" CornerRadius="10"
+                               Padding="0" Margin="0,10,0,5" CornerRadius="10"
                                Style="{StaticResource MainFrameStyle}">
                             <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
-                                Margin="5" Padding="5"
-                                RowSpacing="5" ColumnSpacing="5">
+                                Margin="5" Padding="10"
+                                RowSpacing="10" ColumnSpacing="5">
                                 <Label
                                     Grid.Column="0"
                                     Style="{StaticResource LabelAppStyle}"
                                     HorizontalOptions="Start"
                                     Margin="10,0,0,0"
                                     Text="{Binding Title}" FontAttributes="Bold"
-                                    FontSize="Medium"/>
+                                    FontSize="Large"/>
                                 <HorizontalStackLayout Grid.Row="1" Grid.Column="0">
                                     <Label
                                         Style="{StaticResource LabelAppStyle}"
@@ -43,18 +43,18 @@
                                         VerticalOptions="Center"
                                         Margin="10,1,0,0"
                                         Text="Total: "
-                                        FontSize="Small"/>
+                                        FontSize="Medium"/>
 
                                     <Label
                                         Style="{StaticResource LabelAppStyle}"
                                         HorizontalOptions="Start"
                                         Margin="10,0,0,0"
                                         Text="{Binding TotalCalories}"
-                                        FontSize="Medium"/>
+                                        FontSize="Large"/>
                                     <Label
                                         Style="{StaticResource LabelAppStyle}"
                                         HorizontalOptions="Start"
-                                        Margin="5,0,0,0"
+                                        Margin="5,1,0,0"
                                         Text="calories"
                                         FontSize="Medium"/>
 
@@ -82,7 +82,7 @@
                                        Margin="0,0,10,0"/>
                                 <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
                                        HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                       Opacity="0.6"/>
+                                       Opacity="0.7"/>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
                             </Grid>
