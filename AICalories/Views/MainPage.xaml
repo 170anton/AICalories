@@ -224,8 +224,7 @@
                                 </Grid>-->
 
                                 <CollectionView Grid.Row="2" x:Name="ingredientsCollectionView"
-                                                ItemsSource="{Binding Ingredients}"
-                                                ItemsLayout="GridItemsLayout"
+                                                ItemsSource="{Binding Ingredients}" 
                                                 Margin="2" IsEnabled="False">
 
                                     <CollectionView.ItemTemplate>

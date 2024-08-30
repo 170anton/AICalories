@@ -82,7 +82,6 @@
 
                                 <CollectionView Grid.Row="2" x:Name="ingredientsCollectionView"
                                                 ItemsSource="{Binding Ingredients}"
-                                                ItemsLayout="GridItemsLayout"
                                                 Margin="2" IsEnabled="False">
 
                                     <CollectionView.ItemTemplate>
