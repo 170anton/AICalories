@@ -32,11 +32,11 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
             });
-//#if ANDROID
-//        builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>(); //todo check for ios
-//#elif IOS
-//        builder.Services.AddSingleton<IKeyboardHelper, AICalories.Platforms.iOS.KeyboardHelper>();
-//#endif
+#if ANDROID
+        builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>();
+        //#elif IOS
+        //        builder.Services.AddSingleton<IKeyboardHelper, AICalories.Platforms.iOS.KeyboardHelper>();
+#endif
 
 
         // Register the view model service

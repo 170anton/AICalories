@@ -313,12 +313,12 @@ namespace AICalories.ViewModels
             catch (JsonSerializationException)
             {
                 _alertService.ShowError("Decoding error occurred.");
-                await _navigationService.NavigateToMainPageAsync();
+                await _navigationService.PopModalAsync();
             }
             catch (BadImageFormatException)
             {
                 _alertService.ShowError("No connection to AI server");
-                await _navigationService.NavigateToMainPageAsync();
+                await _navigationService.PopModalAsync();
             }
             catch (FileLoadException)
             {
@@ -328,7 +328,7 @@ namespace AICalories.ViewModels
             catch (Exception)
             {
                 _alertService.ShowUnexpectedError();
-                await _navigationService.NavigateToMainPageAsync();
+                await _navigationService.PopModalAsync();
             }
         }
 
@@ -520,9 +520,8 @@ namespace AICalories.ViewModels
                 var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
                 var keyStorageService = new KeyStorageService(encryptionKey);
 
-
-
-                _apiKeys = keyStorageService.RetrieveKeys();
+                //_apiKeys = keyStorageService.RetrieveKeys();
+                _apiKeys.OpenAIAPIKey = TempApiKeyProvider.ConvertSecureStringToString(TempApiKeyProvider.GetApiKey());
                 if (_apiKeys?.OpenAIAPIKey == null)
                 {
                     if (_apiKeys?.OpenAIAPIKeyReserved == null)

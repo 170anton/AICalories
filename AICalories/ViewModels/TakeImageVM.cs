@@ -101,10 +101,11 @@ namespace AICalories.ViewModels
 
                 await CheckShowReviewKey();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 await _navigationService.PopModalAsync();
                 _alertService.ShowError("Failed to load image");
+                Console.WriteLine(ex.Message);
             }
 
         }
