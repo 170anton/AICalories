@@ -313,12 +313,14 @@ namespace AICalories.ViewModels
             catch (JsonSerializationException)
             {
                 _alertService.ShowError("Decoding error occurred.");
-                await _navigationService.PopModalAsync();
+                //await _navigationService.PopModalAsync();
+                IsLoading = false;
             }
             catch (BadImageFormatException)
             {
                 _alertService.ShowError("No connection to AI server");
-                await _navigationService.PopModalAsync();
+                //await _navigationService.PopModalAsync();
+                IsLoading = false;
             }
             catch (FileLoadException)
             {
@@ -328,7 +330,8 @@ namespace AICalories.ViewModels
             catch (Exception)
             {
                 _alertService.ShowUnexpectedError();
-                await _navigationService.PopModalAsync();
+                //await _navigationService.PopModalAsync();
+                IsLoading = false;
             }
         }
 
@@ -520,8 +523,8 @@ namespace AICalories.ViewModels
                 var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
                 var keyStorageService = new KeyStorageService(encryptionKey);
 
-                //_apiKeys = keyStorageService.RetrieveKeys();
-                _apiKeys.OpenAIAPIKey = TempApiKeyProvider.ConvertSecureStringToString(TempApiKeyProvider.GetApiKey());
+                _apiKeys = new ApiKeys();
+                _apiKeys.OpenAIAPIKey = "sk-proj-QgMA" + "bggM8w9pUhiyP2BvT3BlbkFJ" + "Cp1pm1hywYBWL1QNkG1M";
                 if (_apiKeys?.OpenAIAPIKey == null)
                 {
                     if (_apiKeys?.OpenAIAPIKeyReserved == null)
@@ -535,7 +538,7 @@ namespace AICalories.ViewModels
                 return;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
