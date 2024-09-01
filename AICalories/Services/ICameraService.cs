@@ -3,10 +3,11 @@ namespace AICalories.Services
 {
     public interface ICameraService
     {
-        Task<Stream> TakePhotoAsync();
+        //Task<Stream> TakePhotoAsync();
         void EnableTorch();
         void DisableTorch();
         bool IsTorchEnabled();
+        void ToggleTorch();
     }
 }
 

@@ -4,7 +4,7 @@ using AICalories.Models;
 using AICalories.Services;
 using AICalories.ViewModels;
 using AICalories.Views;
-using Camera.MAUI;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
 
@@ -17,16 +17,18 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-            .UseMauiCameraView()
-			//.ConfigureMauiHandlers(handlers =>
-			//{
-			//	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));
-			////})
-			//.ConfigureMauiHandlers(handlers =>
-			//{
-			//	handlers.AddHandler(typeof(SKCanvasView), typeof(SKCanvasViewHandler));
-			//})
-			.ConfigureFonts(fonts =>
+
+            .UseMauiCommunityToolkitCamera()
+
+            //.ConfigureMauiHandlers(handlers =>
+            //{
+            //	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));
+            ////})
+            //.ConfigureMauiHandlers(handlers =>
+            //{
+            //	handlers.AddHandler(typeof(SKCanvasView), typeof(SKCanvasViewHandler));
+            //})
+            .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
@@ -44,7 +46,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<IImageInfo, ImageInfo>();  //todo try Transient
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IAlertService, AlertService>();
-        //builder.Services.AddSingleton<ICameraService, CameraService>();
         builder.Services.AddTransient<ICameraService, CameraService>();
 
         builder.Services.AddSingleton<ViewModelLocator>();
@@ -60,8 +61,6 @@ public static class MauiProgram
         builder.Services.AddTransient<TakeImagePage>();
         builder.Services.AddTransient<ContextPage>();
         builder.Services.AddTransient<ResultPage>();
-
-
 
 
 #if DEBUG

@@ -23,6 +23,16 @@ public partial class ResultPage : ContentPage
         BindingContext = _viewModel;
     }
 
+    //private void OnNewImageClicked(System.Object sender, System.EventArgs e)
+    //{
+
+    //    var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+
+    //    Shell.Current.Navigation.PopModalAsync();
+    //    Shell.Current.Navigation.PushModalAsync(takeImagePage);
+
+    //}
+
     protected override bool OnBackButtonPressed()
     {
         if (_viewModel.IsLoading == false) //should be check on completed result
@@ -36,7 +46,7 @@ public partial class ResultPage : ContentPage
     {
         base.OnAppearing();
 
-        await _viewModel.ProcessImage();
+        _viewModel.ProcessImage();
 
 
     }

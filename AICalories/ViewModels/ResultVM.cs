@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
@@ -20,6 +21,7 @@ namespace AICalories.ViewModels
         private bool _isLoading;
         private bool _isLabelVisible;
         private bool _isHistoryGridVisible;
+        private MealItem _lastHistoryItem;
         private string _lastHistoryItemImage;
         private string _lastHistoryItemName;
         private string _lastHistoryItemCalories;
@@ -42,7 +44,21 @@ namespace AICalories.ViewModels
 
         private IImageInfo _imageInfo;
 
+        public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand NewImageCommand { get; }
+
         #region Properties
+
+        public MealItem LastHistoryItem
+        {
+            get => _lastHistoryItem;
+            set
+            {
+                _lastHistoryItem = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsLabelVisible
         {
@@ -274,8 +290,33 @@ namespace AICalories.ViewModels
             _imageInfo = imageInfo;
 
             Ingredients = new ObservableCollection<IngredientItem>();
-
+            SaveCommand = new Command(async () => await OnSaveAsync());
+            DeleteCommand = new Command(async () => await OnDeleteAsync());
+            NewImageCommand = new Command(async () => await OnNewImageAsync());
         }
+
+        private async Task OnSaveAsync()
+        {
+            await _navigationService.PopModalAsync();
+        }
+
+        private async Task OnDeleteAsync()
+        {
+            bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+            if (delete)
+            {
+                await App.HistoryItemRepository.DeleteMealItemAsync(LastHistoryItem);
+            }
+            await _navigationService.PopModalAsync();
+        }
+
+        private async Task OnNewImageAsync()
+        {
+            _navigationService.PopModalAsync();
+            await _navigationService.NavigateToTakeImagePageAsync();
+        }
+
+        #region Process Image
 
         public async Task ProcessImage() //todo
         {
@@ -358,6 +399,7 @@ namespace AICalories.ViewModels
         {
             try
             {
+                LastHistoryItem = mealItem;
                 LastHistoryItemImage = mealItem.ImagePath;
                 LastHistoryItemName = mealItem.MealName;
                 LastHistoryItemCalories = mealItem.Calories.ToString();
@@ -390,7 +432,6 @@ namespace AICalories.ViewModels
         //}
 
 
-        #region Process Image
 
         //public async Task<ResponseData> ProcessImage(string imagePath)
         //{

@@ -368,7 +368,7 @@ public class MainVM : INotifyPropertyChanged
         {
             IsLabelVisible = false;
             IsLoading = true;
-            await Task.Delay(500);
+            //await Task.Delay(500);
             var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
             IsLoading = false;
 
@@ -379,7 +379,7 @@ public class MainVM : INotifyPropertyChanged
                 return;
             }
 
-            //if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
+            if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
             {
                 _lastHistoryItem = lastMeal;
                 LastHistoryItemImage = lastMeal.ImagePath;

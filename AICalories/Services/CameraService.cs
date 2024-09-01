@@ -1,5 +1,5 @@
 ﻿using System;
-using Camera.MAUI;
+using CommunityToolkit.Maui.Views;
 
 namespace AICalories.Services
 {
@@ -12,32 +12,41 @@ namespace AICalories.Services
             _cameraView = cameraView;
         }
 
-        public async Task<Stream> TakePhotoAsync()
-        {
-            return await _cameraView.TakePhotoAsync();
-        }
+        //public async Task<Stream> TakePhotoAsync()
+        //{
+        //    return await _cameraView.CaptureImage(new CancellationToken());
+        //}
 
         public void EnableTorch()
         {
-            _cameraView.TorchEnabled = true;
-            _cameraView.FlashMode = FlashMode.Enabled;
+            _cameraView.IsTorchOn = true;
+            _cameraView.CameraFlashMode = CommunityToolkit.Maui.Core.Primitives.CameraFlashMode.On;
         }
 
         public void DisableTorch()
         {
-            _cameraView.TorchEnabled = false;
-            _cameraView.FlashMode = FlashMode.Disabled;
+            _cameraView.IsTorchOn = false;
+            _cameraView.CameraFlashMode = CommunityToolkit.Maui.Core.Primitives.CameraFlashMode.Off;
         }
 
         public bool IsTorchEnabled()
         {
-            return _cameraView.TorchEnabled;
+            return _cameraView.IsTorchOn;
         }
 
-        public async Task DisposeCamera()
+        public void ToggleTorch()
         {
-            await _cameraView.StopCameraAsync();
-            
+            _cameraView.IsTorchOn = !_cameraView.IsTorchOn;
+
+            if (_cameraView.IsTorchOn)
+                _cameraView.CameraFlashMode = CommunityToolkit.Maui.Core.Primitives.CameraFlashMode.On;
+            else
+                _cameraView.CameraFlashMode = CommunityToolkit.Maui.Core.Primitives.CameraFlashMode.Off;
+        }
+
+        public void DisposeCamera()
+        {
+            _cameraView.StopCameraPreview();
         }
     }
 

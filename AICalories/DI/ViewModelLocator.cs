@@ -2,7 +2,7 @@
 using AICalories.Interfaces;
 using AICalories.Services;
 using AICalories.ViewModels;
-using Camera.MAUI;
+using CommunityToolkit.Maui.Views;
 
 namespace AICalories.DI
 {
@@ -20,7 +20,6 @@ namespace AICalories.DI
         public MainVM GetMainViewModel() => _serviceProvider.GetRequiredService<MainVM>();
         public TakeImageVM GetTakeImageViewModel(CameraView cameraView)
         {
-            // Create CameraService with cameraView
             var cameraService = new CameraService(cameraView);
             var viewModelService = _serviceProvider.GetService<IViewModelService>();
             var imageInfo = _serviceProvider.GetService<IImageInfo>();

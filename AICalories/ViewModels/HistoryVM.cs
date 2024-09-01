@@ -59,7 +59,7 @@ namespace AICalories.ViewModels
             {
                 IsLabelVisible = false;
                 IsLoading = true;
-                await Task.Delay(500);
+                //await Task.Delay(500);
 
                 var countInDb = await App.HistoryItemRepository.GetMealItemsCountAsync();
                 var countInColl = DayGroupedItems.SelectMany(grouped => grouped).Count();

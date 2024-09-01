@@ -3,7 +3,10 @@ using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
 using AICalories.ViewModels;
-using Camera.MAUI;
+using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Maui.Camera;
+using CommunityToolkit.Maui.Core.Primitives;
+using CommunityToolkit.Maui.Core;
 
 namespace AICalories.Views;
 
@@ -26,7 +29,43 @@ public partial class TakeImagePage : ContentPage
         _viewModel = viewModelLocator.GetTakeImageViewModel(cameraView);
         BindingContext = _viewModel;
 
-        cameraView.CamerasLoaded += CameraView_CamerasLoaded;
+        cameraView.Loaded += CameraView_CamerasLoaded;
+        //cameraView.MediaCaptured += CameraView_Cuptured;
+    }
+
+    private async void CaptureButton_Clicked(System.Object sender, System.EventArgs e)
+    {
+        try
+        {
+            await cameraView.CaptureImage(CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void CameraView_Captured(object? sender, MediaCapturedEventArgs e)
+    {
+        await MainThread.InvokeOnMainThreadAsync(async () => //todo
+        {
+            try
+            {
+                var imageName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+                var imagePath = Path.Combine(FileSystem.CacheDirectory, imageName);
+
+                await using (var localFileStream = File.Create(imagePath))
+                {
+                    e.Media.CopyTo(localFileStream);
+                }
+                cameraView.StopCameraPreview();
+                _viewModel.CaptureCommand.Execute(imagePath);
+            }
+            catch (Exception ex)
+            {
+                //todo
+            }
+        });
     }
 
     //private async void OnCaptureButtonClicked(object sender, EventArgs e)
@@ -78,7 +117,7 @@ public partial class TakeImagePage : ContentPage
 
     //    Shell.Current.Navigation.PopModalAsync();
     //    await Shell.Current.Navigation.PushModalAsync(new ContextPage());
-        
+
 
     //}
     //private async void OnToggleTorchButtonClicked(object sender, EventArgs e)
@@ -91,30 +130,18 @@ public partial class TakeImagePage : ContentPage
         cameraView.IsVisible = !cameraView.IsVisible;
         captureButton.IsVisible = !captureButton.IsVisible;
         galleryButton.IsVisible = !galleryButton.IsVisible;
-        imagePreview.IsVisible = !imagePreview.IsVisible;
     }
 
     private void CameraView_CamerasLoaded(object sender, EventArgs e)
     {
-        if (cameraView.NumCamerasDetected > 0)
-        {
-            cameraView.Camera = cameraView.Cameras.First();
+
+        cameraView.ImageCaptureResolution = new Size(1440, 1080);
 
 
-            cameraView.StartCameraAsync(new Size(1440, 1080)); // todo make mode resolutions if unavailable 0.75
-            //cameraView.StartCameraAsync(cameraView.Camera.AvailableResolutions.OrderByDescending
-            //            (size => size.Width * size.Height).FirstOrDefault());
-            cameraView.ForceAutoFocus();
-        }
     }
 
     protected override bool OnBackButtonPressed()
     {
-        if (imagePreview.IsVisible)
-        {
-            ToggleVisibility();
-            return true;
-        }
 
         Shell.Current.Navigation.PopModalAsync();
         //Shell.Current.GoToAsync("//main");
@@ -125,11 +152,11 @@ public partial class TakeImagePage : ContentPage
     {
         base.OnDisappearing();
 
-        if (cameraView.TorchEnabled)
-        {
-            cameraView.TorchEnabled = false;
-        }
-        cameraView.StopCameraAsync();
+        //if (cameraView.TorchEnabled)
+        //{
+        //    cameraView.TorchEnabled = false;
+        //}
+        //cameraView.StopCameraAsync();
     }
 
     protected override void OnAppearing()

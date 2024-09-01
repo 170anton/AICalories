@@ -4,6 +4,9 @@
 		<provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
+		<meta-data
+            android:name="com.google.android.gms.ads.ca-app-pub-9280044316923474~6285192079"
+            android:value="ca-app-pub-9280044316923474/7763621828" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

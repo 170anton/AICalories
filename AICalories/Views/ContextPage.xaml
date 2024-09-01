@@ -95,13 +95,29 @@
                 </Frame>-->
             </VerticalStackLayout>
         </ScrollView>
-        <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
-            
-            <Button  Style="{StaticResource ImageOptionStyle}" Padding="13"
-                ImageSource="refresh_white.png" Margin="10,10,0,10" Clicked="OnNewImageClicked"/>
-            <Button Grid.Column="1" Style="{StaticResource ImageOptionStyle}"
-                Text="Confirm" Margin="10" Command="{Binding ConfirmCommand}"/>
+            <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
+
+                <Border Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="10,10,0,10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30,0,30,0"/>
+                    </Border.StrokeShape>
+                    <Button  Style="{StaticResource ImageOptionStyle}" Padding="16"
+                        ImageSource="refresh_white.png" CornerRadius="0"
+                        Command="{Binding NewImageCommand}"/>
+                    
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="2,10,10,10" >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="0,30,0,30"/>
+                    </Border.StrokeShape>
+                    <Button Style="{StaticResource ImageOptionStyle}"
+                        Text="Confirm    " Padding="13" CornerRadius="0"
+                        Command="{Binding ConfirmCommand}"/>
+                 </Border>
+            </Grid>
         </Grid>
-    </Grid>
     </AbsoluteLayout>
 </ContentPage>

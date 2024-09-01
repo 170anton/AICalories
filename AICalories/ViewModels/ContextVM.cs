@@ -80,7 +80,8 @@ namespace AICalories.ViewModels
         #endregion
 
         public ICommand ConfirmCommand { get; }
-        public ICommand AddNewContextCommand { get; }
+        public ICommand NewImageCommand { get; }
+        //public ICommand AddNewContextCommand { get; }
 
 
 
@@ -97,9 +98,9 @@ namespace AICalories.ViewModels
             _imageInfo = imageInfo;
             MainImage = _imageInfo.ImagePath;
 
-            //ConfirmCommand = new Command(async () => await Send());
-            AddNewContextCommand = new Command<VerticalStackLayout>(async (contextLayout) => await AddNewContextAsync(contextLayout));
+            //AddNewContextCommand = new Command<VerticalStackLayout>(async (contextLayout) => await AddNewContextAsync(contextLayout));
             ConfirmCommand = new Command(async () => await OnConfirmAsync());
+            NewImageCommand = new Command(async () => await OnNewImageAsync());
 
             LoadSelectedOption();
 
@@ -166,6 +167,7 @@ namespace AICalories.ViewModels
 
         private async Task OnConfirmAsync()
         {
+
             await SetAdditionalInfo();
 
             if (!InternetConnection.CheckInternetConnection())
@@ -175,7 +177,13 @@ namespace AICalories.ViewModels
             }
 
             _navigationService.PopModalAsync();
-            await _navigationService.NavigateToResultPageAsync();
+            _navigationService.NavigateToResultPageAsync();
+        }
+
+        private async Task OnNewImageAsync()
+        {
+            _navigationService.PopModalAsync();
+            await _navigationService.NavigateToTakeImagePageAsync();
         }
 
         //private void OnSetSelectedOption(object sender, CheckedChangedEventArgs e)

@@ -1,19 +1,25 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Services;
-//using Android.Content;
-//using Android.Provider;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Primitives;
+using CommunityToolkit.Maui.Views;
 
 namespace AICalories.ViewModels
 {
-	public class TakeImageVM
+	public class TakeImageVM : INotifyPropertyChanged
     {
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
         private readonly ICameraService _cameraService;
+        private CameraInfo _selectedCamera;
+        private Size _selectedResolution;
+        private CameraFlashMode _flashMode;
 
         private IImageInfo _imageInfo;
 
@@ -21,6 +27,39 @@ namespace AICalories.ViewModels
         public ICommand GalleryCommand { get; }
         public ICommand ToggleTorchCommand { get; }
 
+        #region Properties
+
+        public CameraInfo SelectedCamera
+        {
+            get => _selectedCamera;
+            set
+            {
+                _selectedCamera = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Size SelectedResolution
+        {
+            get => _selectedResolution;
+            set
+            {
+                _selectedResolution = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CameraFlashMode FlashMode
+        {
+            get => _flashMode;
+            set
+            {
+                _flashMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         public TakeImageVM(IViewModelService viewModelService, IImageInfo imageInfo, ICameraService cameraService,
             INavigationService navigationService, IAlertService alertService)
@@ -29,37 +68,39 @@ namespace AICalories.ViewModels
             _viewModelService.TakeImageVM = this;
             _navigationService = navigationService;
             _alertService = alertService;
-            _cameraService = cameraService;
+            //_cameraService = cameraService;
+
+
+            CaptureCommand = new Command<string>(async (imagePath) => await OnCaptureButtonClicked(imagePath));
+            GalleryCommand = new Command(async () => await OnGalleryButtonClicked());
+            ToggleTorchCommand = new Command(async () => await OnToggleTorchButtonClickedAsync());
 
             _imageInfo = imageInfo;
             _imageInfo.Clear();
-
-            CaptureCommand = new Command(async () => await OnCaptureButtonClicked());
-            GalleryCommand = new Command(async () => await OnGalleryButtonClicked());
-            ToggleTorchCommand = new Command(OnToggleTorchButtonClicked);
         }
 
-
-        public async void SetImage(string imagePath)
-        {
-            _imageInfo.ImagePath = imagePath;
-        }
-
-        private async Task OnCaptureButtonClicked() //todo add try catch
+        public async Task SetImage(string imagePath)
         {
             try
             {
-                var stream = await _cameraService.TakePhotoAsync();
-                if (stream == null)
-                {
-                    return;
-                }
+                _imageInfo.ImagePath = imagePath;
+            }
+            catch (Exception)
+            {
+                _alertService.ShowError("Failed to load image");
+                await _navigationService.PopModalAsync();
+            }
+        }
 
-                string imagePath = await SaveImage(stream);
+        private async Task OnCaptureButtonClicked(string imagePath)
+        {
+            try
+            {
+                //string imagePath = await SaveImage(stream);
 
                 //await SaveToGallery(imagePath);
 
-                SetImage(imagePath);
+                await SetImage(imagePath);
 
                 await CheckShowReviewKey();
             }
@@ -75,11 +116,7 @@ namespace AICalories.ViewModels
             try
             {
 
-                var image = await FilePicker.PickAsync(new PickOptions
-                {
-                    FileTypes = FilePickerFileType.Images,
-                    PickerTitle = "Please select an image"
-                });
+                var image = await MediaPicker.PickPhotoAsync();
 
                 if (image == null)
                 {
@@ -111,16 +148,11 @@ namespace AICalories.ViewModels
         }
 
 
-        private void OnToggleTorchButtonClicked()
+        private async Task OnToggleTorchButtonClickedAsync()
         {
-            if (_cameraService.IsTorchEnabled())
-            {
-                _cameraService.DisableTorch();
-            }
-            else
-            {
-                _cameraService.EnableTorch();
-            }
+            var IsTorchSupported = SelectedCamera.IsFlashSupported;
+            FlashMode = CameraFlashMode.On;
+            await Flashlight.TurnOnAsync();
         }
 
 
@@ -269,6 +301,13 @@ namespace AICalories.ViewModels
                 _navigationService.PopModalAsync();
                 await _navigationService.NavigateToResultPageAsync();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

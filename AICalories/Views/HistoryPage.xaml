@@ -24,7 +24,7 @@
                     <DataTemplate>
                     
                         <Frame
-                               Padding="0" Margin="0,10,0,5" CornerRadius="10"
+                               Padding="0" Margin="0,10,0,5"
                                Style="{StaticResource MainFrameStyle}">
                             <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
                                 Margin="5" Padding="10"
@@ -43,14 +43,15 @@
                                         VerticalOptions="Center"
                                         Margin="10,1,0,0"
                                         Text="Total: "
-                                        FontSize="Medium"/>
+                                        FontSize="Medium"
+                                        IsVisible="False"/>
 
                                     <Label
                                         Style="{StaticResource LabelAppStyle}"
                                         HorizontalOptions="Start"
                                         Margin="10,0,0,0"
                                         Text="{Binding TotalCalories}"
-                                        FontSize="Large"/>
+                                        FontSize="Large" FontAttributes="Bold"/>
                                     <Label
                                         Style="{StaticResource LabelAppStyle}"
                                         HorizontalOptions="Start"
@@ -71,18 +72,33 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                     
-                            <Grid ColumnDefinitions="*,*, 2.5*"
+                            <Grid ColumnDefinitions="*,1.5*, 3*"
                                   HeightRequest="80"
-                                  Padding="0,0,0,0">
+                                  Padding="0,0,0,0"
+                                  BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
                                 <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
-                                <Label Grid.Column="1" Text="{Binding Calories}"
-                                       FontSize="Medium" Style="{StaticResource LabelAppStyle}"
-                                       Margin="0,0,10,0"/>
-                                <Image Grid.Column="2" Grid.ColumnSpan="1" Source="{Binding ImagePath}"
-                                       HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                       Opacity="0.7"/>
+                                <Border Grid.Column="1" Style="{StaticResource TodayStatsBorderStyle}"
+                                        Margin="0,5,2,5" Opacity="1"
+                                        BackgroundColor="{StaticResource SoftYellow}">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="30,0,30,0"/>
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding Calories, StringFormat='{0}'}"
+                                           FontSize="Large" Style="{StaticResource IngredientsStyle}"
+                                            FontAttributes="Bold"/>
+                                </Border>
+                                <Border Grid.Column="2" Grid.ColumnSpan="1" Style="{StaticResource BorderOfButtonStyle}"
+                                        BackgroundColor="Transparent"
+                                        Margin="0,5,0,5" >
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="0,30,0,30"/>
+                                    </Border.StrokeShape>
+                                    <Image Source="{Binding ImagePath}"
+                                           HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
+                                           Opacity="0.8"/>
+                                </Border>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
                             </Grid>

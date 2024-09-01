@@ -33,8 +33,9 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = $"Is there any meal or food in this image? " +
-                                $"If no, set is_meal to false and set other properties to 0 or null. " +
+                                text = "Is there any meal or food in this image? " +
+                                "If no, set is_meal to false and set other properties to 0 or null. " +
+                                "Follow nutritional information if it is present. " +
                                 $"{mealType}. What ingredients are in this meal? " +
                                 "Weight, calories, proteins, fats, carbohydrates, sugar of ingredients must be calculated as precise as possible in grams. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
@@ -73,6 +74,11 @@ namespace AICalories.Models
                                     {
                                         type = "boolean",
                                         description = "Is this a meal or a type of food"
+                                    },
+                                    has_nutrition_information = new
+                                    {
+                                        type = "boolean",
+                                        description = "Is this a meal has nutrition information"
                                     },
                                     ingredients = new
                                     {
