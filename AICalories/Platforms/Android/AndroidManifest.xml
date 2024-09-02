@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.auxiliumratio.aicalories" android:versionName="0.9.0.1" android:versionCode="10">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.auxiliumratio.aicalories" android:versionName="0.9.1" android:versionCode="11">
 	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:label="AICalories">
 		<provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
 		<meta-data
-            android:name="com.google.android.gms.ads.ca-app-pub-9280044316923474~6285192079"
-            android:value="ca-app-pub-9280044316923474/7763621828" />
+			android:name="com.google.android.gms.ads.APPLICATION_ID"
+			android:value="ca-app-pub-9280044316923474~6285192079" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />

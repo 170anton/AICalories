@@ -108,7 +108,7 @@
                                                 <Label Text="{Binding Path=Weight, StringFormat='{0} g'}" Grid.Row="0" 
                                                        Grid.Column="1" Style="{StaticResource IngredientsStyleBlack}" />
 
-                                                <Label Text="{Binding Path=Calories, StringFormat='{0} cal'}" Grid.Row="0" 
+                                                <Label Text="{Binding Path=Calories, StringFormat='{0} cals'}" Grid.Row="0" 
                                                        Grid.Column="2" Style="{StaticResource IngredientsStyleBlack}" />
 
                                                 <!--<Label Text="{Binding Proteins}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />
@@ -238,7 +238,7 @@
                         </Grid>
             </Grid>
         </ScrollView>
-            <Grid Grid.Row="1" ColumnDefinitions=".2*,.2*,.6*"
+            <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*"
                   IsVisible="{Binding IsHistoryGridVisible}">
 
                 <Border Grid.Column="0" Style="{StaticResource BorderOfButtonStyle}"
@@ -252,8 +252,8 @@
                         Command="{Binding DeleteCommand}"/>
                  </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
-                        Margin="2,10,0,10">
+                <!--<Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="2,10,0,10" IsVisible="False">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="0,0,0,0"/>
                     </Border.StrokeShape>
@@ -261,9 +261,9 @@
                         Text="New" CornerRadius="0"
                         Command="{Binding NewImageCommand}"/>
                     
-                </Border>
+                </Border>-->
 
-                <Border Grid.Column="2" Style="{StaticResource BorderOfButtonStyle}"
+                <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
                         Margin="2,10,10,10" >
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="0,30,0,30"/>

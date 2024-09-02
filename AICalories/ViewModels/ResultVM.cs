@@ -8,15 +8,20 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
+using Android.App;
+using Android.Gms.Ads;
+using Android.Gms.Ads.Interstitial;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
 {
 	public class ResultVM : INotifyPropertyChanged
     {
+        private InterstitialAd _interstitialAd;
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
+        private readonly string _adUnitId = "ca-app-pub-3940256099942544/1033173712"; 
         private bool _isRefreshing;
         private bool _isLoading;
         private bool _isLabelVisible;
@@ -47,6 +52,8 @@ namespace AICalories.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand NewImageCommand { get; }
+        public ICommand LoadAdCommand { get; }
+        public ICommand ShowAdCommand { get; }
 
         #region Properties
 
@@ -293,6 +300,8 @@ namespace AICalories.ViewModels
             SaveCommand = new Command(async () => await OnSaveAsync());
             DeleteCommand = new Command(async () => await OnDeleteAsync());
             NewImageCommand = new Command(async () => await OnNewImageAsync());
+            LoadAdCommand = new Command(async () => await LoadAdAsync());
+            ShowAdCommand = new Command(ShowAd);
         }
 
         private async Task OnSaveAsync()
@@ -306,8 +315,8 @@ namespace AICalories.ViewModels
             if (delete)
             {
                 await App.HistoryItemRepository.DeleteMealItemAsync(LastHistoryItem);
+                await _navigationService.PopModalAsync();
             }
-            await _navigationService.PopModalAsync();
         }
 
         private async Task OnNewImageAsync()
@@ -584,6 +593,58 @@ namespace AICalories.ViewModels
                 throw;
             }
         }
+
+        #region Ads
+
+        private async Task LoadAdAsync()
+        {
+            try
+            {
+                var activity = GetCurrentActivity();
+                if (activity == null) throw new InvalidOperationException("Current activity is not available.");
+
+                var adRequest = new AdRequest.Builder().Build();
+                InterstitialAd.Load(activity, _adUnitId, adRequest, new CustomInterstitialAdLoadCallback(this));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to load ad: {ex.Message}");
+            }
+        }
+
+        public void ShowAd()
+        {
+            if (_interstitialAd != null)
+            {
+                var activity = GetCurrentActivity();
+                if (activity != null)
+                {
+                    _interstitialAd.Show(activity);
+                }
+                else
+                {
+                    Console.WriteLine("Activity is not available.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ad is not ready yet.");
+            }
+        }
+
+        public void SetInterstitialAd(InterstitialAd ad)
+        {
+            _interstitialAd = ad;
+            _interstitialAd.FullScreenContentCallback = new CustomFullScreenContentCallback(this);
+        }
+
+        private Activity? GetCurrentActivity()
+        {
+            return Platform.CurrentActivity as Activity;
+        }
+
+
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

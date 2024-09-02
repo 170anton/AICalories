@@ -503,8 +503,8 @@ public class MainVM : INotifyPropertyChanged
         if (delete)
         {
             await App.HistoryItemRepository.DeleteMealItemAsync(_lastHistoryItem);
+            await OnPageAppearingAsync();
         }
-        await OnPageAppearingAsync();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

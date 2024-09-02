@@ -4,6 +4,7 @@ using AICalories.Models;
 using AICalories.Services;
 using AICalories.ViewModels;
 using AICalories.Views;
+using Android.Gms.Ads;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +35,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
             });
+
+
+
+        MobileAds.Initialize(Platform.CurrentActivity ?? Android.App.Application.Context);
+
+        MobileAds.RequestConfiguration = new RequestConfiguration.Builder()
+            .SetTestDeviceIds(new List<string> { "8C15E615345B4618D0BE650BE252E0CC" }) // Replace with your actual device ID
+            .Build();
+
 #if ANDROID
         builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>();
         //#elif IOS

@@ -30,7 +30,7 @@
                         <Border Grid.Column="0" Grid.ColumnSpan="4"
                                 Margin="3"
                                 HorizontalOptions="Start"
-                                Padding="15,15"
+                                Padding="15,15,15,8"
                                 Stroke="Transparent"
                                 >
                             <HorizontalStackLayout>
@@ -51,6 +51,7 @@
                         </Border>
 
                         <Grid x:Name="pfcsInfo" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4"
+                              Margin="0,5,0,0"
                               ColumnDefinitions="*,*,*,*" IsVisible="{Binding IsPfcsGridVisible}"> 
                             <!--Proteins-->
                             <Border Grid.Column="0" Grid.Row="1"
@@ -158,9 +159,9 @@
 
             <!--Last Meal Data-->
         <Grid Grid.Row="1"  RowDefinitions="Auto,*">
-            <!--<Label Grid.Row="0" Text="Your last meal" Style="{StaticResource LabelAppStyle}"
+            <Label Grid.Row="0" Text="Last Meal" Style="{StaticResource LabelAppStyle}"
                         FontAttributes="Bold" FontSize="Title"
-                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>-->
+                        HorizontalTextAlignment="Start" Margin="30,10,20,5"/>
 
 
             <Frame Grid.Row="1" Padding="0" Style="{StaticResource MainFrameStyle}">
@@ -169,14 +170,22 @@
                             AbsoluteLayout.LayoutBounds="0,0,1,1"
                             AbsoluteLayout.LayoutFlags="All" >
                         
-                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,*" Padding="10"
+                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,Auto,Auto,*" Padding="10"
                                 IsVisible="{Binding IsHistoryGridVisible}">
                             
+                            <Label Grid.Row="0" Margin="5"
+                                    Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"
+                                    FontAttributes="Bold"/>
                                 <!--Image-->
-                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}"
-                                    MaximumHeightRequest="200">
+                            <Border Grid.Row="1" Padding="0" Style="{StaticResource TodayStatsBorderStyle}"
+                                    MaximumHeightRequest="200" Opacity="1"
+                                    Margin="3,3,3,1">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="35,35,0,0"/>
+                                </Border.StrokeShape>
                                 <AbsoluteLayout>
-                                    <Image x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}" Aspect="AspectFill"
+                                    <Image x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}"
+                                           Aspect="AspectFill"
                                         AbsoluteLayout.LayoutBounds="0,0,1,1"
                                         AbsoluteLayout.LayoutFlags="All"
                                         Opacity="0.8"/>
@@ -190,18 +199,36 @@
                                         ImageSource="delete_lastmeal.png"
                                         Command="{Binding DeleteLastMealCommand}"/>
                                 </AbsoluteLayout>
-                            </Frame>
+                            </Border>
 
-                                <!--Second frame-->
-                            <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*,Auto"
+                            <Border Grid.Row="2"  HorizontalOptions="FillAndExpand"
+                                    Style="{StaticResource TodayStatsBorderStyle}"
+                                    BackgroundColor="{StaticResource CaloriesColor}"
+                                    Opacity="1"
+                                    Padding="10" Margin="3,0,3,3">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0,0,35,35"/>
+                                </Border.StrokeShape>
+                                
+                                        
+                                    <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
+                                            Text="{Binding LastHistoryItemCalories, StringFormat='{0} calories'}" Style="{StaticResource IngredientsStyle}"
+                                            HorizontalOptions="Center"/>
+                                    
+                                    <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                            Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
+
+                                </Border>
+                                
+                            <Grid Grid.Row="3" RowDefinitions="Auto,Auto,*,Auto"
                                   >
-                                <!--Name and Total cals-->
+                                
                                 <Grid Grid.Row="0"
                                       RowDefinitions="*,*">
                                 
-                                    <Label Grid.Row="0" Margin="5"
-                                           Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
-                                    <Border Grid.Row="1"  HorizontalOptions="Center"
+                                    <!--<Label Grid.Row="0" Margin="5"
+                                           Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>-->
+                                    <!--<Border Grid.Row="1"  HorizontalOptions="Center"
                                             Style="{StaticResource TodayStatsBorderStyle}"
                                             BackgroundColor="{StaticResource CaloriesColor}"
                                             Opacity="1"
@@ -211,11 +238,11 @@
                                             <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
                                                     Text="{Binding LastHistoryItemCalories, StringFormat='{0} cals'}" Style="{StaticResource IngredientsStyle}"/>
                                     
-                                            <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
-                                                    Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
+                                            <Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                                    Text="cals" Style="{StaticResource IngredientsStyle}"/>
 
                                         </HorizontalStackLayout>
-                                        </Border>
+                                        </Border>-->
                                 </Grid>
 
                                 <!--Ingredients-->

@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.9.0</ReleaseVersion>
+		<ReleaseVersion>0.9.1</ReleaseVersion>
 		<BuildWithMSBuildOnMono>false</BuildWithMSBuildOnMono>
 	</PropertyGroup>
 
@@ -100,6 +100,8 @@
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
 		<PackageReference Include="CommunityToolkit.Maui.Camera" Version="1.0.4" />
+		<PackageReference Include="Xamarin.Firebase.Ads" Version="121.4.0.1" />
+		<PackageReference Include="Xamarin.GooglePlayServices.Ads" Version="121.4.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

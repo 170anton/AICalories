@@ -2,6 +2,7 @@
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.ViewModels;
+using AndroidX.Lifecycle;
 
 namespace AICalories.Views;
 
@@ -46,8 +47,17 @@ public partial class ResultPage : ContentPage
     {
         base.OnAppearing();
 
-        _viewModel.ProcessImage();
+        _viewModel.LoadAdCommand.Execute(null);
+        _viewModel.ShowAdCommand.Execute(null);
 
+        await _viewModel.ProcessImage();
+
+        //// Optionally, you can delay showing the ad to ensure it’s fully loaded
+        //Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+        //{
+        //    _viewModel.ShowAd();
+        //    return false; // Run only once
+        //});
 
     }
 }
