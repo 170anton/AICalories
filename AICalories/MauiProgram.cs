@@ -18,7 +18,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-
+            //.UseMauiEssentials()
             .UseMauiCommunityToolkitCamera()
 
             //.ConfigureMauiHandlers(handlers =>
@@ -38,7 +38,7 @@ public static class MauiProgram
 
 
 
-        MobileAds.Initialize(Platform.CurrentActivity ?? Android.App.Application.Context);
+        MobileAds.Initialize(Android.App.Application.Context);
 
         MobileAds.RequestConfiguration = new RequestConfiguration.Builder()
             .SetTestDeviceIds(new List<string> { "8C15E615345B4618D0BE650BE252E0CC" }) // Replace with your actual device ID

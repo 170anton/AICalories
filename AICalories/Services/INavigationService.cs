@@ -5,6 +5,7 @@ namespace AICalories.Services
     {
         Task PushModalAsync(Page page);
         Task PopModalAsync();
+        Task PopToMainModalAsync();
         Task NavigateToMainPageAsync();
         Task NavigateToTakeImagePageAsync();
         Task NavigateToContextPageAsync();

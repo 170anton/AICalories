@@ -23,6 +23,11 @@ namespace AICalories.Services
             return Shell.Current.Navigation.PopModalAsync();
         }
 
+        public Task PopToMainModalAsync()
+        {
+            return Shell.Current.Navigation.PopToRootAsync();
+        }
+
         public Task NavigateToMainPageAsync()
         {
             var resultPage = _serviceProvider.GetService<MainPage>();

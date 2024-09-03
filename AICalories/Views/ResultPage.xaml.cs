@@ -22,6 +22,7 @@ public partial class ResultPage : ContentPage
 
         _viewModel = viewModelLocator.GetResultViewModel();
         BindingContext = _viewModel;
+
     }
 
     //private void OnNewImageClicked(System.Object sender, System.EventArgs e)
@@ -38,7 +39,7 @@ public partial class ResultPage : ContentPage
     {
         if (_viewModel.IsLoading == false) //should be check on completed result
         {
-            Navigation.PopModalAsync();
+            Shell.Current.Navigation.PopToRootAsync();
         }
         return true;
     }
@@ -48,16 +49,9 @@ public partial class ResultPage : ContentPage
         base.OnAppearing();
 
         _viewModel.LoadAdCommand.Execute(null);
-        _viewModel.ShowAdCommand.Execute(null);
+        //_viewModel.ShowAdCommand.Execute(null);
 
         await _viewModel.ProcessImage();
-
-        //// Optionally, you can delay showing the ad to ensure it’s fully loaded
-        //Device.StartTimer(TimeSpan.FromSeconds(2), () =>
-        //{
-        //    _viewModel.ShowAd();
-        //    return false; // Run only once
-        //});
 
     }
 }

@@ -11,6 +11,7 @@ using AICalories.Services;
 using Android.App;
 using Android.Gms.Ads;
 using Android.Gms.Ads.Interstitial;
+using Android.Views;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
@@ -21,8 +22,9 @@ namespace AICalories.ViewModels
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
-        private readonly string _adUnitId = "ca-app-pub-3940256099942544/1033173712"; 
-        private bool _isRefreshing;
+        private readonly string _adUnitId = "ca-app-pub-3940256099942544/1033173712";
+        //private bool _isRefreshing;
+        private bool _isAdsVisible;
         private bool _isLoading;
         private bool _isLabelVisible;
         private bool _isHistoryGridVisible;
@@ -63,6 +65,16 @@ namespace AICalories.ViewModels
             set
             {
                 _lastHistoryItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsAdsVisible
+        {
+            get => _isAdsVisible;
+            set
+            {
+                _isAdsVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -306,7 +318,7 @@ namespace AICalories.ViewModels
 
         private async Task OnSaveAsync()
         {
-            await _navigationService.PopModalAsync();
+            await _navigationService.PopToMainModalAsync();
         }
 
         private async Task OnDeleteAsync()
@@ -315,7 +327,7 @@ namespace AICalories.ViewModels
             if (delete)
             {
                 await App.HistoryItemRepository.DeleteMealItemAsync(LastHistoryItem);
-                await _navigationService.PopModalAsync();
+                await _navigationService.PopToMainModalAsync();
             }
         }
 
@@ -355,9 +367,15 @@ namespace AICalories.ViewModels
                     await LoadMealResponse(mealItem);
 
                     await AddItemToDB(mealItem);
+//#if ANDROID
+//                    Platform.CurrentActivity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+//#endif
 
-                    IsHistoryGridVisible = true;
                     IsLoading = false;
+                    if (IsAdsVisible == false)
+                    {
+                        IsHistoryGridVisible = true;
+                    }
                 }
             }
             catch (JsonSerializationException)
@@ -600,48 +618,57 @@ namespace AICalories.ViewModels
         {
             try
             {
-                var activity = GetCurrentActivity();
-                if (activity == null) throw new InvalidOperationException("Current activity is not available.");
-
                 var adRequest = new AdRequest.Builder().Build();
-                InterstitialAd.Load(activity, _adUnitId, adRequest, new CustomInterstitialAdLoadCallback(this));
+                var context = Android.App.Application.Context;
+
+
+                InterstitialAd.Load(context, _adUnitId, adRequest,
+                    new CustomInterstitialAdLoadCallback(
+                        ad =>
+                        {
+                            SetInterstitialAd(ad);
+                            Console.WriteLine("Interstitial Ad loaded successfully.");
+                            ShowAd();
+                        },
+                        loadAdError =>
+                        {
+                            Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
+                        }));
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Failed to load ad: {ex.Message}");
+                Console.WriteLine($"Error loading ads: {ex.Message}");
             }
         }
 
         public void ShowAd()
         {
+            var context = Platform.CurrentActivity;
+
             if (_interstitialAd != null)
             {
-                var activity = GetCurrentActivity();
-                if (activity != null)
-                {
-                    _interstitialAd.Show(activity);
-                }
-                else
-                {
-                    Console.WriteLine("Activity is not available.");
-                }
+                _interstitialAd.Show(context);
             }
             else
             {
-                Console.WriteLine("Ad is not ready yet.");
+                Console.WriteLine("Ad is not ready to be shown yet.");
             }
         }
 
         public void SetInterstitialAd(InterstitialAd ad)
         {
-            _interstitialAd = ad;
-            _interstitialAd.FullScreenContentCallback = new CustomFullScreenContentCallback(this);
+            if (ad != null)
+            {
+                _interstitialAd = ad;
+                _interstitialAd.FullScreenContentCallback = new CustomFullScreenContentCallback(this);
+            }
         }
 
-        private Activity? GetCurrentActivity()
-        {
-            return Platform.CurrentActivity as Activity;
-        }
+        //private Activity? GetCurrentActivity()
+        //{
+        //    return Platform.CurrentActivity as Activity;
+        //}
 
 
         #endregion

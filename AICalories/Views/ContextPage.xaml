@@ -102,7 +102,8 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="30,0,30,0"/>
                     </Border.StrokeShape>
-                    <Button  Style="{StaticResource ImageOptionStyle}" Padding="16"
+                    <Button  Style="{StaticResource ImageOptionStyle}"
+                             Padding="18,14,12,14"
                         ImageSource="refresh_white.png" CornerRadius="0"
                         Command="{Binding NewImageCommand}"/>
                     

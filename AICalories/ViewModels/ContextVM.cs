@@ -177,7 +177,7 @@ namespace AICalories.ViewModels
             }
 
             _navigationService.PopModalAsync();
-            _navigationService.NavigateToResultPageAsync();
+            await _navigationService.NavigateToResultPageAsync();
         }
 
         private async Task OnNewImageAsync()
