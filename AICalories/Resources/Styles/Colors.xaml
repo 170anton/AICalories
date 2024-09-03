@@ -9,11 +9,11 @@
     <Color x:Key="PrimaryMain">White</Color>
     <Color x:Key="SecondaryMain">#EEEEEE</Color>
     <Color x:Key="TertiaryMain">Black</Color>
-    <Color x:Key="SoftYellow">#EBD87F</Color><!--f5df73-->
+    <Color x:Key="SoftYellow">#eb5968</Color><!--f5df73--><!--dbc974--><!--db8574-->
     
-    <Color x:Key="CaloriesColor">#EBD87F</Color>
+    <Color x:Key="CaloriesColor">#eb5968</Color><!--#EBD87F-->
     <Color x:Key="ProteinColor">#6b97e8</Color>
-    <Color x:Key="FatColor">#e8736b</Color><!--e8cb6b-->
+    <Color x:Key="FatColor">#e8cb6b</Color><!--e8cb6b--><!--e8736b-->
     <Color x:Key="CarbsColor">#6BE859</Color>
     <Color x:Key="SugarColor">#CCCCCC</Color>
 

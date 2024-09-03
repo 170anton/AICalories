@@ -83,7 +83,7 @@
                                         Margin="0,5,2,5" Opacity="1"
                                         BackgroundColor="{StaticResource SoftYellow}">
                                     <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="30,0,30,0"/>
+                                        <RoundRectangle CornerRadius="35,3,3,3"/>
                                     </Border.StrokeShape>
                                     <Label Text="{Binding Calories, StringFormat='{0}'}"
                                            FontSize="Large" Style="{StaticResource IngredientsStyle}"
@@ -93,7 +93,7 @@
                                         BackgroundColor="Transparent"
                                         Margin="0,5,0,5" >
                                     <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="0,30,0,30"/>
+                                        <RoundRectangle CornerRadius="3,3,3,35"/>
                                     </Border.StrokeShape>
                                     <Image Source="{Binding ImagePath}"
                                            HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"

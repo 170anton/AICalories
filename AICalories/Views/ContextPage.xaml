@@ -100,7 +100,7 @@
                 <Border Style="{StaticResource BorderOfButtonStyle}"
                         Margin="10,10,0,10">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="30,0,30,0"/>
+                        <RoundRectangle CornerRadius="35,3,3,3"/>
                     </Border.StrokeShape>
                     <Button  Style="{StaticResource ImageOptionStyle}"
                              Padding="18,14,12,14"
@@ -112,7 +112,7 @@
                 <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
                         Margin="2,10,10,10" >
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="0,30,0,30"/>
+                        <RoundRectangle CornerRadius="3,3,3,35"/>
                     </Border.StrokeShape>
                     <Button Style="{StaticResource ImageOptionStyle}"
                         Text="Confirm    " Padding="13" CornerRadius="0"

@@ -62,6 +62,6 @@ Global
 		$14.inheritsSet = null
 		$14.scope = text/x-vs
 		$0.StandardHeader = $15
-		version = 0.9.1
+		version = 0.9.2
 	EndGlobalSection
 EndGlobal

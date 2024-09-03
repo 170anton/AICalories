@@ -350,12 +350,12 @@ public class MainVM : INotifyPropertyChanged
         var savedOption = Preferences.Get(App.ShowMoreTodayStatsKey, false);
         if (!savedOption)
         {
-            ShowMoreTodayStatsText = "show more";
+            ShowMoreTodayStatsText = "+";
             IsPfcsGridVisible = savedOption;
         }
         else
         {
-            ShowMoreTodayStatsText = "show less";
+            ShowMoreTodayStatsText = "-";
             IsPfcsGridVisible = savedOption;
         }
     }

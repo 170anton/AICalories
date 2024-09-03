@@ -20,7 +20,7 @@ public static class MauiProgram
 			.UseMauiApp<App>()
             //.UseMauiEssentials()
             .UseMauiCommunityToolkitCamera()
-
+            
             //.ConfigureMauiHandlers(handlers =>
             //{
             //	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));

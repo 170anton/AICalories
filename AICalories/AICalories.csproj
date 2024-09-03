@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.9.1</ReleaseVersion>
+		<ReleaseVersion>0.9.2</ReleaseVersion>
 		<BuildWithMSBuildOnMono>false</BuildWithMSBuildOnMono>
 	</PropertyGroup>
 
@@ -79,18 +79,16 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+		<!--<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />-->
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiIcon Include="Resources\AppIcon\appicon.jpg">
-		  <Color>#f5df73</Color>
-		</MauiIcon>
+		<MauiSplashScreen Include="Resources\Splash\splashmain.png" Color="#eb5968" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.82" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.82" />
@@ -162,10 +160,7 @@
 	  <None Remove="Resources\Images\icons8-delete.svg" />
 	  <None Remove="Resources\Images\dashboard.png" />
 	  <None Remove="Resources\Images\history_clocks.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <MauiSplashScreen Include="Resources\Splash\splashmain.jpg" Color="#f5df73" />
-
+	  <None Remove="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidResource Include="Resources\xml\file_paths.xml">
@@ -184,5 +179,8 @@
 	<ItemGroup>
 	  <MauiXaml Remove="Views\BlurEffectView.xaml" />
 	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 </Project>

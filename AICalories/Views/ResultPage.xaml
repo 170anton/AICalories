@@ -32,40 +32,52 @@
                 </Frame>-->
 
     
-                        <Grid Grid.Row="0" Margin="0"  x:Name="historyGrid"  RowDefinitions="Auto,*" Padding="0"
+                        <Grid Grid.Row="0" Margin="0"  x:Name="historyGrid"  RowDefinitions="Auto,Auto,*" Padding="0"
                                 IsVisible="{Binding IsHistoryGridVisible}">
                             
-                                <!--Image-->
+                            <!--Image-->
                             
-                                <Image
-                                    x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}"
-                                    Aspect="AspectFill" MaximumHeightRequest="300"/>
-                            
+                            <Image
+                                x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}"
+                                Aspect="AspectFill" MaximumHeightRequest="300"/>
 
-                                <!--Second frame-->
-                            <Grid Grid.Row="1" Padding="10" RowDefinitions="Auto,Auto,*,Auto"
+                            <Grid Grid.Row="1" RowDefinitions="Auto,Auto" Padding="0">
+                            
+                                <Label Grid.Row="0" Margin="5"
+                                        Text="{Binding LastHistoryItemName}"
+                                        Style="{StaticResource LabelAppStyle}"
+                                        FontAttributes="Bold"/>
+                                <Border Grid.Row="1"
+                                        Style="{StaticResource TodayStatsBorderStyle}"
+                                        BackgroundColor="{StaticResource CaloriesColor}"
+                                        HorizontalOptions="FillAndExpand"
+                                        Padding="25,15,25,15"
+                                        Margin="10,5,10,10"
+                                        Opacity="1">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="35,3,3,35"/>
+                                    </Border.StrokeShape>
+                                        
+                                    <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
+                                            Text="{Binding LastHistoryItemCalories, StringFormat='{0} calories'}"
+                                            Style="{StaticResource IngredientsStyle}"
+                                            />
+                                    
+                                        <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                                Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
+
+                                    </Border>
+
+                             </Grid>
+
+
+                               
+                            <Grid Grid.Row="2" Padding="10" RowDefinitions="Auto,Auto,*,Auto"
                                   >
                                 <!--Name and Total cals-->
                                 <Grid Grid.Row="0"
-                                      RowDefinitions="*,*">
+                                      >
                                 
-                                    <Label Grid.Row="0" Margin="5"
-                                           Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
-                                    <Frame Grid.Row="1"  HorizontalOptions="Center"
-                                            Style="{StaticResource TodayStatsFrameStyle}"
-                                            BackgroundColor="{StaticResource CaloriesColor}"
-                                            Padding="40,5" Margin="10,5,10,10"
-                                            Opacity="1">
-                                        <HorizontalStackLayout >
-                                        
-                                            <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
-                                                    Text="{Binding LastHistoryItemCalories, StringFormat='{0} cals'}" Style="{StaticResource IngredientsStyle}"/>
-                                    
-                                            <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
-                                                    Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
-
-                                        </HorizontalStackLayout>
-                                        </Frame>
                                 </Grid>
 
                                 <!--Ingredients-->
@@ -244,7 +256,7 @@
                 <Border Grid.Column="0" Style="{StaticResource BorderOfButtonStyle}"
                         Margin="10,10,0,10" >
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="30,0,30,0"/>
+                        <RoundRectangle CornerRadius="35,3,3,3"/>
                     </Border.StrokeShape>
                     <Button Style="{StaticResource ImageOptionStyle}"
                         ImageSource="delete_lastmeal_white.png"
@@ -266,7 +278,7 @@
                 <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
                         Margin="2,10,10,10" >
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="0,30,0,30"/>
+                        <RoundRectangle CornerRadius="3,3,3,35"/>
                     </Border.StrokeShape>
                     <Button Style="{StaticResource ImageOptionStyle}"
                         Text="Save    " Padding="3" CornerRadius="0"
