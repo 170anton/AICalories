@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.9.2</ReleaseVersion>
+		<ReleaseVersion>0.9.3</ReleaseVersion>
 		<BuildWithMSBuildOnMono>false</BuildWithMSBuildOnMono>
 	</PropertyGroup>
 
@@ -86,7 +86,7 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiSplashScreen Include="Resources\Splash\splashmain.png" Color="#eb5968" />
+		<MauiSplashScreen Include="Resources\Splash\splashmain.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -161,6 +161,12 @@
 	  <None Remove="Resources\Images\dashboard.png" />
 	  <None Remove="Resources\Images\history_clocks.png" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
+	  <None Remove="Resources\AppIcon\appicon.png" />
+	  <None Remove="Resources\Splash\splashmain.png" />
+	  <None Remove="Resources\Splash\splashmain.png" />
+	  <None Remove="Resources\AppIcon\appicon.png" />
+	  <None Remove="Resources\Splash\splashmain.png" />
+	  <None Remove="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidResource Include="Resources\xml\file_paths.xml">
@@ -181,6 +187,12 @@
 	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
+	  <MauiIcon Include="Resources\AppIcon\appicon3.png" />
 	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Resources\Splash\splashmain2.png">
+	    <Color>#eb5968</Color>
+	  </None>
 	</ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
              Title="TakePhotoPage"
              BackgroundColor="Black">
 
-    <Grid RowDefinitions=".7*,.2*,.05*">
+    <Grid RowDefinitions=".7*,.2*">
         <Image x:Name="imagePreview" IsVisible="False"/>
 
         <toolkit:CameraView x:Name="cameraView"  Grid.Row="0"
@@ -19,20 +19,24 @@
                         MediaCaptured="CameraView_Captured"
                         />
         
+        <Grid Grid.Row="1"
+              Margin="0,0,0,0">
 
 
-        <Button x:Name="captureButton" Text=""  Grid.Row="1" Margin="15"
-                Clicked="CaptureButton_Clicked"
-                Style="{StaticResource ImageOptionStyle}"
-                HeightRequest="80" WidthRequest="80"
-                CornerRadius="50" IsVisible="True"
-                />
-        <Button x:Name="galleryButton"
-                ImageSource="gallery_white.png" Padding="10" Grid.Row="1" Margin="15" HorizontalOptions="Start"
-                Command="{Binding GalleryCommand}"  Style="{StaticResource ImageOptionStyle}"
-                HeightRequest="60" WidthRequest="60"
-                CornerRadius="50" IsVisible="True"
-                />
+            <Button x:Name="captureButton" Text="" Margin="15"
+                    Clicked="CaptureButton_Clicked"
+                    Style="{StaticResource ImageOptionStyle}"
+                    HeightRequest="80" WidthRequest="80"
+                    CornerRadius="50" IsVisible="True"
+                    />
+            <Button x:Name="galleryButton"
+                    ImageSource="gallery_white.png" Padding="10" Margin="15" HorizontalOptions="Start"
+                    Command="{Binding GalleryCommand}"  Style="{StaticResource ImageOptionStyle}"
+                    HeightRequest="60" WidthRequest="60"
+                    CornerRadius="50" IsVisible="True"
+                    />
+
+        </Grid>
         <!--<Button x:Name="torchButton"
                 ImageSource="flashlight_white.png" Padding="13" Grid.Row="1" Margin="15" HorizontalOptions="End"
                 Command="{Binding ToggleTorchCommand}" Style="{StaticResource ImageOptionStyle}"

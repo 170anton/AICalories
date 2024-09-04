@@ -12,15 +12,15 @@ public class MainActivity : MauiAppCompatActivity
     {
             base.OnCreate(savedInstanceState);
 
-            // Set the activity to fullscreen mode
-            //Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+        //// Set the activity to fullscreen mode
+        //Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
 
-            //// Prevent layout changes when the soft input mode changes
-            //Window.SetSoftInputMode(SoftInput.AdjustResize);
+        //// Prevent layout changes when the soft input mode changes
+        //Window.SetSoftInputMode(SoftInput.AdjustResize);
 
-            //// Optional: Keep the screen on while the activity is visible
-            //Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
+        //// Optional: Keep the screen on while the activity is visible
+        //Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
         }
 
 }
