@@ -86,7 +86,6 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-		<MauiSplashScreen Include="Resources\Splash\splashmain.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -161,10 +160,7 @@
 	  <None Remove="Resources\Images\dashboard.png" />
 	  <None Remove="Resources\Images\history_clocks.png" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
-	  <None Remove="Resources\AppIcon\appicon.png" />
 	  <None Remove="Resources\Splash\splashmain.png" />
-	  <None Remove="Resources\Splash\splashmain.png" />
-	  <None Remove="Resources\AppIcon\appicon.png" />
 	  <None Remove="Resources\Splash\splashmain.png" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
@@ -187,12 +183,9 @@
 	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
-	  <MauiIcon Include="Resources\AppIcon\appicon3.png" />
-	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
+	  <MauiSplashScreen Include="Resources\Splash\splashmain.png" Color="#FFFFFF" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="Resources\Splash\splashmain2.png">
-	    <Color>#eb5968</Color>
-	  </None>
+	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 </Project>

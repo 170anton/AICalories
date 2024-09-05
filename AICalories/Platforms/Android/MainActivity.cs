@@ -21,6 +21,7 @@ public class MainActivity : MauiAppCompatActivity
 
         //// Optional: Keep the screen on while the activity is visible
         //Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
-        }
+
+    }
 
 }

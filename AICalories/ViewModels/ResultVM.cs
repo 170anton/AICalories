@@ -22,7 +22,10 @@ namespace AICalories.ViewModels
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
-        private readonly string _adUnitId = "ca-app-pub-3940256099942544/1033173712";
+        private readonly string _adUnitId = "ca-app-pub-9280044316923474/7763621828";
+        //"ca-app-pub-3940256099942544/1033173712"; - for testing
+        //"ca-app-pub-9280044316923474/7763621828"; - actual
+
         //private bool _isRefreshing;
         private bool _isAdsVisible;
         private bool _isLoading;

@@ -5,6 +5,8 @@ using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Services;
+using Android.Content;
+using Android.Provider;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
@@ -98,7 +100,7 @@ namespace AICalories.ViewModels
             {
                 //string imagePath = await SaveImage(stream);
 
-                //await SaveToGallery(imagePath);
+                await SaveToGallery(imagePath);
 
                 await SetImage(imagePath);
 
@@ -134,7 +136,7 @@ namespace AICalories.ViewModels
                     }
                 }
 
-                SetImage(imagePath);
+                await SetImage(imagePath);
 
                 await CheckShowReviewKey();
             }
@@ -169,125 +171,125 @@ namespace AICalories.ViewModels
             return imagePath;
         }
 
-//        #region Save Image to Gallery
+        #region Save Image to Gallery
 
-//        private async Task<bool> SaveToGallery(string imagePath)
-//        {
+        private async Task<bool> SaveToGallery(string imagePath)
+        {
 
-//            if (Preferences.Get(App.SaveToGalleryKey, false))
-//            {
-//#if ANDROID
-//                return await SaveImageToGalleryAndroid(imagePath);
-//#elif IOS
-//                return await SaveImageToGalleryiOS(imagePath);
-//#else
-//                // Handle other platforms or return false
-//                return false;
-//#endif
-//            }
-//            return false;
-//            //if (DeviceInfo.Platform == DevicePlatform.Android)
-//            //{
-//            //    var fileName = Path.GetFileName(imagePath);
-//            //    var mimeType = "image/jpeg";
-//            //    var values = new Android.Content.ContentValues();
-//            //    values.Put(Android.Provider.MediaStore.IMediaColumns.DisplayName, fileName);
-//            //    values.Put(Android.Provider.MediaStore.IMediaColumns.MimeType, mimeType);
-//            //    values.Put(Android.Provider.MediaStore.Images.ImageColumns.RelativePath, Android.OS.Environment.DirectoryPictures);
+            if (Preferences.Get(App.SaveToGalleryKey, false))
+            {
+#if ANDROID
+                return await SaveImageToGalleryAndroid(imagePath);
+#elif IOS
+                        return await SaveImageToGalleryiOS(imagePath);
+#else
+                        // Handle other platforms or return false
+                        return false;
+#endif
+            }
+            return false;
+            //if (DeviceInfo.Platform == DevicePlatform.Android)
+            //{
+            //    var fileName = Path.GetFileName(imagePath);
+            //    var mimeType = "image/jpeg";
+            //    var values = new Android.Content.ContentValues();
+            //    values.Put(Android.Provider.MediaStore.IMediaColumns.DisplayName, fileName);
+            //    values.Put(Android.Provider.MediaStore.IMediaColumns.MimeType, mimeType);
+            //    values.Put(Android.Provider.MediaStore.Images.ImageColumns.RelativePath, Android.OS.Environment.DirectoryPictures);
 
-//            //    var contentResolver = Platform.CurrentActivity.ContentResolver;
-//            //    var uri = contentResolver.Insert(Android.Provider.MediaStore.Images.Media.ExternalContentUri, values);
+            //    var contentResolver = Platform.CurrentActivity.ContentResolver;
+            //    var uri = contentResolver.Insert(Android.Provider.MediaStore.Images.Media.ExternalContentUri, values);
 
-//            //    if (uri != null)
-//            //    {
-//            //        using (var inputStream = File.OpenRead(imagePath))
-//            //        using (var outputStream = contentResolver.OpenOutputStream(uri))
-//            //        {
-//            //            inputStream.CopyTo(outputStream);
-//            //        }
-//            //    }
-//            //    //File.Delete(imagePath);
-//            //}
-//            //else if (DeviceInfo.Platform == DevicePlatform.iOS)
-//            //{
-//            //    var picturesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-//            //    var destinationPath = Path.Combine(picturesDirectory, Path.GetFileName(imagePath));
-//            //    File.Copy(imagePath, destinationPath, true);
-//            //}
+            //    if (uri != null)
+            //    {
+            //        using (var inputStream = File.OpenRead(imagePath))
+            //        using (var outputStream = contentResolver.OpenOutputStream(uri))
+            //        {
+            //            inputStream.CopyTo(outputStream);
+            //        }
+            //    }
+            //    //File.Delete(imagePath);
+            //}
+            //else if (DeviceInfo.Platform == DevicePlatform.iOS)
+            //{
+            //    var picturesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            //    var destinationPath = Path.Combine(picturesDirectory, Path.GetFileName(imagePath));
+            //    File.Copy(imagePath, destinationPath, true);
+            //}
 
-//        }
+        }
 
-//        public async Task<bool> SaveImageToGalleryiOS(string imagePath)
-//        {
-//            try
-//            {
-//                var picturesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-//                var destinationPath = Path.Combine(picturesDirectory, Path.GetFileName(imagePath));
-//                File.Copy(imagePath, destinationPath, true);
+        public async Task<bool> SaveImageToGalleryiOS(string imagePath)
+        {
+            try
+            {
+                var picturesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                var destinationPath = Path.Combine(picturesDirectory, Path.GetFileName(imagePath));
+                File.Copy(imagePath, destinationPath, true);
 
-//                return true;
-//            }
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine($"Error saving image to gallery: {ex.Message}");
-//                return false;
-//            }
-//        }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving image to gallery: {ex.Message}");
+                return false;
+            }
+        }
 
 
-//        public async Task<bool> SaveImageToGalleryAndroid(string imagePath)
-//        {
-//            try
-//            {
-//                // Check and request permissions if necessary
-//                if (DeviceInfo.Version.Major < 10)
-//                {
-//                    var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
-//                    if (status != PermissionStatus.Granted)
-//                    {
-//                        status = await Permissions.RequestAsync<Permissions.StorageWrite>();
-//                        if (status != PermissionStatus.Granted)
-//                            return false;
-//                    }
-//                }
+        public async Task<bool> SaveImageToGalleryAndroid(string imagePath)
+        {
+            try
+            {
+                // Check and request permissions if necessary
+                if (DeviceInfo.Version.Major < 10)
+                {
+                    var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+                    if (status != PermissionStatus.Granted)
+                    {
+                        status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+                        if (status != PermissionStatus.Granted)
+                            return false;
+                    }
+                }
 
-//                // Prepare file metadata
-//                var fileName = Path.GetFileName(imagePath);
-//                var mimeType = "image/jpeg"; // Adjust if necessary
-//                var values = new ContentValues();
-//                values.Put(MediaStore.Images.Media.InterfaceConsts.DisplayName, fileName);
-//                values.Put(MediaStore.Images.Media.InterfaceConsts.MimeType, mimeType);
-//                values.Put(MediaStore.Images.Media.InterfaceConsts.DateAdded, Java.Lang.JavaSystem.CurrentTimeMillis() / 1000);
-//                values.Put(MediaStore.Images.Media.InterfaceConsts.DateTaken, Java.Lang.JavaSystem.CurrentTimeMillis());
+                // Prepare file metadata
+                var fileName = Path.GetFileName(imagePath);
+                var mimeType = "image/jpeg"; // Adjust if necessary
+                var values = new ContentValues();
+                values.Put(MediaStore.Images.Media.InterfaceConsts.DisplayName, fileName);
+                values.Put(MediaStore.Images.Media.InterfaceConsts.MimeType, mimeType);
+                values.Put(MediaStore.Images.Media.InterfaceConsts.DateAdded, Java.Lang.JavaSystem.CurrentTimeMillis() / 1000);
+                values.Put(MediaStore.Images.Media.InterfaceConsts.DateTaken, Java.Lang.JavaSystem.CurrentTimeMillis());
 
-//                if (DeviceInfo.Version.Major >= 10)
-//                {
-//                    values.Put(MediaStore.Images.Media.InterfaceConsts.RelativePath, Android.OS.Environment.DirectoryPictures);
-//                }
-//                else
-//                {
-//                    var filePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath;
-//                    values.Put(MediaStore.Images.Media.InterfaceConsts.Data, Path.Combine(filePath, fileName));
-//                }
+                if (DeviceInfo.Version.Major >= 10)
+                {
+                    values.Put(MediaStore.Images.Media.InterfaceConsts.RelativePath, Android.OS.Environment.DirectoryPictures);
+                }
+                else
+                {
+                    var filePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryPictures).AbsolutePath;
+                    values.Put(MediaStore.Images.Media.InterfaceConsts.Data, Path.Combine(filePath, fileName));
+                }
 
-//                var uri = Platform.CurrentActivity.ContentResolver.Insert(MediaStore.Images.Media.ExternalContentUri, values);
+                var uri = Platform.CurrentActivity.ContentResolver.Insert(MediaStore.Images.Media.ExternalContentUri, values);
 
-//                using (var inputStream = File.OpenRead(imagePath))
-//                using (var outputStream = Platform.CurrentActivity.ContentResolver.OpenOutputStream(uri))
-//                {
-//                    await inputStream.CopyToAsync(outputStream);
-//                }
+                using (var inputStream = File.OpenRead(imagePath))
+                using (var outputStream = Platform.CurrentActivity.ContentResolver.OpenOutputStream(uri))
+                {
+                    await inputStream.CopyToAsync(outputStream);
+                }
 
-//                return true;
-//            }
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine($"Error saving image to gallery: {ex.Message}");
-//                return false;
-//            }
-//        }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving image to gallery: {ex.Message}");
+                return false;
+            }
+        }
 
-//        #endregion
+#endregion
 
         private async Task CheckShowReviewKey()
         {
