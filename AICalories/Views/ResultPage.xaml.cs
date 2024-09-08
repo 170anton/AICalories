@@ -34,6 +34,12 @@ public partial class ResultPage : ContentPage
     //    Shell.Current.Navigation.PushModalAsync(takeImagePage);
 
     //}
+    public async Task UpdateContent()
+    {
+        historyGrid.IsVisible = false;
+        historyGrid.IsVisible = true;
+    }
+
 
     protected override bool OnBackButtonPressed()
     {

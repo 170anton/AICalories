@@ -22,11 +22,11 @@
                 <custom:CustomAutoHeightFrame  AutoHeight="True" Padding="30,20"
                                                Style="{StaticResource MainFrameStyle}"
                                                Margin="10,10,10,0">
-                    <Editor Text="{Binding UserInfo}" Placeholder="Help AI"  FontSize="Large"
-                                x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
-                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
-                                PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
-                                />
+                    <Editor Text="{Binding UserInfo}" Placeholder="Description"  FontSize="Large"
+                            x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
+                            TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                            PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
+                            />
 
                 </custom:CustomAutoHeightFrame>
 

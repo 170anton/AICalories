@@ -373,12 +373,13 @@ namespace AICalories.ViewModels
 //#if ANDROID
 //                    Platform.CurrentActivity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
 //#endif
-
+                    
                     IsLoading = false;
-                    if (IsAdsVisible == false)
-                    {
-                        IsHistoryGridVisible = true;
-                    }
+                    IsHistoryGridVisible = true;
+                    //if (IsAdsVisible == false)
+                    //{
+                    //    IsHistoryGridVisible = true;
+                    //}
                 }
             }
             catch (JsonSerializationException)

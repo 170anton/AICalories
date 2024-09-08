@@ -39,7 +39,7 @@ public class MainVM : INotifyPropertyChanged
     private readonly IViewModelService _viewModelService;
     private readonly INavigationService _navigationService;
     private readonly IAlertService _alertService;
-    private ObservableCollection<IngredientItem> _ingredients;
+    private ObservableCollection<IngredientItem> _lastMealIngredients;
 
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
@@ -50,12 +50,14 @@ public class MainVM : INotifyPropertyChanged
 
     #region Properties
 
-    public ObservableCollection<IngredientItem> Ingredients
+    public ObservableCollection<MealItem> TodayMealsCollection { get; private set; }
+
+    public ObservableCollection<IngredientItem> LastMealIngredients
     {
-        get => _ingredients;
+        get => _lastMealIngredients;
         set
         {
-            _ingredients = value;
+            _lastMealIngredients = value;
             OnPropertyChanged();
         }
     }
@@ -246,7 +248,8 @@ public class MainVM : INotifyPropertyChanged
         DeleteLastMealCommand = new Command(async () => await DeleteLastMealClicked());
         ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
 
-        Ingredients = new ObservableCollection<IngredientItem>();
+        LastMealIngredients = new ObservableCollection<IngredientItem>();
+        TodayMealsCollection = new ObservableCollection<MealItem>();
 
         LoadShowMoreTodayStatsOption();
 
@@ -270,7 +273,9 @@ public class MainVM : INotifyPropertyChanged
 
             await LoadTodayStats();
 
-            await LoadLastMeal();
+
+            await LoadLastMeals();
+
         }
         catch (Exception)
         {
@@ -362,43 +367,74 @@ public class MainVM : INotifyPropertyChanged
 
     #endregion
 
-    public async Task LoadLastMeal()
+    public async Task LoadLastMeals()
     {
         try
         {
+            var dateTimeNow = DateTime.Now;
+            var items = await App.HistoryItemRepository.GetAllMealItemsAsync();
+
+            var countInDb = items.Where(i => i.Date.Date == dateTimeNow.Date).Count();
+            var countInColl = TodayMealsCollection.Count();
+
+            if (countInDb == countInColl)
+                return;
+
+
             IsLabelVisible = false;
             IsLoading = true;
             //await Task.Delay(500);
-            var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
-            IsLoading = false;
 
-            if (lastMeal == null)
+            TodayMealsCollection.Clear();
+
+
+            var todayMeals = items.Where(i => i.Date.Date == dateTimeNow.Date)
+                               .OrderByDescending(g => g.Date)
+                               .ToList();
+
+            if (todayMeals == null)
             {
                 IsHistoryGridVisible = false;
                 IsLabelVisible = true;
                 return;
             }
 
-            if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
-            {
-                _lastHistoryItem = lastMeal;
-                LastHistoryItemImage = lastMeal.ImagePath;
-                LastHistoryItemName = lastMeal.MealName;
-                LastHistoryItemCalories = lastMeal.Calories.ToString();
-                LastHistoryItemProtein = lastMeal.Proteins.ToString();
-                LastHistoryItemFat = lastMeal.Fats.ToString();
-                LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
-                LastHistoryItemSugar = lastMeal.Sugar.ToString();
 
-                await LoadLastMealIngredients(lastMeal.Id);
+            foreach (var meal in todayMeals)
+            {
+                TodayMealsCollection.Add(meal);
             }
 
+            //var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
+
+            //if (lastMeal == null)
+            //{
+            //    IsHistoryGridVisible = false;
+            //    IsLabelVisible = true;
+            //    return;
+            //}
+
+            //if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
+            //{
+            //    _lastHistoryItem = lastMeal;
+            //    LastHistoryItemImage = lastMeal.ImagePath;
+            //    LastHistoryItemName = lastMeal.MealName;
+            //    LastHistoryItemCalories = lastMeal.Calories.ToString();
+            //    LastHistoryItemProtein = lastMeal.Proteins.ToString();
+            //    LastHistoryItemFat = lastMeal.Fats.ToString();
+            //    LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
+            //    LastHistoryItemSugar = lastMeal.Sugar.ToString();
+
+            //    await LoadLastMealIngredients(lastMeal.Id);
+            //}
+
+            IsLoading = false;
             IsHistoryGridVisible = true;
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
+            Console.WriteLine($"Error: {ex.Message}");
             throw;
         }
     }
@@ -408,7 +444,7 @@ public class MainVM : INotifyPropertyChanged
         var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
 
         //Ingredients.Clear();
-        Ingredients = new ObservableCollection<IngredientItem>(lastMealIngredients);
+        LastMealIngredients = new ObservableCollection<IngredientItem>(lastMealIngredients);
         //foreach (var ingredient in lastMealIngredients)
         //{
         //    Ingredients.Add(ingredient);

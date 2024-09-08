@@ -118,7 +118,10 @@ namespace AICalories.ViewModels
             try
             {
 
-                var image = await MediaPicker.PickPhotoAsync();
+                var image = await FilePicker.PickAsync(new PickOptions
+                {
+                    FileTypes = FilePickerFileType.Images
+                });
 
                 if (image == null)
                 {

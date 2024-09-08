@@ -108,7 +108,7 @@
             
             <Style x:Key="MainFrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="False"/>
-                <Setter Property="CornerRadius" Value="30"/>
+                <Setter Property="CornerRadius" Value="35"/>
                 <Setter Property="Padding" Value="30"/>
                 <Setter Property="Opacity" Value="1" />
                 <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />

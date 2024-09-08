@@ -37,7 +37,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>-->
 		<UserSecretsId>2e8442e3-cef0-4d10-be7a-6cdc7d97305b</UserSecretsId>
-		<ReleaseVersion>0.9.3</ReleaseVersion>
+		<ReleaseVersion>0.9.4</ReleaseVersion>
 		<BuildWithMSBuildOnMono>false</BuildWithMSBuildOnMono>
 	</PropertyGroup>
 
@@ -163,6 +163,7 @@
 	  <None Remove="Resources\Splash\splashmain.png" />
 	  <None Remove="Resources\Splash\splashmain.png" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
+	  <None Remove="Resources\Images\fat_icon.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidResource Include="Resources\xml\file_paths.xml">
