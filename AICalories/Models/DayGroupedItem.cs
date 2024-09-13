@@ -26,7 +26,7 @@ namespace AICalories.Models
         public DayGroupedItem(DateTime date)
         {
             Date = date;
-            Title = date.ToString("dd MMMM");
+            Title = date.ToString("dddd, dd MMMM");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

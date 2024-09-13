@@ -31,10 +31,17 @@ public class MainVM : INotifyPropertyChanged
     private string _totalCarbohydrates;
     private string _totalSugar;
     private string _showMoreTodayStatsText;
+    private string _todayDate;
     private bool _isLoading;
-    private bool _isLabelVisible;
+    private bool _isMakeFirstRecordVisible;
     private bool _isHistoryGridVisible;
     private bool _isPfcsInfoGridVisible;
+    private bool _isGoalsSet;
+    private int _dailyCalorieGoal;
+    private int _dailyProteinGoal;
+    private int _dailyFatGoal;
+    private int _dailyCarbsGoal;
+    private int _dailySugarGoal;
 
     private readonly IViewModelService _viewModelService;
     private readonly INavigationService _navigationService;
@@ -47,6 +54,7 @@ public class MainVM : INotifyPropertyChanged
     public ICommand NewImageCommand { get; }
     public ICommand DeleteLastMealCommand { get; }
     public ICommand ShowMoreTodayStatsCommand { get; }
+    public ICommand SetGoalCommand { get; }
 
     #region Properties
 
@@ -68,6 +76,16 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _showMoreTodayStatsText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string TodayDate
+    {
+        get => _todayDate;
+        set
+        {
+            _todayDate = value;
             OnPropertyChanged();
         }
     }
@@ -121,6 +139,67 @@ public class MainVM : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public bool IsGoalsSet
+    {
+        get => _isGoalsSet;
+        set
+        {
+            _isGoalsSet = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyCalorieGoal
+    {
+        get => _dailyCalorieGoal;
+        set
+        {
+            _dailyCalorieGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyProteinGoal
+    {
+        get => _dailyProteinGoal;
+        set
+        {
+            _dailyProteinGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyFatGoal
+    {
+        get => _dailyFatGoal;
+        set
+        {
+            _dailyFatGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyCarbsGoal
+    {
+        get => _dailyCarbsGoal;
+        set
+        {
+            _dailyCarbsGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailySugarGoal
+    {
+        get => _dailySugarGoal;
+        set
+        {
+            _dailySugarGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
 
     public string LastHistoryItemImage
     {
@@ -202,12 +281,12 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    public bool IsLabelVisible
+    public bool IsMakeFirstRecordVisible
     {
-        get => _isLabelVisible;
+        get => _isMakeFirstRecordVisible;
         set
         {
-            _isLabelVisible = value;
+            _isMakeFirstRecordVisible = value;
             OnPropertyChanged();
         }
     }
@@ -247,6 +326,7 @@ public class MainVM : INotifyPropertyChanged
         NewImageCommand = new Command(async () => await NewImageClicked());
         DeleteLastMealCommand = new Command(async () => await DeleteLastMealClicked());
         ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
+        SetGoalCommand = new Command(async () => await SetGoalAsync());
 
         LastMealIngredients = new ObservableCollection<IngredientItem>();
         TodayMealsCollection = new ObservableCollection<MealItem>();
@@ -273,7 +353,6 @@ public class MainVM : INotifyPropertyChanged
 
             await LoadTodayStats();
 
-
             await LoadLastMeals();
 
         }
@@ -291,11 +370,24 @@ public class MainVM : INotifyPropertyChanged
         var dateTimeNow = DateTime.Now;
         List<MealItem> items = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
+        TodayDate = dateTimeNow.ToString("dddd, dd MMMM");
         await GetTotalCalories(items, dateTimeNow);
         await GetTotalProteins(items, dateTimeNow);
         await GetTotalFats(items, dateTimeNow);
         await GetTotalCarbohydrates(items, dateTimeNow);
         await GetTotalSugar(items, dateTimeNow);
+        CheckPFCSInfoExist();
+        await GetTodayGoals();
+    }
+
+    public async Task GetTodayGoals()
+    {
+        IsGoalsSet = Preferences.Get(App.IsGoalsSet, false);
+        DailyCalorieGoal = Preferences.Get(App.DailyCalorieGoal, 0);
+        DailyProteinGoal = Preferences.Get(App.DailyProteinGoal, 0);
+        DailyFatGoal = Preferences.Get(App.DailyFatGoal, 0);
+        DailyCarbsGoal = Preferences.Get(App.DailyCarbsGoal, 0);
+        DailySugarGoal = Preferences.Get(App.DailySugarGoal, 0);
     }
 
     public async Task GetTotalCalories(List<MealItem> items, DateTime dateTimeNow)
@@ -350,6 +442,18 @@ public class MainVM : INotifyPropertyChanged
         LoadShowMoreTodayStatsOption();
     }
 
+    private void CheckPFCSInfoExist()
+    {
+        if (Convert.ToInt32(TotalProteins) == 0 && Convert.ToInt32(TotalCarbohydrates) == 0)
+        {
+            IsPfcsGridVisible = false;
+        }
+        else
+        {
+            IsPfcsGridVisible = true;
+        }
+    }
+
     private void LoadShowMoreTodayStatsOption()
     {
         var savedOption = Preferences.Get(App.ShowMoreTodayStatsKey, false);
@@ -374,16 +478,23 @@ public class MainVM : INotifyPropertyChanged
             var dateTimeNow = DateTime.Now;
             var items = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
+            if (items == null)
+            {
+                IsHistoryGridVisible = false;
+                IsMakeFirstRecordVisible = true;
+                return;
+            }
+
             var countInDb = items.Where(i => i.Date.Date == dateTimeNow.Date).Count();
             var countInColl = TodayMealsCollection.Count();
+
 
             if (countInDb == countInColl)
                 return;
 
 
-            IsLabelVisible = false;
+            IsMakeFirstRecordVisible = false;
             IsLoading = true;
-            //await Task.Delay(500);
 
             TodayMealsCollection.Clear();
 
@@ -392,41 +503,13 @@ public class MainVM : INotifyPropertyChanged
                                .OrderByDescending(g => g.Date)
                                .ToList();
 
-            if (todayMeals == null)
-            {
-                IsHistoryGridVisible = false;
-                IsLabelVisible = true;
-                return;
-            }
 
 
             foreach (var meal in todayMeals)
             {
+                await LoadMealIngredients(meal);
                 TodayMealsCollection.Add(meal);
             }
-
-            //var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
-
-            //if (lastMeal == null)
-            //{
-            //    IsHistoryGridVisible = false;
-            //    IsLabelVisible = true;
-            //    return;
-            //}
-
-            //if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
-            //{
-            //    _lastHistoryItem = lastMeal;
-            //    LastHistoryItemImage = lastMeal.ImagePath;
-            //    LastHistoryItemName = lastMeal.MealName;
-            //    LastHistoryItemCalories = lastMeal.Calories.ToString();
-            //    LastHistoryItemProtein = lastMeal.Proteins.ToString();
-            //    LastHistoryItemFat = lastMeal.Fats.ToString();
-            //    LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
-            //    LastHistoryItemSugar = lastMeal.Sugar.ToString();
-
-            //    await LoadLastMealIngredients(lastMeal.Id);
-            //}
 
             IsLoading = false;
             IsHistoryGridVisible = true;
@@ -449,6 +532,11 @@ public class MainVM : INotifyPropertyChanged
         //{
         //    Ingredients.Add(ingredient);
         //}
+    }
+
+    private async Task LoadMealIngredients(IMealItem mealItem)
+    {
+        mealItem.Ingredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(mealItem.Id);
     }
 
     #region Photo selection buttons
@@ -531,7 +619,70 @@ public class MainVM : INotifyPropertyChanged
 
     #endregion
 
+    private async Task SetGoalAsync()
+    {
+        string caloriesInput;
+        string proteinInput;
+        string fatInput;
+        string carbsInput;
+        string sugarInput;
 
+        caloriesInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Calorie Goal",
+            "Enter your daily calorie goal:",
+            keyboard: Keyboard.Numeric
+        );
+        proteinInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Protein Goal",
+            "Enter your daily protein goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+        fatInput = await Application.Current.MainPage.DisplayPromptAsync(
+                    "Set Fat Goal",
+                    "Enter your daily fat goal (in grams):",
+                    keyboard: Keyboard.Numeric
+                );
+        carbsInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Carbs Goal",
+            "Enter your daily carbs goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+
+        sugarInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Sugar Goal",
+            "Enter your daily sugar goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+
+        //string nutrientsInput = await Application.Current.MainPage.DisplayPromptAsync(
+        //    "Set Nutrient Goal",
+        //    "Enter your daily nutrient goal (e.g., protein, carbs, fats):",
+        //    keyboard: Keyboard.Text
+        //);
+
+        if (true) //todo
+        {
+            DailyCalorieGoal = Convert.ToInt32(caloriesInput); ;
+            DailyProteinGoal = Convert.ToInt32(proteinInput);
+            DailyFatGoal = Convert.ToInt32(fatInput); ;
+            DailyCarbsGoal = Convert.ToInt32(carbsInput); ;
+            DailySugarGoal = Convert.ToInt32(sugarInput); ;
+
+            Preferences.Set(App.DailyCalorieGoal, DailyCalorieGoal);
+            Preferences.Set(App.DailyProteinGoal, DailyProteinGoal);
+            Preferences.Set(App.DailyFatGoal, DailyFatGoal);
+            Preferences.Set(App.DailyCarbsGoal, DailyCarbsGoal);
+            Preferences.Set(App.DailySugarGoal, DailySugarGoal);
+
+            Preferences.Set(App.IsGoalsSet, true);
+
+            await Application.Current.MainPage.DisplayAlert("Success", "Goals have been set!", "OK");
+        }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert("Invalid Input", "Please enter valid numeric values for calories.", "OK");
+        }
+    }
 
     private async Task DeleteLastMealClicked()
     {

@@ -7,18 +7,22 @@ using AICalories.Views;
 using Android.Gms.Ads;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-
+using Syncfusion.Maui.Core.Hosting;
+using Syncfusion.Licensing;
 
 namespace AICalories;
 
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
+    {
+        SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVF2WmFZfVpgcV9HY1ZURmYuP1ZhSXxXdkxiWn9bcXdQRGZdV0w=");
+
+        var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
             //.UseMauiEssentials()
+            .ConfigureSyncfusionCore()
             .UseMauiCommunityToolkitCamera()
             
             //.ConfigureMauiHandlers(handlers =>

@@ -98,6 +98,7 @@
 		<PackageReference Include="CommunityToolkit.Maui.Camera" Version="1.0.4" />
 		<PackageReference Include="Xamarin.Firebase.Ads" Version="121.4.0.1" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Ads" Version="121.4.0.1" />
+		<PackageReference Include="Syncfusion.Maui.Gauges" Version="26.2.14" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -164,6 +165,8 @@
 	  <None Remove="Resources\Splash\splashmain.png" />
 	  <None Remove="Resources\AppIcon\appicon.png" />
 	  <None Remove="Resources\Images\fat_icon.png" />
+	  <None Remove="Resources\AppIcon\appicon.png" />
+	  <None Remove="Resources\Splash\splashmain.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <AndroidResource Include="Resources\xml\file_paths.xml">
@@ -184,9 +187,14 @@
 	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
-	  <MauiSplashScreen Include="Resources\Splash\splashmain.png" Color="#FFFFFF" />
+	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <MauiIcon Include="Resources\AppIcon\appicon.png" />
+	  <None Update="Resources\Splash\splashmain3.png">
+	    <Color>#FFFFFF</Color>
+	  </None>
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splashmain.png" Color="#FFFFFF" />
 	</ItemGroup>
 </Project>

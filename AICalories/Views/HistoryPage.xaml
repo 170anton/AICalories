@@ -10,89 +10,107 @@
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
             
-            Padding="10">
+            Padding="10,0">
             <Button IsVisible="False" Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
             <Button IsVisible="False" Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
+            <!--BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"-->
             <CollectionView Grid.Row="2"
                             x:Name="collectionView"
                             ItemsSource="{Binding DayGroupedItems}"
                             IsGrouped="True"
                             SelectionMode="Single"
-                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"
+                            
                             SelectionChanged="OnCollectionViewSelectionChanged">
+                
+                <CollectionView.ItemsLayout>
+                   <GridItemsLayout Orientation="Vertical"
+                                    VerticalItemSpacing="11"/>
+                </CollectionView.ItemsLayout>
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                     
-                        <Frame
-                               Padding="0" Margin="0,10,0,5"
-                               Style="{StaticResource MainFrameStyle}">
+                        <Border
+                               Padding="0" Margin="0,30,0,5"
+                               Style="{StaticResource BorderOfButtonStyle}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="35,3,3,35"/>
+                            </Border.StrokeShape>
                             <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
                                 Margin="5" Padding="10"
                                 RowSpacing="10" ColumnSpacing="5">
                                 <Label
                                     Grid.Column="0"
-                                    Style="{StaticResource LabelAppStyle}"
+                                    Style="{StaticResource IngredientsStyle}"
                                     HorizontalOptions="Start"
                                     Margin="10,0,0,0"
                                     Text="{Binding Title}" FontAttributes="Bold"
-                                    FontSize="Large"/>
-                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0">
-                                    <Label
-                                        Style="{StaticResource LabelAppStyle}"
+                                    FontSize="Medium"/>
+                                <Border Grid.Row="1" Grid.Column="0"
+                                        Style="{StaticResource BorderOfButtonStyle}"
                                         HorizontalOptions="Start"
-                                        VerticalOptions="Center"
-                                        Margin="10,1,0,0"
-                                        Text="Total: "
-                                        FontSize="Medium"
-                                        IsVisible="False"/>
+                                        Padding="0"
+                                        Background="Transparent">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="35,35,35,35"/>
+                                    </Border.StrokeShape>
+                                    <HorizontalStackLayout>
+                                        <Label
+                                            Style="{StaticResource IngredientsStyle}"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center"
+                                            Margin="10,1,0,0"
+                                            Text="Total: "
+                                            FontSize="Medium"
+                                            IsVisible="False"/>
 
-                                    <Label
-                                        Style="{StaticResource LabelAppStyle}"
-                                        HorizontalOptions="Start"
-                                        Margin="10,0,0,0"
-                                        Text="{Binding TotalCalories}"
-                                        FontSize="Large" FontAttributes="Bold"/>
-                                    <Label
-                                        Style="{StaticResource LabelAppStyle}"
-                                        HorizontalOptions="Start"
-                                        Margin="5,1,0,0"
-                                        Text="calories"
-                                        FontSize="Medium"/>
+                                        <Label
+                                            Style="{StaticResource IngredientsStyle}"
+                                            HorizontalOptions="Start"
+                                            Margin="10,0,0,0"
+                                            Text="{Binding TotalCalories}"
+                                            FontSize="Title" FontAttributes="Bold"/>
+                                        <Label
+                                            Style="{StaticResource IngredientsStyle}"
+                                            HorizontalOptions="Start"
+                                            Margin="5,1,0,0"
+                                            Text="Calories"
+                                            FontSize="Medium"/>
 
-                                </HorizontalStackLayout>
+                                    </HorizontalStackLayout>
+                                </Border>
                                 <Button
                                     Grid.Column="2" Grid.RowSpan="2"
                                     Text="Add"
                                     IsVisible="False"
                                     Clicked="OnAddToHeaderButton_Clicked"/>
                             </Grid>
-                        </Frame>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                     
-                            <Grid ColumnDefinitions="2*,3*,6*"
-                                  HeightRequest="80"
-                                  Padding="0,0,0,0"
-                                  BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
+                                  <!--BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"-->
+                            <Grid ColumnDefinitions="2*,4*,6*"
+                                  HeightRequest="70"
+                                  Padding="0,0,0,0">
                                 <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
                                        FontAttributes="Italic"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
-                                <Border Grid.Column="1" Style="{StaticResource TodayStatsBorderStyle}"
-                                        Margin="0,5,2,5" Opacity="1"
-                                        BackgroundColor="{StaticResource SoftYellow}">
+                                <Border Grid.Column="1" Style="{StaticResource MainBorderStyle}"
+                                        Margin="0,0,2,0" Opacity="1"
+                                           Padding="0">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="35,3,3,3"/>
                                     </Border.StrokeShape>
-                                    <Label Text="{Binding Calories, StringFormat='{0}'}"
-                                           FontSize="Large" Style="{StaticResource IngredientsStyle}"
+                                    <Label Text="{Binding Calories, StringFormat='{0} Cals'}"
+                                           FontSize="Medium" Style="{StaticResource LabelAppStyle}"
                                             FontAttributes="Bold"/>
                                 </Border>
                                 <Border Grid.Column="2" Grid.ColumnSpan="1" Style="{StaticResource BorderOfButtonStyle}"
                                         BackgroundColor="Transparent"
-                                        Margin="0,5,0,5" >
+                                        Margin="0,0,0,0" >
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="3,3,3,35"/>
                                     </Border.StrokeShape>

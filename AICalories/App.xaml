@@ -166,7 +166,7 @@
             <Style x:Key="BorderOfButtonStyle" TargetType="Border">
                 <Setter Property="StrokeShape">
                     <Setter.Value>
-                        <RoundRectangle CornerRadius="30" />
+                        <RoundRectangle CornerRadius="35" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="StrokeThickness" Value="0" />

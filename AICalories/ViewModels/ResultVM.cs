@@ -27,7 +27,7 @@ namespace AICalories.ViewModels
         //"ca-app-pub-9280044316923474/7763621828"; - actual
 
         //private bool _isRefreshing;
-        private bool _isAdsVisible;
+        private bool _isAdsEnabled;
         private bool _isLoading;
         private bool _isLabelVisible;
         private bool _isHistoryGridVisible;
@@ -72,12 +72,12 @@ namespace AICalories.ViewModels
             }
         }
 
-        public bool IsAdsVisible
+        public bool IsAdsEnabled
         {
-            get => _isAdsVisible;
+            get => _isAdsEnabled;
             set
             {
-                _isAdsVisible = value;
+                _isAdsEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -347,6 +347,7 @@ namespace AICalories.ViewModels
             try
             {
                 IsLoading = true;
+                IsAdsEnabled = true;
                 IsHistoryGridVisible = false;
                 await LoadSecrets();
 
@@ -375,23 +376,23 @@ namespace AICalories.ViewModels
 //#endif
                     
                     IsLoading = false;
-                    IsHistoryGridVisible = true;
-                    //if (IsAdsVisible == false)
-                    //{
-                    //    IsHistoryGridVisible = true;
-                    //}
+                    //IsHistoryGridVisible = true;
+                    if (IsAdsEnabled == false)
+                    {
+                        IsHistoryGridVisible = true;
+                    }
                 }
             }
             catch (JsonSerializationException)
             {
-                _alertService.ShowError("Decoding error occurred.");
-                //await _navigationService.PopModalAsync();
+                _alertService.ShowError("Decoding error occurred");
+                await _navigationService.PopModalAsync();
                 IsLoading = false;
             }
             catch (BadImageFormatException)
             {
                 _alertService.ShowError("No connection to AI server");
-                //await _navigationService.PopModalAsync();
+                await _navigationService.PopModalAsync();
                 IsLoading = false;
             }
             catch (FileLoadException)
@@ -402,7 +403,7 @@ namespace AICalories.ViewModels
             catch (Exception)
             {
                 _alertService.ShowUnexpectedError();
-                //await _navigationService.PopModalAsync();
+                await _navigationService.PopModalAsync();
                 IsLoading = false;
             }
         }

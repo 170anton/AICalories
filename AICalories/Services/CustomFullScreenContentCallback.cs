@@ -19,12 +19,12 @@ namespace AICalories.Services
         public override void OnAdDismissedFullScreenContent()
         {
             Console.WriteLine("Interstitial ad dismissed.");
-            RefreshUI();
-            //_viewModel.IsAdsVisible = false;
-            //if (_viewModel.IsLoading == false)
-            //{
-            //    _viewModel.IsHistoryGridVisible = true;
-            //}
+            //RefreshUI();
+            _viewModel.IsAdsEnabled = false;
+            if (_viewModel.IsLoading == false)
+            {
+                _viewModel.IsHistoryGridVisible = true;
+            }
         }
 
         public override void OnAdFailedToShowFullScreenContent(AdError adError)
@@ -35,7 +35,7 @@ namespace AICalories.Services
         public override void OnAdShowedFullScreenContent()
         {
             Console.WriteLine("Interstitial ad showed full screen content.");
-            _viewModel.IsAdsVisible = true;
+            _viewModel.IsAdsEnabled = true;
 
             // Set the interstitial ad to null after it is shown to prevent reuse
             _viewModel.SetInterstitialAd(null); // Clear the ad reference after showing //todo test

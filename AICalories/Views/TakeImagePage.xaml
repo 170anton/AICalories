@@ -32,7 +32,7 @@
                     BorderColor="White"
                     />
             <Button x:Name="galleryButton"
-                    ImageSource="galley_red.png" Padding="10" Margin="15" HorizontalOptions="Start"
+                    ImageSource="gallery.png" Padding="10" Margin="15" HorizontalOptions="Start"
                     Command="{Binding GalleryCommand}"  Style="{StaticResource ImageOptionStyle}"
                     HeightRequest="60" WidthRequest="60"
                     CornerRadius="50" IsVisible="True"
