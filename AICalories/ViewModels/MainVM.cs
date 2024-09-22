@@ -36,6 +36,7 @@ public class MainVM : INotifyPropertyChanged
     private bool _isMakeFirstRecordVisible;
     private bool _isHistoryGridVisible;
     private bool _isPfcsInfoGridVisible;
+    private bool _isYesterdayVisible;
     private bool _isGoalsSet;
     private int _dailyCalorieGoal;
     private int _dailyProteinGoal;
@@ -136,6 +137,16 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _totalSugar = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsYesterdayVisible
+    {
+        get => _isYesterdayVisible;
+        set
+        {
+            _isYesterdayVisible = value;
             OnPropertyChanged();
         }
     }
@@ -347,10 +358,6 @@ public class MainVM : INotifyPropertyChanged
     {
         try
         {
-            //LastHistoryItemName = null;
-            //LastHistoryItemCalories = null;
-            //LastHistoryItemImage = null;
-
             await LoadTodayStats();
 
             await LoadLastMeals();
@@ -475,41 +482,34 @@ public class MainVM : INotifyPropertyChanged
     {
         try
         {
-            var dateTimeNow = DateTime.Now;
-            var items = await App.HistoryItemRepository.GetAllMealItemsAsync();
+            IsMakeFirstRecordVisible = false;
+            IsYesterdayVisible = false;
+            IsLoading = true;
 
-            if (items == null)
+            var dateTimeNow = DateTime.Now;
+            var allMealsList = await App.HistoryItemRepository.GetAllMealItemsAsync();
+
+            if (allMealsList == null)
             {
                 IsHistoryGridVisible = false;
                 IsMakeFirstRecordVisible = true;
                 return;
             }
 
-            var countInDb = items.Where(i => i.Date.Date == dateTimeNow.Date).Count();
-            var countInColl = TodayMealsCollection.Count();
-
-
-            if (countInDb == countInColl)
-                return;
-
-
-            IsMakeFirstRecordVisible = false;
-            IsLoading = true;
-
-            TodayMealsCollection.Clear();
-
-
-            var todayMeals = items.Where(i => i.Date.Date == dateTimeNow.Date)
+            var mealListByDay = allMealsList.Where(i => i.Date.Date == dateTimeNow.Date)
                                .OrderByDescending(g => g.Date)
                                .ToList();
 
-
-
-            foreach (var meal in todayMeals)
+            if (mealListByDay.Count() == 0)
             {
-                await LoadMealIngredients(meal);
-                TodayMealsCollection.Add(meal);
+                mealListByDay = await SetYesterdayInfo(dateTimeNow, allMealsList, mealListByDay);
             }
+
+            if (CheckOnUpdate(dateTimeNow, mealListByDay))
+            {
+                await FillCollection(mealListByDay);
+            }
+
 
             IsLoading = false;
             IsHistoryGridVisible = true;
@@ -521,6 +521,51 @@ public class MainVM : INotifyPropertyChanged
             throw;
         }
     }
+
+    private async Task<List<MealItem>> SetYesterdayInfo(DateTime dateTimeNow, List<MealItem> items, List<MealItem> todayMeals)
+    {
+        var yesterday = dateTimeNow.AddDays(-1);
+        var yesterdayMeals = items.Where(i => i.Date.Date == yesterday.Date)
+                       .OrderByDescending(g => g.Date)
+                       .ToList();
+
+        if (yesterdayMeals.Count() != 0)
+        {
+            IsYesterdayVisible = true;
+            return yesterdayMeals;
+        }
+        else
+            return todayMeals;
+    }
+
+    private async Task FillCollection(List<MealItem> mealList)
+    {
+        TodayMealsCollection.Clear();
+
+        foreach (var meal in mealList)
+        {
+            await LoadMealIngredients(meal);
+            TodayMealsCollection.Add(meal);
+        }
+    }
+
+    /// <summary>
+    /// Returns true if collection should be updated
+    /// </summary>
+    /// <param name="dateTimeNow"></param>
+    /// <param name="todayMeals"></param>
+    /// <returns></returns>
+    private bool CheckOnUpdate(DateTime dateTimeNow, List<MealItem> todayMeals)
+    {
+        var countInDb = todayMeals.Count();
+        var countInColl = TodayMealsCollection.Count();
+
+        if (countInDb == countInColl)
+            return false;
+        else
+            return true;
+    }
+
 
     private async Task LoadLastMealIngredients(int lastMealId)
     {

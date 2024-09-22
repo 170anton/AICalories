@@ -16,7 +16,7 @@
                         HorizontalTextAlignment="Start" Margin="30,10,20,5"/>
                 
                 <Frame Grid.Row="1" Style="{StaticResource MainFrameStyle}" >
-                    <VerticalStackLayout Padding="10,10" Spacing="20">
+                    <VerticalStackLayout Padding="10,5" Spacing="10">
                     
                             <Grid ColumnDefinitions="*,Auto">
                                 <Label Text="Dark theme" Style="{StaticResource LabelAppStyle}"
@@ -27,7 +27,7 @@
                                         IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Image review" Style="{StaticResource LabelAppStyle}"
+                                <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
                                        HorizontalOptions="Start"
                                        FontSize="Large"/>
                                 <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
