@@ -17,7 +17,7 @@
     <Color x:Key="CarbsColor">#4489fc</Color>
     <Color x:Key="SugarColor">#DDDDDD</Color>
 
-    <Color x:Key="Primary">#512BD4</Color><!--#512BD4-->
+    <Color x:Key="Primary">#db5361</Color><!--#512BD4-->
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>

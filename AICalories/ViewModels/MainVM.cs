@@ -557,10 +557,10 @@ public class MainVM : INotifyPropertyChanged
     /// <returns></returns>
     private bool CheckOnUpdate(DateTime dateTimeNow, List<MealItem> todayMeals)
     {
-        var countInDb = todayMeals.Count();
-        var countInColl = TodayMealsCollection.Count();
+        bool haveSameImages = todayMeals.Select(i => i.ImagePath)
+                               .SequenceEqual(TodayMealsCollection.ToList().Select(i => i.ImagePath));
 
-        if (countInDb == countInColl)
+        if (haveSameImages)
             return false;
         else
             return true;

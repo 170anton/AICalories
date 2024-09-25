@@ -562,7 +562,8 @@ namespace AICalories.ViewModels
         {
             try
             {
-                var dateTimeNow = DateTime.Now;
+                //var dateTimeNow = DateTime.Now;
+                var dateTimeNow = new DateTime(2024, 9, 25, 19, 13, 0);
 
                 mealItem.Date = dateTimeNow;
                 mealItem.Time = dateTimeNow.ToString("HH:mm");
@@ -638,12 +639,14 @@ namespace AICalories.ViewModels
                         loadAdError =>
                         {
                             Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
+                            IsAdsEnabled = false;
                         }));
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading ads: {ex.Message}");
+                IsAdsEnabled = false;
             }
         }
 

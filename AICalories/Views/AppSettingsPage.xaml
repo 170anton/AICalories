@@ -19,7 +19,7 @@
                     <VerticalStackLayout Padding="10,5" Spacing="10">
                     
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Dark theme" Style="{StaticResource LabelAppStyle}"
+                                <Label Text="Dark Mode" Style="{StaticResource LabelAppStyle}"
                                        HorizontalOptions="Start"
                                        FontSize="Large"/>
                                 <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"
@@ -27,7 +27,7 @@
                                         IsToggled="{Binding IsDarkMode, Mode=TwoWay}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Photo review" Style="{StaticResource LabelAppStyle}"
+                                <Label Text="Photo Review" Style="{StaticResource LabelAppStyle}"
                                        HorizontalOptions="Start"
                                        FontSize="Large"/>
                                 <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"

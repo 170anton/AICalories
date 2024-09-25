@@ -91,8 +91,8 @@
                     <DataTemplate>
                     
                                   <!--BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"-->
-                            <Grid ColumnDefinitions="2*,4*,6*"
-                                  HeightRequest="70"
+                            <Grid ColumnDefinitions="2*,4*,5*"
+                                  HeightRequest="60"
                                   Padding="0,0,0,0">
                                 <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
@@ -116,7 +116,7 @@
                                     </Border.StrokeShape>
                                     <Image Source="{Binding ImagePath}"
                                            HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"
-                                           Opacity="0.8"/>
+                                           Opacity="1"/>
                                 </Border>
                                 <!--<models:CutImage Grid.Column="2" ImagePath="{Binding ImagePath}" />-->
                         
