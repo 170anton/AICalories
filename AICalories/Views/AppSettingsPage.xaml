@@ -7,6 +7,7 @@
     
     <AbsoluteLayout>
     <ScrollView
+             IsVisible="{Binding IsLayoutVisible}"
            AbsoluteLayout.LayoutBounds="0,0,1,1"
            AbsoluteLayout.LayoutFlags="All" >
         <VerticalStackLayout  Padding="10">
@@ -115,5 +116,6 @@
         Style="{StaticResource MainActivityIndicatorStyle}"
         
         />
+        
     </AbsoluteLayout>
 </ContentPage>

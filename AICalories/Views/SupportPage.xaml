@@ -5,7 +5,7 @@
              x:Class="AICalories.Views.SupportPage"
              >
     
-    <AbsoluteLayout>
+    <AbsoluteLayout IsVisible="{Binding IsLayoutVisible}">
     <ScrollView
            AbsoluteLayout.LayoutBounds="0,0,1,1"
            AbsoluteLayout.LayoutFlags="All" >
@@ -43,13 +43,19 @@
         
     <ActivityIndicator
         IsRunning="{Binding IsSending}"
-        Color="Black"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        Scale="2"
+        Style="{StaticResource MainActivityIndicatorStyle}"
         IsVisible="{Binding IsSending}"
         
         AbsoluteLayout.LayoutBounds="0.5,0.3,-1,-1"
+        AbsoluteLayout.LayoutFlags="PositionProportional" 
+        />
+        
+    <ActivityIndicator
+        IsRunning="{Binding IsLoading}"
+        Style="{StaticResource MainActivityIndicatorStyle}"
+        IsVisible="{Binding IsLoading}"
+        
+        AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
         AbsoluteLayout.LayoutFlags="PositionProportional" 
         />
     </AbsoluteLayout>

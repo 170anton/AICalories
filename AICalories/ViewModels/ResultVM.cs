@@ -562,8 +562,8 @@ namespace AICalories.ViewModels
         {
             try
             {
-                //var dateTimeNow = DateTime.Now;
-                var dateTimeNow = new DateTime(2024, 9, 25, 19, 13, 0);
+                var dateTimeNow = DateTime.Now;
+                //var dateTimeNow = new DateTime(2024, 9, 25, 19, 13, 0);
 
                 mealItem.Date = dateTimeNow;
                 mealItem.Time = dateTimeNow.ToString("HH:mm");
@@ -574,7 +574,7 @@ namespace AICalories.ViewModels
                 foreach (var ingredient in mealItem.Ingredients)
                 {
                     ingredient.MealItemId = mealItemId;
-                    App.IngredientItemRepository.SaveIngredientAsync(ingredient);
+                    await App.IngredientItemRepository.SaveIngredientAsync(ingredient);
                 }
 
             }
@@ -661,6 +661,7 @@ namespace AICalories.ViewModels
             else
             {
                 Console.WriteLine("Ad is not ready to be shown yet.");
+                IsAdsEnabled = false;
             }
         }
 

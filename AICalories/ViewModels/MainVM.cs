@@ -487,12 +487,15 @@ public class MainVM : INotifyPropertyChanged
             IsLoading = true;
 
             var dateTimeNow = DateTime.Now;
+            //await App.HistoryItemRepository.DeleteAllMealItemsAsync();
             var allMealsList = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
-            if (allMealsList == null)
+            if (allMealsList.Count == 0)
             {
                 IsHistoryGridVisible = false;
+                IsLoading = false;
                 IsMakeFirstRecordVisible = true;
+
                 return;
             }
 
