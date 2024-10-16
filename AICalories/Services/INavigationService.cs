@@ -8,6 +8,7 @@ namespace AICalories.Services
         Task PopToMainModalAsync();
         Task NavigateToMainPageAsync();
         Task NavigateToTakeImagePageAsync();
+        Task NavigateToTakeImagePageAsyncNotModal();
         Task NavigateToContextPageAsync();
         Task NavigateToResultPageAsync();
     }

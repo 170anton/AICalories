@@ -4,6 +4,7 @@ using AICalories;
 using AICalories.DI;
 using AICalories.Models;
 using AICalories.ViewModels;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json; 
 
@@ -70,7 +71,6 @@ public partial class MainPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-
     }
 
     protected async override void OnAppearing()
@@ -80,5 +80,4 @@ public partial class MainPage : ContentPage
         await _viewModel.OnPageAppearingAsync();
     }
     #endregion
-
 }

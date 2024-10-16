@@ -132,12 +132,12 @@ public partial class TakeImagePage : ContentPage
         galleryButton.IsVisible = !galleryButton.IsVisible;
     }
 
-    private void CameraView_CamerasLoaded(object sender, EventArgs e)
+    private async void CameraView_CamerasLoaded(object sender, EventArgs e)
     {
 
         cameraView.ImageCaptureResolution = new Size(1440, 1080);
-
-
+        await Task.Delay(200);
+        _viewModel.IsLayoutVisible = true;
     }
 
     protected override bool OnBackButtonPressed()
@@ -156,12 +156,13 @@ public partial class TakeImagePage : ContentPage
         //{
         //    cameraView.TorchEnabled = false;
         //}
-        //cameraView.StopCameraAsync();
+        cameraView.StopCameraPreview();
+
+        cameraView.Loaded -= CameraView_CamerasLoaded;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
     }
 }

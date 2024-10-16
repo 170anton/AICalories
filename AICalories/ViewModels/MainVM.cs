@@ -8,6 +8,7 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
+using AICalories.Views;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
@@ -591,57 +592,37 @@ public class MainVM : INotifyPropertyChanged
 
     private async Task NewImageClicked()
     {
-        try
+        bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
+        if (isCameraAvailable)
         {
-            bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
-            if (isCameraAvailable)
+            try
             {
-                try
+                if (!InternetConnection.CheckInternetConnection())
                 {
-                    //var image = await MediaPicker.Default.CapturePhotoAsync();
-                    //await CrossMedia.Current.Initialize();
-
-                    //var takeImagePage = new TakeImagePage();
-
-                    if (!InternetConnection.CheckInternetConnection())
-                    {
-                        DisplayAlertConfiguration.ShowError("No internet connection");
-                        return;
-                    }
-
-                    _navigationService.PopModalAsync();
-                    await _navigationService.NavigateToTakeImagePageAsync();
-
-                    //var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
-                    //await Shell.Current.Navigation.PushModalAsync(takeImagePage);
-
-
-                    //await CrossMedia.Current.Initialize();
-
-                    //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                    //{
-                    //    PhotoSize = PhotoSize.Medium,
-                    //    //SaveToAlbum = true
-                    //});
-
+                    DisplayAlertConfiguration.ShowError("No internet connection");
+                    return;
                 }
-                catch (ArgumentNullException ex)
-                {
-                    DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
-                }
-                catch (Exception ex)
-                {
-                    DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
-                }
+
+                await _navigationService.NavigateToTakeImagePageAsync();
+
+                //var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+
+                ////Shell.Current.Navigation.PopModalAsync();
+                //await Shell.Current.Navigation.PushModalAsync(takeImagePage);
+
             }
-            else
+            catch (ArgumentNullException ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
+                DisplayAlertConfiguration.ShowError("No connection to the server. Please try again later");
+            }
+            catch (Exception ex)
+            {
+                DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
             }
         }
-        catch (Exception ex)
+        else
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+            await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
         }
     }
 

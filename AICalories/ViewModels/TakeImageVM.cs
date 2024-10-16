@@ -24,6 +24,7 @@ namespace AICalories.ViewModels
         private CameraFlashMode _flashMode;
 
         private IImageInfo _imageInfo;
+        private bool _isLayoutVisible;
 
         public ICommand CaptureCommand { get; }
         public ICommand GalleryCommand { get; }
@@ -57,6 +58,16 @@ namespace AICalories.ViewModels
             set
             {
                 _flashMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsLayoutVisible
+        {
+            get => _isLayoutVisible;
+            set
+            {
+                _isLayoutVisible = value;
                 OnPropertyChanged();
             }
         }

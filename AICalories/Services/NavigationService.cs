@@ -40,6 +40,12 @@ namespace AICalories.Services
             return Shell.Current.Navigation.PushModalAsync(resultPage);
         }
 
+        public Task NavigateToTakeImagePageAsyncNotModal()
+        {
+            var resultPage = _serviceProvider.GetService<TakeImagePage>();
+            return Shell.Current.Navigation.PushAsync(resultPage);
+        }
+
         public Task NavigateToContextPageAsync()
         {
             var resultPage = _serviceProvider.GetService<ContextPage>();

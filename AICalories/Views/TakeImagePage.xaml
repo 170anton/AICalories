@@ -5,6 +5,8 @@
              x:Class="AICalories.Views.TakeImagePage">
 
     <Grid RowDefinitions=".7*,.2*"
+          x:Name="MainGrid"
+          IsVisible="{Binding IsLayoutVisible}"
           BackgroundColor="Black">
         <Image x:Name="imagePreview" IsVisible="False"/>
 
