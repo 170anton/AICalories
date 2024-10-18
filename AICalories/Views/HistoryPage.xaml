@@ -36,13 +36,12 @@
                                 <RoundRectangle CornerRadius="35,3,3,35"/>
                             </Border.StrokeShape>
                             <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,Auto,Auto"
-                                Margin="5" Padding="10"
-                                RowSpacing="10" ColumnSpacing="5">
+                                Margin="25,4,5,4" Padding="8"
+                                RowSpacing="6" ColumnSpacing="5">
                                 <Label
                                     Grid.Column="0"
                                     Style="{StaticResource IngredientsStyle}"
                                     HorizontalOptions="Start"
-                                    Margin="10,0,0,0"
                                     Text="{Binding Title}" FontAttributes="Bold"
                                     FontSize="Medium"/>
                                 <Border Grid.Row="1" Grid.Column="0"
@@ -58,7 +57,6 @@
                                             Style="{StaticResource IngredientsStyle}"
                                             HorizontalOptions="Start"
                                             VerticalOptions="Center"
-                                            Margin="10,1,0,0"
                                             Text="Total: "
                                             FontSize="Medium"
                                             IsVisible="False"/>
@@ -66,7 +64,6 @@
                                         <Label
                                             Style="{StaticResource IngredientsStyle}"
                                             HorizontalOptions="Start"
-                                            Margin="10,0,0,0"
                                             Text="{Binding TotalCalories}"
                                             FontSize="Title" FontAttributes="Bold"/>
                                         <Label
@@ -74,7 +71,8 @@
                                             HorizontalOptions="Start"
                                             Margin="5,1,0,0"
                                             Text="Calories"
-                                            FontSize="Medium"/>
+                                            FontSize="Medium"
+                                            FontAttributes="Bold"/>
 
                                     </HorizontalStackLayout>
                                 </Border>

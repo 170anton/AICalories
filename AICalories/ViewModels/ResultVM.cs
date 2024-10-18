@@ -371,16 +371,13 @@ namespace AICalories.ViewModels
                     await LoadMealResponse(mealItem);
 
                     await AddItemToDB(mealItem);
-//#if ANDROID
-//                    Platform.CurrentActivity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
-//#endif
-                    
+                    //#if ANDROID
+                    //                    Platform.CurrentActivity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+                    //#endif
+
                     IsLoading = false;
                     //IsHistoryGridVisible = true;
-                    if (IsAdsEnabled == false)
-                    {
-                        IsHistoryGridVisible = true;
-                    }
+                    ShowHistoryGridAfterAds();
                 }
             }
             catch (JsonSerializationException)
@@ -405,6 +402,14 @@ namespace AICalories.ViewModels
                 _alertService.ShowUnexpectedError();
                 await _navigationService.PopModalAsync();
                 IsLoading = false;
+            }
+        }
+
+        public void ShowHistoryGridAfterAds()
+        {
+            if (IsAdsEnabled == false)
+            {
+                IsHistoryGridVisible = true;
             }
         }
 
@@ -563,7 +568,7 @@ namespace AICalories.ViewModels
             try
             {
                 var dateTimeNow = DateTime.Now;
-                //var dateTimeNow = new DateTime(2024, 9, 25, 19, 13, 0);
+                //var dateTimeNow = new DateTime(2024, 10, 14, 19, 13, 0);
 
                 mealItem.Date = dateTimeNow;
                 mealItem.Time = dateTimeNow.ToString("HH:mm");
@@ -640,6 +645,7 @@ namespace AICalories.ViewModels
                         {
                             Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
                             IsAdsEnabled = false;
+                            ShowHistoryGridAfterAds();
                         }));
 
             }
@@ -647,6 +653,7 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine($"Error loading ads: {ex.Message}");
                 IsAdsEnabled = false;
+                ShowHistoryGridAfterAds();
             }
         }
 
@@ -662,6 +669,7 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine("Ad is not ready to be shown yet.");
                 IsAdsEnabled = false;
+                ShowHistoryGridAfterAds();
             }
         }
 

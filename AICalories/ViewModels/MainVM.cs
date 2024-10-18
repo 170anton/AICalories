@@ -9,6 +9,7 @@ using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
 using AICalories.Views;
+using Android.Webkit;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
@@ -33,11 +34,12 @@ public class MainVM : INotifyPropertyChanged
     private string _totalSugar;
     private string _showMoreTodayStatsText;
     private string _todayDate;
+    private string _previousDate;
     private bool _isLoading;
     private bool _isMakeFirstRecordVisible;
     private bool _isHistoryGridVisible;
     private bool _isPfcsInfoGridVisible;
-    private bool _isYesterdayVisible;
+    private bool _isPreviousVisible;
     private bool _isGoalsSet;
     private int _dailyCalorieGoal;
     private int _dailyProteinGoal;
@@ -57,6 +59,7 @@ public class MainVM : INotifyPropertyChanged
     public ICommand DeleteLastMealCommand { get; }
     public ICommand ShowMoreTodayStatsCommand { get; }
     public ICommand SetGoalCommand { get; }
+    public ICommand DeleteSelectedMealCommand { get; }
 
     #region Properties
 
@@ -88,6 +91,16 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _todayDate = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string PreviousDate
+    {
+        get => _previousDate;
+        set
+        {
+            _previousDate = value;
             OnPropertyChanged();
         }
     }
@@ -142,12 +155,12 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    public bool IsYesterdayVisible
+    public bool IsPreviousVisible
     {
-        get => _isYesterdayVisible;
+        get => _isPreviousVisible;
         set
         {
-            _isYesterdayVisible = value;
+            _isPreviousVisible = value;
             OnPropertyChanged();
         }
     }
@@ -339,6 +352,7 @@ public class MainVM : INotifyPropertyChanged
         DeleteLastMealCommand = new Command(async () => await DeleteLastMealClicked());
         ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
         SetGoalCommand = new Command(async () => await SetGoalAsync());
+        DeleteSelectedMealCommand = new Command<MealItem>(DeleteSelectedMealClicked);
 
         LastMealIngredients = new ObservableCollection<IngredientItem>();
         TodayMealsCollection = new ObservableCollection<MealItem>();
@@ -484,7 +498,7 @@ public class MainVM : INotifyPropertyChanged
         try
         {
             IsMakeFirstRecordVisible = false;
-            IsYesterdayVisible = false;
+            IsPreviousVisible = false;
             IsLoading = true;
 
             var dateTimeNow = DateTime.Now;
@@ -506,7 +520,7 @@ public class MainVM : INotifyPropertyChanged
 
             if (mealListByDay.Count() == 0)
             {
-                mealListByDay = await SetYesterdayInfo(dateTimeNow, allMealsList, mealListByDay);
+                mealListByDay = await SetPreviousInfo(allMealsList, mealListByDay);
             }
 
             if (CheckOnUpdate(dateTimeNow, mealListByDay))
@@ -526,20 +540,27 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    private async Task<List<MealItem>> SetYesterdayInfo(DateTime dateTimeNow, List<MealItem> items, List<MealItem> todayMeals)
+    private async Task<List<MealItem>> SetPreviousInfo(List<MealItem> allMealsList, List<MealItem> todayMeals)
     {
-        var yesterday = dateTimeNow.AddDays(-1);
-        var yesterdayMeals = items.Where(i => i.Date.Date == yesterday.Date)
+        //var yesterday = dateTimeNow.AddDays(-1);
+        var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
+        var lastMealDate = lastMeal.Date.Date;
+        PreviousDate = lastMealDate.ToString("dd MMMM");
+
+        var previousMeals = allMealsList.Where(i => i.Date.Date == lastMealDate)
                        .OrderByDescending(g => g.Date)
                        .ToList();
 
-        if (yesterdayMeals.Count() != 0)
+        if (previousMeals.Count() != 0)
         {
-            IsYesterdayVisible = true;
-            return yesterdayMeals;
+            IsPreviousVisible = true;
+            return previousMeals;
         }
         else
+        {
+            IsPreviousVisible = false;
             return todayMeals;
+        }
     }
 
     private async Task FillCollection(List<MealItem> mealList)
@@ -586,6 +607,27 @@ public class MainVM : INotifyPropertyChanged
     private async Task LoadMealIngredients(IMealItem mealItem)
     {
         mealItem.Ingredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(mealItem.Id);
+    }
+
+    private async void DeleteSelectedMealClicked(MealItem item)
+    {
+        try
+        {
+            bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+            if (delete)
+            { 
+                if (item != null)
+                {
+                    TodayMealsCollection.Remove(item);
+                    await App.HistoryItemRepository.DeleteMealItemAsync(item);
+                    await OnPageAppearingAsync();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", "", "Sad");
+        }
     }
 
     #region Photo selection buttons

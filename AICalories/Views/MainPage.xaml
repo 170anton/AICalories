@@ -14,7 +14,7 @@
 
 
         <ScrollView Padding="10,10,10,10" >
-        <Grid RowDefinitions="Auto,Auto"
+        <Grid RowDefinitions="Auto,*"
               Padding="0,20,0,0" >
 
 
@@ -45,7 +45,7 @@
                                 <RoundRectangle CornerRadius="35,3,3,35"/>
                             </Border.StrokeShape>
                             <Grid RowDefinitions="Auto,Auto">
-                                <Label Grid.Row="0" Text="{Binding TodayDate}" Style="{StaticResource IngredientsStyle}"
+                                <Label Grid.Row="0" Text="{Binding TodayDate, StringFormat='Today - {0}'}" Style="{StaticResource IngredientsStyle}"
                                     FontAttributes="Bold" FontSize="Large"
                                     HorizontalOptions="Start" Margin="0,5"
                                     />
@@ -475,19 +475,19 @@
                 </Frame>-->
 
             </Grid>
-                
+
+            <!--History Grid-->
             <Grid  Grid.Row="1"
                 x:Name="historyGrid"
                 IsVisible="{Binding IsHistoryGridVisible}"
-                RowDefinitions="Auto,Auto"
+                RowDefinitions="Auto,*"
                 Margin="0,30,0,0"
                 Padding="0,0,0,0">
                 <Label Grid.Row="0"
-                       x:Name="yesterdayLabel"
-                        Text="Yesterday"
-                        IsVisible="{Binding IsYesterdayVisible}"
+                        Text="{Binding PreviousDate, StringFormat='Previous - {0}'}"
+                        IsVisible="{Binding IsPreviousVisible}"
                         Style="{StaticResource LabelAppStyle}"
-                        FontAttributes="Bold" FontSize="Title"
+                        FontAttributes="Bold" FontSize="Large"
                         HorizontalTextAlignment="Start" Margin="20,20,20,0"/>
 
                         <!--Today Meals Data-->
@@ -499,6 +499,7 @@
                         ItemsLayout="VerticalList"
                         VerticalScrollBarVisibility="Never"
                         HorizontalScrollBarVisibility="Never"
+                        VerticalOptions="FillAndExpand"
                         >
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -516,22 +517,25 @@
                                 <Border Grid.Row="1"
                                         Style="{StaticResource MainBorderStyle}"
                                         Padding="0"
-                                        Margin="0,5">
+                                        Margin="0,5"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}">
                                         
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="35,3,3,35"/>
                                 </Border.StrokeShape>
                                     <Grid RowDefinitions="Auto,Auto">
                                         <Grid Grid.Row="0"
-                                              ColumnDefinitions="4*,5*">
+                                              ColumnDefinitions="4*,5*"
+                                              HeightRequest="120"
+
+                                              >
                                             <Grid Grid.Column="1"
                                                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                                                 AbsoluteLayout.LayoutFlags="All" 
                                                 RowDefinitions="Auto,*,Auto,Auto"
                                                 ColumnDefinitions="*,Auto"
                                                 Margin="0,0"
-                                                VerticalOptions="FillAndExpand"
-                                                HeightRequest="100">
+                                                VerticalOptions="FillAndExpand">
 
                                                 <!--Time Old-->
                                                 <!--<Border Grid.Row="0" Style="{StaticResource MainBorderStyle}"
@@ -778,12 +782,11 @@
                                             <!--Image-->
                                             <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource TodayStatsBorderStyle}"
                                                     Opacity="1"
-                                                    Margin="0,0,0,0" Padding="0,0,2,2"
-                                                    HeightRequest="100"
+                                                    Margin="0,0,0,0" Padding="0,0,3,3"
                                                     VerticalOptions="Start"
                                                     Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}">
                                                 <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="3,3,3,37"/>
+                                                    <RoundRectangle CornerRadius="3,0,0,37"/>
                                                 </Border.StrokeShape>
                                                 <Border Style="{StaticResource TodayStatsBorderStyle}"
                                                         Padding="0"
@@ -850,7 +853,23 @@
                                                 </CollectionView>
                                             </Border>
                                         </Grid>
-
+                                        
+                                        <!-- Delete Button -->
+                                        <Button
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                HeightRequest="20"
+                                                WidthRequest="20"
+                                                Margin="3"
+                                                Style="{StaticResource ImageOptionStyle}"
+                                                BackgroundColor="Transparent"
+                                                BorderColor="Transparent"
+                                                Opacity="0.3"
+                                                IsEnabled="True"
+                                                ImageSource="delete_lastmeal.png"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteSelectedMealCommand}"
+                                                CommandParameter="{Binding .}"
+                                                />
 
                                     </Grid>
                                 </Border>
@@ -892,7 +911,7 @@
 
             <Button
                     Text="New &#xFF0B;"
-                    Padding="18"
+                    Padding="15"
                     CornerRadius="0"
                     Style="{StaticResource ImageOptionStyle}"
                     Command="{Binding NewImageCommand}">

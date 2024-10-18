@@ -18,18 +18,23 @@ namespace AICalories.Services
 
         public override void OnAdDismissedFullScreenContent()
         {
-            Console.WriteLine("Interstitial ad dismissed.");
+            Console.WriteLine("Ad dismissed.");
             //RefreshUI();
             _viewModel.IsAdsEnabled = false;
             if (_viewModel.IsLoading == false)
             {
-                _viewModel.IsHistoryGridVisible = true;
+                _viewModel.ShowHistoryGridAfterAds();
             }
         }
 
         public override void OnAdFailedToShowFullScreenContent(AdError adError)
         {
             Console.WriteLine($"Interstitial ad failed to show: {adError.Message}");
+            _viewModel.IsAdsEnabled = false;
+            if (_viewModel.IsLoading == false)
+            {
+                _viewModel.ShowHistoryGridAfterAds();
+            }
         }
 
         public override void OnAdShowedFullScreenContent()
