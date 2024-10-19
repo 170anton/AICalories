@@ -22,11 +22,11 @@
                 <custom:CustomAutoHeightFrame  AutoHeight="True" Padding="30,20"
                                                Style="{StaticResource MainFrameStyle}"
                                                Margin="10,10,10,0">
-                    <Editor Text="{Binding UserInfo}" Placeholder="Help AI"  FontSize="Large"
-                                x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
-                                TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
-                                PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
-                                />
+                    <Editor Text="{Binding UserInfo}" Placeholder="Description"  FontSize="Large"
+                            x:Name="userInfoEditor" MaxLength="200" MaximumHeightRequest="400" AutoSize="TextChanges"
+                            TextColor = "{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                            PlaceholderColor = "{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource White}}"
+                            />
 
                 </custom:CustomAutoHeightFrame>
 
@@ -38,8 +38,8 @@
                         <!--<Label Text="Type" Style="{StaticResource LabelAppStyle}" FontAttributes="Bold"
                                HorizontalTextAlignment="Start" Margin="20,20,20,0"/>-->
                         <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto"
-                              Padding="50,20" RowSpacing="0">
-                            <Label Text="Diet" Style="{StaticResource LabelAppStyle}"
+                              Padding="60,15" RowSpacing="0">
+                            <Label Text="Dietary" Style="{StaticResource LabelAppStyle}"
                                    HorizontalTextAlignment="Start"/> 
                             <RadioButton Grid.Column="1" Style="{StaticResource RadioButtonAppStyle}" 
                                    CheckedChanged="RadioButton_CheckedChanged" 
@@ -95,13 +95,30 @@
                 </Frame>-->
             </VerticalStackLayout>
         </ScrollView>
-        <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
-            
-            <Button  Style="{StaticResource ImageOptionStyle}" Padding="13"
-                ImageSource="refresh_white.png" Margin="10,10,0,10" Clicked="OnNewImageClicked"/>
-            <Button Grid.Column="1" Style="{StaticResource ImageOptionStyle}"
-                Text="Confirm" Margin="10" Command="{Binding ConfirmCommand}"/>
+            <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*">
+
+                <Border Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="10,10,0,10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="35,3,3,3"/>
+                    </Border.StrokeShape>
+                    <Button  Style="{StaticResource ImageOptionStyle}"
+                             Padding="18,14,12,14"
+                        ImageSource="refresh_white.png" CornerRadius="0"
+                        Command="{Binding NewImageCommand}"/>
+                    
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="2,10,10,10" >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="3,3,3,35"/>
+                    </Border.StrokeShape>
+                    <Button Style="{StaticResource ImageOptionStyle}"
+                        Text="Confirm    " Padding="13" CornerRadius="0"
+                        Command="{Binding ConfirmCommand}"/>
+                 </Border>
+            </Grid>
         </Grid>
-    </Grid>
     </AbsoluteLayout>
 </ContentPage>

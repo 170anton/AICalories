@@ -36,4 +36,11 @@ public partial class SupportPage : ContentPage
         Shell.Current.GoToAsync("//history");
         return true;
     }
+
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        await _viewModel.OnPageAppearingAsync();
+    }
 }

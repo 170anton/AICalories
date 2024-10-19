@@ -8,6 +8,8 @@ using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
+using AICalories.Views;
+using Android.Webkit;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics.Platform;
 using Newtonsoft.Json;
@@ -31,15 +33,24 @@ public class MainVM : INotifyPropertyChanged
     private string _totalCarbohydrates;
     private string _totalSugar;
     private string _showMoreTodayStatsText;
+    private string _todayDate;
+    private string _previousDate;
     private bool _isLoading;
-    private bool _isLabelVisible;
+    private bool _isMakeFirstRecordVisible;
     private bool _isHistoryGridVisible;
     private bool _isPfcsInfoGridVisible;
+    private bool _isPreviousVisible;
+    private bool _isGoalsSet;
+    private int _dailyCalorieGoal;
+    private int _dailyProteinGoal;
+    private int _dailyFatGoal;
+    private int _dailyCarbsGoal;
+    private int _dailySugarGoal;
 
     private readonly IViewModelService _viewModelService;
     private readonly INavigationService _navigationService;
     private readonly IAlertService _alertService;
-    private ObservableCollection<IngredientItem> _ingredients;
+    private ObservableCollection<IngredientItem> _lastMealIngredients;
 
     public ContextVM ContextVM => _viewModelService.ContextVM;
     public AppSettingsVM AppSettingsVM => _viewModelService.AppSettingsVM;
@@ -47,15 +58,19 @@ public class MainVM : INotifyPropertyChanged
     public ICommand NewImageCommand { get; }
     public ICommand DeleteLastMealCommand { get; }
     public ICommand ShowMoreTodayStatsCommand { get; }
+    public ICommand SetGoalCommand { get; }
+    public ICommand DeleteSelectedMealCommand { get; }
 
     #region Properties
 
-    public ObservableCollection<IngredientItem> Ingredients
+    public ObservableCollection<MealItem> TodayMealsCollection { get; private set; }
+
+    public ObservableCollection<IngredientItem> LastMealIngredients
     {
-        get => _ingredients;
+        get => _lastMealIngredients;
         set
         {
-            _ingredients = value;
+            _lastMealIngredients = value;
             OnPropertyChanged();
         }
     }
@@ -66,6 +81,26 @@ public class MainVM : INotifyPropertyChanged
         set
         {
             _showMoreTodayStatsText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string TodayDate
+    {
+        get => _todayDate;
+        set
+        {
+            _todayDate = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string PreviousDate
+    {
+        get => _previousDate;
+        set
+        {
+            _previousDate = value;
             OnPropertyChanged();
         }
     }
@@ -119,6 +154,77 @@ public class MainVM : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
+
+    public bool IsPreviousVisible
+    {
+        get => _isPreviousVisible;
+        set
+        {
+            _isPreviousVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsGoalsSet
+    {
+        get => _isGoalsSet;
+        set
+        {
+            _isGoalsSet = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyCalorieGoal
+    {
+        get => _dailyCalorieGoal;
+        set
+        {
+            _dailyCalorieGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyProteinGoal
+    {
+        get => _dailyProteinGoal;
+        set
+        {
+            _dailyProteinGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyFatGoal
+    {
+        get => _dailyFatGoal;
+        set
+        {
+            _dailyFatGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailyCarbsGoal
+    {
+        get => _dailyCarbsGoal;
+        set
+        {
+            _dailyCarbsGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int DailySugarGoal
+    {
+        get => _dailySugarGoal;
+        set
+        {
+            _dailySugarGoal = value;
+            OnPropertyChanged();
+        }
+    }
+
 
     public string LastHistoryItemImage
     {
@@ -200,12 +306,12 @@ public class MainVM : INotifyPropertyChanged
         }
     }
 
-    public bool IsLabelVisible
+    public bool IsMakeFirstRecordVisible
     {
-        get => _isLabelVisible;
+        get => _isMakeFirstRecordVisible;
         set
         {
-            _isLabelVisible = value;
+            _isMakeFirstRecordVisible = value;
             OnPropertyChanged();
         }
     }
@@ -245,8 +351,11 @@ public class MainVM : INotifyPropertyChanged
         NewImageCommand = new Command(async () => await NewImageClicked());
         DeleteLastMealCommand = new Command(async () => await DeleteLastMealClicked());
         ShowMoreTodayStatsCommand = new Command(ShowMoreTodayStatsClicked);
+        SetGoalCommand = new Command(async () => await SetGoalAsync());
+        DeleteSelectedMealCommand = new Command<MealItem>(DeleteSelectedMealClicked);
 
-        Ingredients = new ObservableCollection<IngredientItem>();
+        LastMealIngredients = new ObservableCollection<IngredientItem>();
+        TodayMealsCollection = new ObservableCollection<MealItem>();
 
         LoadShowMoreTodayStatsOption();
 
@@ -264,13 +373,10 @@ public class MainVM : INotifyPropertyChanged
     {
         try
         {
-            //LastHistoryItemName = null;
-            //LastHistoryItemCalories = null;
-            //LastHistoryItemImage = null;
-
             await LoadTodayStats();
 
-            await LoadLastMeal();
+            await LoadLastMeals();
+
         }
         catch (Exception)
         {
@@ -286,11 +392,24 @@ public class MainVM : INotifyPropertyChanged
         var dateTimeNow = DateTime.Now;
         List<MealItem> items = await App.HistoryItemRepository.GetAllMealItemsAsync();
 
+        TodayDate = dateTimeNow.ToString("dddd, dd MMMM");
         await GetTotalCalories(items, dateTimeNow);
         await GetTotalProteins(items, dateTimeNow);
         await GetTotalFats(items, dateTimeNow);
         await GetTotalCarbohydrates(items, dateTimeNow);
         await GetTotalSugar(items, dateTimeNow);
+        CheckPFCSInfoExist();
+        await GetTodayGoals();
+    }
+
+    public async Task GetTodayGoals()
+    {
+        IsGoalsSet = Preferences.Get(App.IsGoalsSet, false);
+        DailyCalorieGoal = Preferences.Get(App.DailyCalorieGoal, 0);
+        DailyProteinGoal = Preferences.Get(App.DailyProteinGoal, 0);
+        DailyFatGoal = Preferences.Get(App.DailyFatGoal, 0);
+        DailyCarbsGoal = Preferences.Get(App.DailyCarbsGoal, 0);
+        DailySugarGoal = Preferences.Get(App.DailySugarGoal, 0);
     }
 
     public async Task GetTotalCalories(List<MealItem> items, DateTime dateTimeNow)
@@ -345,131 +464,207 @@ public class MainVM : INotifyPropertyChanged
         LoadShowMoreTodayStatsOption();
     }
 
+    private void CheckPFCSInfoExist()
+    {
+        if (Convert.ToInt32(TotalProteins) == 0 && Convert.ToInt32(TotalCarbohydrates) == 0)
+        {
+            IsPfcsGridVisible = false;
+        }
+        else
+        {
+            IsPfcsGridVisible = true;
+        }
+    }
+
     private void LoadShowMoreTodayStatsOption()
     {
         var savedOption = Preferences.Get(App.ShowMoreTodayStatsKey, false);
         if (!savedOption)
         {
-            ShowMoreTodayStatsText = "show more";
+            ShowMoreTodayStatsText = "+";
             IsPfcsGridVisible = savedOption;
         }
         else
         {
-            ShowMoreTodayStatsText = "show less";
+            ShowMoreTodayStatsText = "-";
             IsPfcsGridVisible = savedOption;
         }
     }
 
     #endregion
 
-    public async Task LoadLastMeal()
+    public async Task LoadLastMeals()
     {
         try
         {
-            IsLabelVisible = false;
+            IsMakeFirstRecordVisible = false;
+            IsPreviousVisible = false;
             IsLoading = true;
-            await Task.Delay(500);
-            var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
-            IsLoading = false;
 
-            if (lastMeal == null)
+            var dateTimeNow = DateTime.Now;
+            //await App.HistoryItemRepository.DeleteAllMealItemsAsync();
+            var allMealsList = await App.HistoryItemRepository.GetAllMealItemsAsync();
+
+            if (allMealsList.Count == 0)
             {
                 IsHistoryGridVisible = false;
-                IsLabelVisible = true;
+                IsLoading = false;
+                IsMakeFirstRecordVisible = true;
+
                 return;
             }
 
-            //if (LastHistoryItemImage != lastMeal.ImagePath || LastHistoryItemName != lastMeal.MealName) //todo test in release
-            {
-                _lastHistoryItem = lastMeal;
-                LastHistoryItemImage = lastMeal.ImagePath;
-                LastHistoryItemName = lastMeal.MealName;
-                LastHistoryItemCalories = lastMeal.Calories.ToString();
-                LastHistoryItemProtein = lastMeal.Proteins.ToString();
-                LastHistoryItemFat = lastMeal.Fats.ToString();
-                LastHistoryItemCarbs = lastMeal.Carbohydrates.ToString();
-                LastHistoryItemSugar = lastMeal.Sugar.ToString();
+            var mealListByDay = allMealsList.Where(i => i.Date.Date == dateTimeNow.Date)
+                               .OrderByDescending(g => g.Date)
+                               .ToList();
 
-                await LoadLastMealIngredients(lastMeal.Id);
+            if (mealListByDay.Count() == 0)
+            {
+                mealListByDay = await SetPreviousInfo(allMealsList, mealListByDay);
             }
 
+            if (CheckOnUpdate(dateTimeNow, mealListByDay))
+            {
+                await FillCollection(mealListByDay);
+            }
+
+
+            IsLoading = false;
             IsHistoryGridVisible = true;
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error LoadLastHistoryItem: {ex.Message}");
+            Console.WriteLine($"Error: {ex.Message}");
             throw;
         }
     }
+
+    private async Task<List<MealItem>> SetPreviousInfo(List<MealItem> allMealsList, List<MealItem> todayMeals)
+    {
+        //var yesterday = dateTimeNow.AddDays(-1);
+        var lastMeal = await App.HistoryItemRepository.GetLastMealItemAsync();
+        var lastMealDate = lastMeal.Date.Date;
+        PreviousDate = lastMealDate.ToString("dd MMMM");
+
+        var previousMeals = allMealsList.Where(i => i.Date.Date == lastMealDate)
+                       .OrderByDescending(g => g.Date)
+                       .ToList();
+
+        if (previousMeals.Count() != 0)
+        {
+            IsPreviousVisible = true;
+            return previousMeals;
+        }
+        else
+        {
+            IsPreviousVisible = false;
+            return todayMeals;
+        }
+    }
+
+    private async Task FillCollection(List<MealItem> mealList)
+    {
+        TodayMealsCollection.Clear();
+
+        foreach (var meal in mealList)
+        {
+            await LoadMealIngredients(meal);
+            TodayMealsCollection.Add(meal);
+        }
+    }
+
+    /// <summary>
+    /// Returns true if collection should be updated
+    /// </summary>
+    /// <param name="dateTimeNow"></param>
+    /// <param name="todayMeals"></param>
+    /// <returns></returns>
+    private bool CheckOnUpdate(DateTime dateTimeNow, List<MealItem> todayMeals)
+    {
+        bool haveSameImages = todayMeals.Select(i => i.ImagePath)
+                               .SequenceEqual(TodayMealsCollection.ToList().Select(i => i.ImagePath));
+
+        if (haveSameImages)
+            return false;
+        else
+            return true;
+    }
+
 
     private async Task LoadLastMealIngredients(int lastMealId)
     {
         var lastMealIngredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(lastMealId);
 
         //Ingredients.Clear();
-        Ingredients = new ObservableCollection<IngredientItem>(lastMealIngredients);
+        LastMealIngredients = new ObservableCollection<IngredientItem>(lastMealIngredients);
         //foreach (var ingredient in lastMealIngredients)
         //{
         //    Ingredients.Add(ingredient);
         //}
     }
 
-    #region Photo selection buttons
+    private async Task LoadMealIngredients(IMealItem mealItem)
+    {
+        mealItem.Ingredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(mealItem.Id);
+    }
 
-    private async Task NewImageClicked()
+    private async void DeleteSelectedMealClicked(MealItem item)
     {
         try
         {
-            bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
-            if (isCameraAvailable)
-            {
-                try
+            bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+            if (delete)
+            { 
+                if (item != null)
                 {
-                    //var image = await MediaPicker.Default.CapturePhotoAsync();
-                    //await CrossMedia.Current.Initialize();
-
-                    //var takeImagePage = new TakeImagePage();
-
-                    if (!InternetConnection.CheckInternetConnection())
-                    {
-                        DisplayAlertConfiguration.ShowError("No internet connection");
-                        return;
-                    }
-
-                    _navigationService.PopModalAsync();
-                    await _navigationService.NavigateToTakeImagePageAsync();
-
-                    //var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
-                    //await Shell.Current.Navigation.PushModalAsync(takeImagePage);
-
-
-                    //await CrossMedia.Current.Initialize();
-
-                    //MediaFile image = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                    //{
-                    //    PhotoSize = PhotoSize.Medium,
-                    //    //SaveToAlbum = true
-                    //});
-
+                    TodayMealsCollection.Remove(item);
+                    await App.HistoryItemRepository.DeleteMealItemAsync(item);
+                    await OnPageAppearingAsync();
                 }
-                catch (ArgumentNullException ex)
-                {
-                    DisplayAlertConfiguration.ShowError("No connection to AI server. Please try again later");
-                }
-                catch (Exception ex)
-                {
-                    DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
-                }
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "Sad");
+            await Application.Current.MainPage.DisplayAlert("Error", "", "Sad");
+        }
+    }
+
+    #region Photo selection buttons
+
+    private async Task NewImageClicked()
+    {
+        bool isCameraAvailable = await CheckAndRequestCameraPermissionAsync();
+        if (isCameraAvailable)
+        {
+            try
+            {
+                if (!InternetConnection.CheckInternetConnection())
+                {
+                    DisplayAlertConfiguration.ShowError("No internet connection");
+                    return;
+                }
+
+                await _navigationService.NavigateToTakeImagePageAsync();
+
+                //var takeImagePage = IPlatformApplication.Current.Services.GetService<TakeImagePage>();
+
+                ////Shell.Current.Navigation.PopModalAsync();
+                //await Shell.Current.Navigation.PushModalAsync(takeImagePage);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                DisplayAlertConfiguration.ShowError("No connection to the server. Please try again later");
+            }
+            catch (Exception ex)
+            {
+                DisplayAlertConfiguration.ShowError($"An error occurred: {ex.Message}");
+            }
+        }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert("Permission Denied", "Camera permission is required to take photos.", "OK");
         }
     }
 
@@ -495,7 +690,70 @@ public class MainVM : INotifyPropertyChanged
 
     #endregion
 
+    private async Task SetGoalAsync()
+    {
+        string caloriesInput;
+        string proteinInput;
+        string fatInput;
+        string carbsInput;
+        string sugarInput;
 
+        caloriesInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Calorie Goal",
+            "Enter your daily calorie goal:",
+            keyboard: Keyboard.Numeric
+        );
+        proteinInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Protein Goal",
+            "Enter your daily protein goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+        fatInput = await Application.Current.MainPage.DisplayPromptAsync(
+                    "Set Fat Goal",
+                    "Enter your daily fat goal (in grams):",
+                    keyboard: Keyboard.Numeric
+                );
+        carbsInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Carbs Goal",
+            "Enter your daily carbs goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+
+        sugarInput = await Application.Current.MainPage.DisplayPromptAsync(
+            "Set Sugar Goal",
+            "Enter your daily sugar goal (in grams):",
+            keyboard: Keyboard.Numeric
+        );
+
+        //string nutrientsInput = await Application.Current.MainPage.DisplayPromptAsync(
+        //    "Set Nutrient Goal",
+        //    "Enter your daily nutrient goal (e.g., protein, carbs, fats):",
+        //    keyboard: Keyboard.Text
+        //);
+
+        if (true) //todo
+        {
+            DailyCalorieGoal = Convert.ToInt32(caloriesInput); ;
+            DailyProteinGoal = Convert.ToInt32(proteinInput);
+            DailyFatGoal = Convert.ToInt32(fatInput); ;
+            DailyCarbsGoal = Convert.ToInt32(carbsInput); ;
+            DailySugarGoal = Convert.ToInt32(sugarInput); ;
+
+            Preferences.Set(App.DailyCalorieGoal, DailyCalorieGoal);
+            Preferences.Set(App.DailyProteinGoal, DailyProteinGoal);
+            Preferences.Set(App.DailyFatGoal, DailyFatGoal);
+            Preferences.Set(App.DailyCarbsGoal, DailyCarbsGoal);
+            Preferences.Set(App.DailySugarGoal, DailySugarGoal);
+
+            Preferences.Set(App.IsGoalsSet, true);
+
+            await Application.Current.MainPage.DisplayAlert("Success", "Goals have been set!", "OK");
+        }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert("Invalid Input", "Please enter valid numeric values for calories.", "OK");
+        }
+    }
 
     private async Task DeleteLastMealClicked()
     {
@@ -503,8 +761,8 @@ public class MainVM : INotifyPropertyChanged
         if (delete)
         {
             await App.HistoryItemRepository.DeleteMealItemAsync(_lastHistoryItem);
+            await OnPageAppearingAsync();
         }
-        await OnPageAppearingAsync();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

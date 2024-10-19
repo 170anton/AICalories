@@ -5,10 +5,12 @@
              Title="ResultPage">
     
     <AbsoluteLayout>
-        <ScrollView
-                AbsoluteLayout.LayoutBounds="0,0,1,1"
-                AbsoluteLayout.LayoutFlags="All">
-            <Grid RowDefinitions="*" Padding="10" RowSpacing="10">
+        <Grid RowDefinitions=".9*,.11*" 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            >
+        <ScrollView Grid.RowSpan="2">
+            <Grid RowDefinitions="*" Margin="0,0,0,90" RowSpacing="0">
                 <!--<Frame Padding="30" CornerRadius="20" Style="{StaticResource MainFrameStyle}">
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" HorizontalOptions="Center" RowSpacing="20">
                         <Label Text="Loading screen" FontAttributes="Bold" Style="{StaticResource LabelAppStyle}"/>
@@ -30,41 +32,52 @@
                 </Frame>-->
 
     
-                <Frame Grid.Row="0" Padding="0" Style="{StaticResource MainFrameStyle}">
-                        <Grid x:Name="historyGrid"  RowDefinitions="Auto,*" Padding="10"
+                        <Grid Grid.Row="0" Margin="0"  x:Name="historyGrid"  RowDefinitions="Auto,Auto,*" Padding="0"
                                 IsVisible="{Binding IsHistoryGridVisible}">
                             
-                                <!--Image-->
-                            <Frame Padding="0" Style="{StaticResource MainFrameStyle}"
-                                    >
-                                <Image
-                                    x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}"
-                                    Aspect="AspectFill" MaximumHeightRequest="1600"/>
-                            </Frame>
+                            <!--Image-->
+                            
+                            <Image
+                                x:Name="lastHistoryItemImage" Source="{Binding LastHistoryItemImage}"
+                                Aspect="AspectFill" MaximumHeightRequest="300"/>
 
-                                <!--Second frame-->
-                            <Grid Grid.Row="1" RowDefinitions="Auto,Auto,*,Auto"
+                            <Grid Grid.Row="1" RowDefinitions="Auto,Auto" Padding="0,0">
+                            
+                                <Label Grid.Row="0" Margin="10"
+                                        Text="{Binding LastHistoryItemName}"
+                                        Style="{StaticResource LabelAppStyle}"
+                                        FontAttributes="Italic"/>
+                                <Border Grid.Row="1"
+                                        Style="{StaticResource TodayStatsBorderStyle}"
+                                        BackgroundColor="{StaticResource CaloriesColor}"
+                                        HorizontalOptions="Center"
+                                        Padding="50,15,50,15"
+                                        Margin="10,5,10,10"
+                                        Opacity="1">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="35,3,3,35"/>
+                                    </Border.StrokeShape>
+                                        
+                                    <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
+                                            Text="{Binding LastHistoryItemCalories, StringFormat='{0} Calories'}"
+                                            Style="{StaticResource IngredientsStyle}"
+                                            />
+                                    
+                                        <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                                Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
+
+                                    </Border>
+
+                             </Grid>
+
+
+                               
+                            <Grid Grid.Row="2" Padding="40,10" RowDefinitions="Auto,Auto,*,Auto"
                                   >
                                 <!--Name and Total cals-->
                                 <Grid Grid.Row="0"
-                                      RowDefinitions="*,*">
+                                      >
                                 
-                                    <Label Grid.Row="0" Margin="5"
-                                           Text="{Binding LastHistoryItemName}" Style="{StaticResource LabelAppStyle}"/>
-                                    <Frame Grid.Row="1"  HorizontalOptions="Center"
-                                            Style="{StaticResource TodayStatsFrameStyle}"
-                                            BackgroundColor="{StaticResource CaloriesColor}"
-                                            Padding="40,5" Margin="10,5,10,10">
-                                        <HorizontalStackLayout >
-                                        
-                                            <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
-                                                    Text="{Binding LastHistoryItemCalories, StringFormat='{0} cals'}" Style="{StaticResource IngredientsStyle}"/>
-                                    
-                                            <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
-                                                    Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
-
-                                        </HorizontalStackLayout>
-                                        </Frame>
                                 </Grid>
 
                                 <!--Ingredients-->
@@ -80,9 +93,8 @@
 
                                 </Grid>-->
 
-                                <CollectionView Grid.Row="2" x:Name="ingredientsCollectionView"
+                                <CollectionView Grid.Row="1" x:Name="ingredientsCollectionView"
                                                 ItemsSource="{Binding Ingredients}"
-                                                ItemsLayout="GridItemsLayout"
                                                 Margin="2" IsEnabled="False">
 
                                     <CollectionView.ItemTemplate>
@@ -108,7 +120,7 @@
                                                 <Label Text="{Binding Path=Weight, StringFormat='{0} g'}" Grid.Row="0" 
                                                        Grid.Column="1" Style="{StaticResource IngredientsStyleBlack}" />
 
-                                                <Label Text="{Binding Path=Calories, StringFormat='{0} cal'}" Grid.Row="0" 
+                                                <Label Text="{Binding Path=Calories, StringFormat='{0} Cals'}" Grid.Row="0" 
                                                        Grid.Column="2" Style="{StaticResource IngredientsStyleBlack}" />
 
                                                 <!--<Label Text="{Binding Proteins}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />
@@ -123,87 +135,138 @@
 
 
                                         <!--Protein, Fat, Carbs, Sugar-->
-                                        <Grid x:Name="pfcsInfo" Grid.Row="3"
-                                                ColumnDefinitions="*,*,*,*"> 
+                                        <Grid x:Name="pfcsInfo" Grid.Row="2"
+                                                RowDefinitions="*,*,*,*"
+                                                ColumnDefinitions="*,*"
+                                                RowSpacing="20"
+                                                ColumnSpacing="20"
+                                                Margin="20,40,20,30"
+                                                VerticalOptions="Center"
+                                                HorizontalOptions="Center"> 
                                         <!--Proteins-->
-                                        <Border Grid.Column="0" Grid.Row="1"
-                                                Style="{StaticResource TodayStatsBorderStyle}" 
-                                                Stroke="{StaticResource ProteinColor}"
-                                                >
-                                            <VerticalStackLayout
+                                            <Border Grid.Row="0"
+                                                    Style="{StaticResource RoundBorder}"
+                                                    Stroke="{StaticResource ProteinColor}"
+                                                    >
+                                            <VerticalStackLayout Grid.Row="0"
+                                                VerticalOptions="CenterAndExpand" 
+                                                HorizontalOptions="CenterAndExpand">
+                                                <HorizontalStackLayout
+                                                        HorizontalOptions="Center">
+                                                            
+                                                    <!--<Frame Margin="3,0" Style="{StaticResource TodayStatsFrameStyle}"
+                                                            CornerRadius="7"
+                                                            Padding="3"
+                                                            BackgroundColor="{StaticResource ProteinColor}"> 
+                                                        <Image Source="protein_white.png"
+                                                                HeightRequest="15" WidthRequest="15"/>
+                                                    </Frame>-->
+                                                    <Label
+                                                        Text="Protein" Style="{StaticResource LabelAppStyle}"
+                                                        FontAttributes="Bold"
+                                                        FontSize="Body" LineBreakMode="NoWrap" />
+                                                </HorizontalStackLayout>
+                                                <Label
+                                                    Text="{Binding LastHistoryItemProtein, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource LabelAppStyle}"
+                                                    FontSize="Medium"
+                                                        FontAttributes="Bold"/>
+
+                                            </VerticalStackLayout>
+                                            </Border>
+
+                                            <!--Fats-->
+                                            <Border Grid.Row="1"
+                                                    Style="{StaticResource RoundBorder}"
+                                                    Stroke="{StaticResource FatColor}"
+                                                    >
+                                            <VerticalStackLayout Grid.Row="1" 
+                                                VerticalOptions="CenterAndExpand" 
+                                                HorizontalOptions="CenterAndExpand">
+                                                <HorizontalStackLayout 
+                                                        HorizontalOptions="Center">  
+                                                    <!--<Frame Margin="3,0" Style="{StaticResource TodayStatsFrameStyle}"
+                                                            CornerRadius="7"
+                                                            Padding="3"
+                                                            BackgroundColor="{StaticResource FatColor}"> 
+                                                        <Image Source="fat_white.png"
+                                                                HeightRequest="15" WidthRequest="15"/>
+                                                    </Frame>-->
+                                                    <Label
+                                                        Text="Fat" Style="{StaticResource LabelAppStyle}"
+                                                        FontSize="Body"
+                                                        FontAttributes="Bold"/>
+                                                </HorizontalStackLayout>
+                                                <Label
+                                                    Text="{Binding LastHistoryItemFat, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource LabelAppStyle}"
+                                                    FontSize="Medium"
+                                                        FontAttributes="Bold"/>
+
+                                            </VerticalStackLayout>
+                                            </Border>
+                                
+                                            <!--Carbohydrates-->
+                                            <Border Grid.Row="0" Grid.Column="1"
+                                                    Style="{StaticResource RoundBorder}"
+                                                    Stroke="{StaticResource CarbsColor}"
+                                                    >
+                                            <VerticalStackLayout Grid.Row="2"
                                                 VerticalOptions="CenterAndExpand" 
                                                 HorizontalOptions="CenterAndExpand">
                                         
-                                                <Label
-                                                    Text="Protein" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Small" LineBreakMode="NoWrap" />
+                                                <HorizontalStackLayout
+                                                        HorizontalOptions="Center">  
+                                                    <!--<Frame Margin="3,0" Style="{StaticResource TodayStatsFrameStyle}"
+                                                            CornerRadius="7"
+                                                            Padding="3"
+                                                            BackgroundColor="{StaticResource CarbsColor}"> 
+                                                        <Image Source="carbs_white.png"
+                                                                HeightRequest="15" WidthRequest="15"/>
+                                                    </Frame>-->
+                                                    <Label
+                                                        Text="Carbs" Style="{StaticResource LabelAppStyle}"
+                                                        FontSize="Body" LineBreakMode="NoWrap" 
+                                                        FontAttributes="Bold"/>
+                                                </HorizontalStackLayout>
                                 
                                                 <Label
-                                                    Text="{Binding LastHistoryItemProtein, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Large"/>
+                                                    Text="{Binding LastHistoryItemCarbs, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource LabelAppStyle}"
+                                                    FontSize="Medium"
+                                                        FontAttributes="Bold"/>
 
                                             </VerticalStackLayout>
-                                        </Border>
-                                
-                                        <!--Fats-->
-                                        <Border Grid.Column="1" Grid.Row="1"
-                                                Style="{StaticResource TodayStatsBorderStyle}" 
-                                                Stroke="{StaticResource FatColor}"
-                                                >
-                                            <VerticalStackLayout
-                                                VerticalOptions="CenterAndExpand" 
-                                                HorizontalOptions="CenterAndExpand">
-                                        
-                                                <Label
-                                                    Text="Fat" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Small"/>
-                                
-                                                <Label
-                                                    Text="{Binding LastHistoryItemFat, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Large"/>
-
-                                            </VerticalStackLayout>
-                                        </Border>
-                                
-                                        <!--Carbohydrates-->
-                                        <Border Grid.Column="2" Grid.Row="1"
-                                                Style="{StaticResource TodayStatsBorderStyle}" 
-                                                Stroke="{StaticResource CarbsColor}"
-                                                >
-                                            <VerticalStackLayout
-                                                VerticalOptions="CenterAndExpand" 
-                                                HorizontalOptions="CenterAndExpand">
-                                        
-                                                <Label
-                                                    Text="Carbs" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Small" LineBreakMode="NoWrap" />
-                                
-                                                <Label
-                                                    Text="{Binding LastHistoryItemCarbs, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Large"/>
-
-                                            </VerticalStackLayout>
-                                        </Border>
+                                            </Border>
                         
-                                        <!--Sugar-->
-                                        <Border Grid.Column="3" Grid.Row="1"
-                                                Style="{StaticResource TodayStatsBorderStyle}" 
-                                                Stroke="{StaticResource SugarColor}"
-                                                >
-                                            <VerticalStackLayout
+                                            <!--Sugar-->
+                                            <Border Grid.Row="1" Grid.Column="1"
+                                                    Style="{StaticResource RoundBorder}"
+                                                    Stroke="{StaticResource SugarColor}"
+                                                    >
+                                            <VerticalStackLayout Grid.Row="3"
                                                 VerticalOptions="CenterAndExpand" 
                                                 HorizontalOptions="CenterAndExpand">
                                         
-                                                <Label
-                                                    Text="Sugar" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Small" LineBreakMode="NoWrap" />
+                                                <HorizontalStackLayout
+                                                        HorizontalOptions="Center">  
+                                                    <!--<Frame Margin="3,0" Style="{StaticResource TodayStatsFrameStyle}"
+                                                            CornerRadius="7"
+                                                            Padding="3"
+                                                            BackgroundColor="{StaticResource SugarColor}"> 
+                                                        <Image Source="sugar_white.png"
+                                                                HeightRequest="15" WidthRequest="15"/>
+                                                    </Frame>-->
+                                                    <Label
+                                                        Text="Sugar" Style="{StaticResource LabelAppStyle}"
+                                                        FontSize="Body" LineBreakMode="NoWrap" 
+                                                        FontAttributes="Bold"/>
                                 
+                                                </HorizontalStackLayout>
                                                 <Label
-                                                    Text="{Binding LastHistoryItemSugar, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource IngredientsStyle}"
-                                                    FontSize="Large"/>
+                                                    Text="{Binding LastHistoryItemSugar, StringFormat='{0} g', Converter={StaticResource MaxLengthConverter}}" Style="{StaticResource LabelAppStyle}"
+                                                    FontSize="Medium"
+                                                        FontAttributes="Bold"/>
 
                                             </VerticalStackLayout>
-                                        </Border>
+                                            </Border>
                                     </Grid>
 
                                     <!--<Grid Grid.Row="3" ColumnDefinitions="*,*,*,*" 
@@ -236,10 +299,46 @@
                             </Grid>
                         
                         </Grid>
-                </Frame>
             </Grid>
         </ScrollView>
-        
+            <Grid Grid.Row="1" ColumnDefinitions=".2*,.8*"
+                  IsVisible="{Binding IsHistoryGridVisible}">
+
+                <Border Grid.Column="0" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="10,10,0,10" >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="35,3,3,3"/>
+                    </Border.StrokeShape>
+                    <Button Style="{StaticResource ImageOptionStyle}"
+                        ImageSource="delete_lastmeal_white.png"
+                        Padding="18,14,12,14" CornerRadius="0"
+                        Command="{Binding DeleteCommand}"/>
+                 </Border>
+
+                <!--<Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="2,10,0,10" IsVisible="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="0,0,0,0"/>
+                    </Border.StrokeShape>
+                    <Button  Style="{StaticResource ImageOptionStyle}" Padding="3"
+                        Text="New" CornerRadius="0"
+                        Command="{Binding NewImageCommand}"/>
+                    
+                </Border>-->
+
+                <Border Grid.Column="1" Style="{StaticResource BorderOfButtonStyle}"
+                        Margin="2,10,10,10" >
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="3,3,3,35"/>
+                    </Border.StrokeShape>
+                    <Button Style="{StaticResource ImageOptionStyle}"
+                        Text="Save    " Padding="3" CornerRadius="0"
+                        Command="{Binding SaveCommand}"/>
+                 </Border>
+            </Grid>
+
+
+        </Grid>
         <!--Loading-->
         <Label x:Name="CenterLabel"
             AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"

@@ -19,6 +19,7 @@ namespace AICalories.ViewModels
         private string _email;
         private string _question;
         private bool _isLoading;
+        private bool _isLayoutVisible;
         private const int MaxQuestionsPerHour = 2;
         private const string QuestionTimestampsKey = "QuestionTimestamps";
 
@@ -94,6 +95,16 @@ namespace AICalories.ViewModels
             set
             {
                 _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsLayoutVisible
+        {
+            get => _isLayoutVisible;
+            set
+            {
+                _isLayoutVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -286,6 +297,22 @@ namespace AICalories.ViewModels
         }
 
         #endregion
+
+
+        public async Task OnPageAppearingAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                //await Task.Delay(500);
+                IsLayoutVisible = true;
+                IsLoading = false;
+            }
+            catch (Exception)
+            {
+                DisplayAlertConfiguration.ShowError("Loading error occurred");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

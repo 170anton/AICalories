@@ -4,39 +4,55 @@ using AICalories.Models;
 using AICalories.Services;
 using AICalories.ViewModels;
 using AICalories.Views;
-using Camera.MAUI;
+using Android.Gms.Ads;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-
+using Syncfusion.Maui.Core.Hosting;
+using Syncfusion.Licensing;
 
 namespace AICalories;
 
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
+    {
+        SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhAYVF2WmFZfVpgcV9HY1ZURmYuP1ZhSXxXdkxiWn9bcXdQRGZdV0w=");
+
+        var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-            .UseMauiCameraView()
-			//.ConfigureMauiHandlers(handlers =>
-			//{
-			//	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));
-			////})
-			//.ConfigureMauiHandlers(handlers =>
-			//{
-			//	handlers.AddHandler(typeof(SKCanvasView), typeof(SKCanvasViewHandler));
-			//})
-			.ConfigureFonts(fonts =>
+            //.UseMauiEssentials()
+            .ConfigureSyncfusionCore()
+            .UseMauiCommunityToolkitCamera()
+            
+            //.ConfigureMauiHandlers(handlers =>
+            //{
+            //	handlers.AddHandler(typeof(CutImage), typeof(SKCanvasViewHandler));
+            ////})
+            //.ConfigureMauiHandlers(handlers =>
+            //{
+            //	handlers.AddHandler(typeof(SKCanvasView), typeof(SKCanvasViewHandler));
+            //})
+            .ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("Ubuntu-Regular.ttf", "UbuntuRegular");
             });
-//#if ANDROID
-//        builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>(); //todo check for ios
-//#elif IOS
-//        builder.Services.AddSingleton<IKeyboardHelper, AICalories.Platforms.iOS.KeyboardHelper>();
-//#endif
+
+
+
+        MobileAds.Initialize(Android.App.Application.Context);
+
+        MobileAds.RequestConfiguration = new RequestConfiguration.Builder()
+            .SetTestDeviceIds(new List<string> { "8C15E615345B4618D0BE650BE252E0CC" }) // Replace with your actual device ID
+            .Build();
+
+#if ANDROID
+        builder.Services.AddSingleton<IKeyboardHelper, Platforms.Android.KeyboardHelper>();
+        //#elif IOS
+        //        builder.Services.AddSingleton<IKeyboardHelper, AICalories.Platforms.iOS.KeyboardHelper>();
+#endif
 
 
         // Register the view model service
@@ -44,7 +60,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<IImageInfo, ImageInfo>();  //todo try Transient
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IAlertService, AlertService>();
-        //builder.Services.AddSingleton<ICameraService, CameraService>();
         builder.Services.AddTransient<ICameraService, CameraService>();
 
         builder.Services.AddSingleton<ViewModelLocator>();
@@ -60,8 +75,6 @@ public static class MauiProgram
         builder.Services.AddTransient<TakeImagePage>();
         builder.Services.AddTransient<ContextPage>();
         builder.Services.AddTransient<ResultPage>();
-
-
 
 
 #if DEBUG

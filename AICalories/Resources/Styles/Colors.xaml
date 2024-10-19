@@ -7,17 +7,17 @@
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
     
     <Color x:Key="PrimaryMain">White</Color>
-    <Color x:Key="SecondaryMain">#EEEEEE</Color>
+    <Color x:Key="SecondaryMain">#EEEEEE</Color><!--F0F8FE-->
     <Color x:Key="TertiaryMain">Black</Color>
-    <Color x:Key="SoftYellow">#EBD87F</Color><!--f5df73-->
+    <Color x:Key="SoftYellow">#db5361</Color><!--f5df73--><!--dbc974--><!--db8574-->
     
-    <Color x:Key="CaloriesColor">#EBD87F</Color>
-    <Color x:Key="ProteinColor">#6b97e8</Color>
-    <Color x:Key="FatColor">#e8736b</Color><!--e8cb6b-->
-    <Color x:Key="CarbsColor">#6BE859</Color>
-    <Color x:Key="SugarColor">#CCCCCC</Color>
+    <Color x:Key="CaloriesColor">#db5361</Color><!--#EBD87F-->
+    <Color x:Key="ProteinColor">#ff2617</Color>
+    <Color x:Key="FatColor">#fcd553</Color><!--e8cb6b--><!--e8736b-->
+    <Color x:Key="CarbsColor">#4489fc</Color>
+    <Color x:Key="SugarColor">#DDDDDD</Color>
 
-    <Color x:Key="Primary">#512BD4</Color><!--#512BD4-->
+    <Color x:Key="Primary">#db5361</Color><!--#512BD4-->
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>

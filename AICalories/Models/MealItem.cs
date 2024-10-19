@@ -19,7 +19,7 @@ namespace AICalories.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [JsonProperty("is_meal")]
+        [JsonProperty("is_food")]
         public bool IsMeal { get; set; }
 
         [JsonProperty("meal_name")]

@@ -23,6 +23,11 @@ namespace AICalories.Services
             return Shell.Current.Navigation.PopModalAsync();
         }
 
+        public Task PopToMainModalAsync()
+        {
+            return Shell.Current.Navigation.PopToRootAsync();
+        }
+
         public Task NavigateToMainPageAsync()
         {
             var resultPage = _serviceProvider.GetService<MainPage>();
@@ -33,6 +38,12 @@ namespace AICalories.Services
         {
             var resultPage = _serviceProvider.GetService<TakeImagePage>();
             return Shell.Current.Navigation.PushModalAsync(resultPage);
+        }
+
+        public Task NavigateToTakeImagePageAsyncNotModal()
+        {
+            var resultPage = _serviceProvider.GetService<TakeImagePage>();
+            return Shell.Current.Navigation.PushAsync(resultPage);
         }
 
         public Task NavigateToContextPageAsync()

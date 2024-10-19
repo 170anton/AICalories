@@ -8,7 +8,7 @@ namespace AICalories.Models
         private static object secondPrompt;
 
 
-        public static object GetFirstPrompt(string base64Image, string mealType, string userInfo)
+        public static object GetFirstPrompt(string base64Image, string foodType, string userInfo)
         {
             firstPrompt = new
             {
@@ -33,9 +33,10 @@ namespace AICalories.Models
                             new
                             {
                                 type = "text",
-                                text = $"Is there any meal or food in this image? " +
-                                $"If no, set is_meal to false and set other properties to 0 or null. " +
-                                $"{mealType}. What ingredients are in this meal? " +
+                                text = "Is there any food item in this image? " +
+                                "If no, set is_food to false and set other properties to 0 or null. " +
+                                "Follow nutritional information if it is present. " +
+                                $"{foodType}. What ingredients are in this food? " +
                                 "Weight, calories, proteins, fats, carbohydrates, sugar of ingredients must be calculated as precise as possible in grams. " +
                                 //"If you are not sure about weight of ingredient, take a lower-value. " +
                                 "Then precisely summarize all calories and weight of all ingredients. " +
@@ -66,13 +67,18 @@ namespace AICalories.Models
                             parameters = new
                             {
                                 type = "object",
-                                required = new[] { "is_meal", "ingredients", "meal_name", "weight", "calories", "proteins", "fats", "carbohydrates", "sugar" },
+                                required = new[] { "is_food", "ingredients", "meal_name", "weight", "calories", "proteins", "fats", "carbohydrates", "sugar" },
                                 properties = new
                                 {
-                                    is_meal = new
+                                    is_food = new
                                     {
                                         type = "boolean",
-                                        description = "Is this a meal or a type of food"
+                                        description = "Is this a food"
+                                    },
+                                    has_nutrition_information = new
+                                    {
+                                        type = "boolean",
+                                        description = "Is this a food has nutrition information"
                                     },
                                     ingredients = new
                                     {
@@ -136,7 +142,7 @@ namespace AICalories.Models
                                     meal_name = new
                                     {
                                         type = "string",
-                                        description = "Summarize and give the name of the meal"
+                                        description = "Summarize and give the name of the food or meal"
                                     },
                                     weight = new
                                     {

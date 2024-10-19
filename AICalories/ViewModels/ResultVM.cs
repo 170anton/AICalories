@@ -3,23 +3,35 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Input;
 using AICalories.DI;
 using AICalories.Interfaces;
 using AICalories.Models;
 using AICalories.Services;
+using Android.App;
+using Android.Gms.Ads;
+using Android.Gms.Ads.Interstitial;
+using Android.Views;
 using Newtonsoft.Json;
 
 namespace AICalories.ViewModels
 {
 	public class ResultVM : INotifyPropertyChanged
     {
+        private InterstitialAd _interstitialAd;
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
-        private bool _isRefreshing;
+        private readonly string _adUnitId = "ca-app-pub-9280044316923474/7763621828";
+        //"ca-app-pub-3940256099942544/1033173712"; - for testing
+        //"ca-app-pub-9280044316923474/7763621828"; - actual
+
+        //private bool _isRefreshing;
+        private bool _isAdsEnabled;
         private bool _isLoading;
         private bool _isLabelVisible;
         private bool _isHistoryGridVisible;
+        private MealItem _lastHistoryItem;
         private string _lastHistoryItemImage;
         private string _lastHistoryItemName;
         private string _lastHistoryItemCalories;
@@ -42,7 +54,33 @@ namespace AICalories.ViewModels
 
         private IImageInfo _imageInfo;
 
+        public ICommand SaveCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand NewImageCommand { get; }
+        public ICommand LoadAdCommand { get; }
+        public ICommand ShowAdCommand { get; }
+
         #region Properties
+
+        public MealItem LastHistoryItem
+        {
+            get => _lastHistoryItem;
+            set
+            {
+                _lastHistoryItem = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsAdsEnabled
+        {
+            get => _isAdsEnabled;
+            set
+            {
+                _isAdsEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool IsLabelVisible
         {
@@ -274,14 +312,42 @@ namespace AICalories.ViewModels
             _imageInfo = imageInfo;
 
             Ingredients = new ObservableCollection<IngredientItem>();
-
+            SaveCommand = new Command(async () => await OnSaveAsync());
+            DeleteCommand = new Command(async () => await OnDeleteAsync());
+            NewImageCommand = new Command(async () => await OnNewImageAsync());
+            LoadAdCommand = new Command(async () => await LoadAdAsync());
+            ShowAdCommand = new Command(ShowAd);
         }
+
+        private async Task OnSaveAsync()
+        {
+            await _navigationService.PopToMainModalAsync();
+        }
+
+        private async Task OnDeleteAsync()
+        {
+            bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+            if (delete)
+            {
+                await App.HistoryItemRepository.DeleteMealItemAsync(LastHistoryItem);
+                await _navigationService.PopToMainModalAsync();
+            }
+        }
+
+        private async Task OnNewImageAsync()
+        {
+            _navigationService.PopModalAsync();
+            await _navigationService.NavigateToTakeImagePageAsync();
+        }
+
+        #region Process Image
 
         public async Task ProcessImage() //todo
         {
             try
             {
                 IsLoading = true;
+                IsAdsEnabled = true;
                 IsHistoryGridVisible = false;
                 await LoadSecrets();
 
@@ -305,20 +371,26 @@ namespace AICalories.ViewModels
                     await LoadMealResponse(mealItem);
 
                     await AddItemToDB(mealItem);
+                    //#if ANDROID
+                    //                    Platform.CurrentActivity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
+                    //#endif
 
-                    IsHistoryGridVisible = true;
                     IsLoading = false;
+                    //IsHistoryGridVisible = true;
+                    ShowHistoryGridAfterAds();
                 }
             }
             catch (JsonSerializationException)
             {
-                _alertService.ShowError("Decoding error occurred.");
-                await _navigationService.NavigateToMainPageAsync();
+                _alertService.ShowError("Decoding error occurred");
+                await _navigationService.PopModalAsync();
+                IsLoading = false;
             }
             catch (BadImageFormatException)
             {
                 _alertService.ShowError("No connection to AI server");
-                await _navigationService.NavigateToMainPageAsync();
+                await _navigationService.PopModalAsync();
+                IsLoading = false;
             }
             catch (FileLoadException)
             {
@@ -328,7 +400,19 @@ namespace AICalories.ViewModels
             catch (Exception)
             {
                 _alertService.ShowUnexpectedError();
-                await _navigationService.NavigateToMainPageAsync();
+                await _navigationService.PopModalAsync();
+                IsLoading = false;
+            }
+        }
+
+        public async void ShowHistoryGridAfterAds()
+        {
+            //if (IsAdsEnabled == false)
+            if (IsLoading == false)
+            {
+                IsHistoryGridVisible = false;
+                await Task.Delay(200);
+                IsHistoryGridVisible = true;
             }
         }
 
@@ -355,6 +439,7 @@ namespace AICalories.ViewModels
         {
             try
             {
+                LastHistoryItem = mealItem;
                 LastHistoryItemImage = mealItem.ImagePath;
                 LastHistoryItemName = mealItem.MealName;
                 LastHistoryItemCalories = mealItem.Calories.ToString();
@@ -387,7 +472,6 @@ namespace AICalories.ViewModels
         //}
 
 
-        #region Process Image
 
         //public async Task<ResponseData> ProcessImage(string imagePath)
         //{
@@ -487,6 +571,7 @@ namespace AICalories.ViewModels
             try
             {
                 var dateTimeNow = DateTime.Now;
+                //var dateTimeNow = new DateTime(2024, 10, 14, 19, 13, 0);
 
                 mealItem.Date = dateTimeNow;
                 mealItem.Time = dateTimeNow.ToString("HH:mm");
@@ -497,7 +582,7 @@ namespace AICalories.ViewModels
                 foreach (var ingredient in mealItem.Ingredients)
                 {
                     ingredient.MealItemId = mealItemId;
-                    App.IngredientItemRepository.SaveIngredientAsync(ingredient);
+                    await App.IngredientItemRepository.SaveIngredientAsync(ingredient);
                 }
 
             }
@@ -520,9 +605,8 @@ namespace AICalories.ViewModels
                 var encryptionKey = "eahuifuiwRHFwihHFIUwuia";
                 var keyStorageService = new KeyStorageService(encryptionKey);
 
-
-
-                _apiKeys = keyStorageService.RetrieveKeys();
+                _apiKeys = new ApiKeys();
+                _apiKeys.OpenAIAPIKey = "sk-proj-QgMA" + "bggM8w9pUhiyP2BvT3BlbkFJ" + "Cp1pm1hywYBWL1QNkG1M";
                 if (_apiKeys?.OpenAIAPIKey == null)
                 {
                     if (_apiKeys?.OpenAIAPIKeyReserved == null)
@@ -536,11 +620,87 @@ namespace AICalories.ViewModels
                 return;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
         }
+
+        #region Ads
+
+        private async Task LoadAdAsync()
+        {
+            try
+            {
+                var adRequest = new AdRequest.Builder().Build();
+                var context = Android.App.Application.Context;
+
+
+                InterstitialAd.Load(context, _adUnitId, adRequest,
+                    new CustomInterstitialAdLoadCallback(
+                        ad =>
+                        {
+                            SetInterstitialAd(ad);
+                            Console.WriteLine("Interstitial Ad loaded successfully.");
+                            ShowAd();
+                        },
+                        loadAdError =>
+                        {
+                            Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
+                            IsAdsEnabled = false;
+                            if (IsLoading == false)
+                            {
+                                ShowHistoryGridAfterAds();
+                            }
+                        }));
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading ads: {ex.Message}");
+                IsAdsEnabled = false;
+                if (IsLoading == false)
+                {
+                    ShowHistoryGridAfterAds();
+                }
+            }
+        }
+
+        public void ShowAd()
+        {
+            var context = Platform.CurrentActivity;
+
+            if (_interstitialAd != null)
+            {
+                _interstitialAd.Show(context);
+            }
+            else
+            {
+                Console.WriteLine("Ad is not ready to be shown yet.");
+                IsAdsEnabled = false;
+                if (IsLoading == false)
+                {
+                    ShowHistoryGridAfterAds();
+                }
+            }
+        }
+
+        public void SetInterstitialAd(InterstitialAd ad)
+        {
+            if (ad != null)
+            {
+                _interstitialAd = ad;
+                _interstitialAd.FullScreenContentCallback = new CustomFullScreenContentCallback(this);
+            }
+        }
+
+        //private Activity? GetCurrentActivity()
+        //{
+        //    return Platform.CurrentActivity as Activity;
+        //}
+
+
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
 

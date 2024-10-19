@@ -17,6 +17,12 @@ public partial class App : Application
     public const string ShowReviewKey = "ShowReviewKey";
     public const string SaveToGalleryKey = "SaveToGalleryKey";
     public const string ShowMoreTodayStatsKey = "ShowMoreTodayStatsKey";
+    public const string DailyCalorieGoal = "DailyCalorieGoal";
+    public const string DailyProteinGoal = "DailyProteinGoal";
+    public const string DailyFatGoal = "DailyFatGoal";
+    public const string DailyCarbsGoal = "DailyCarbsGoal";
+    public const string DailySugarGoal = "DailySugarGoal";
+    public const string IsGoalsSet = "IsGoalsSet";
     public static IHistoryItemRepository HistoryItemRepository { get; private set; }
     public static IIngredientItemRepository IngredientItemRepository { get; private set; }
     public static IContextItemRepository ContextItemRepository { get; private set; }

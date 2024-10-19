@@ -7,6 +7,8 @@ namespace AICalories.Models
     {
         private readonly EncryptionHelper _encryptionHelper;
         private readonly string _encryptedKeysFilePath;
+        private const string resourceFileName = "AICalories.Resources.encryptedKeys.txt";
+
 
         public KeyStorageService(string encryptionKey)
         {

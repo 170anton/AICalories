@@ -44,7 +44,7 @@
                 <Setter Property="Padding" Value="0" />
                 
                 <!--<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />-->
-                <Setter Property="Opacity" Value="0.8" />
+                <Setter Property="Opacity" Value="1" />
                 <Setter Property="BorderColor" Value="{StaticResource SoftYellow}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource SoftYellow}" />
 
@@ -73,7 +73,7 @@
                 <Setter Property="LineBreakMode" Value="TailTruncation"/>
                 <Setter Property="FontSize" Value="Medium"/>
                 <!--<Setter Property="BackgroundColor" Value="Transparent"/>-->
-                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
 
             </Style>
             
@@ -108,9 +108,9 @@
             
             <Style x:Key="MainFrameStyle" TargetType="Frame">
                 <Setter Property="HasShadow" Value="False"/>
-                <Setter Property="CornerRadius" Value="30"/>
+                <Setter Property="CornerRadius" Value="35"/>
                 <Setter Property="Padding" Value="30"/>
-                <Setter Property="Opacity" Value="0.9" />
+                <Setter Property="Opacity" Value="1" />
                 <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
                 <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
 
@@ -125,9 +125,43 @@
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="Padding" Value="5"/>
-                <Setter Property="Opacity" Value="1" />
+                <Setter Property="Opacity" Value="0.9" />
                 <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
                 <Setter Property="BorderColor" Value="Transparent" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+
+            </Style>
+            
+            <Style x:Key="MainBorderStyle" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="35" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Padding" Value="30"/>
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />
+                <Setter Property="StrokeThickness" Value="0" />
+
+            </Style>
+            
+            <Style x:Key="RoundBorder" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="60" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="StrokeThickness" Value="3" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Padding" Value="5"/>
+                <Setter Property="Opacity" Value="0.99" />
+                <Setter Property="HeightRequest" Value="120" />
+                <Setter Property="WidthRequest" Value="120" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                <Setter Property="StrokeThickness" Value="2" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
 
             </Style>
@@ -138,15 +172,33 @@
                         <RoundRectangle CornerRadius="35" />
                     </Setter.Value>
                 </Setter>
-                <Setter Property="StrokeThickness" Value="5" />
+                <Setter Property="StrokeThickness" Value="0" />
                 <Setter Property="VerticalOptions" Value="FillAndExpand"/>
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="Margin" Value="3"/>
                 <Setter Property="Padding" Value="5"/>
-                <Setter Property="Opacity" Value="1" />
+                <Setter Property="Opacity" Value="0.99" />
                 <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
                 <Setter Property="Stroke" Value="{StaticResource SoftYellow}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
+
+            </Style>
+            
+            <Style x:Key="BorderOfButtonStyle" TargetType="Border">
+                <Setter Property="StrokeShape">
+                    <Setter.Value>
+                        <RoundRectangle CornerRadius="35" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Opacity" Value="0.98" />
+                <!--<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SecondaryMain}, Dark={StaticResource Black}}" />-->
+                <Setter Property="Stroke" Value="{StaticResource SoftYellow}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource SoftYellow}" />
 
             </Style>
             

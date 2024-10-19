@@ -45,11 +45,18 @@ public partial class AppSettingsPage : ContentPage
         return true;
     }
 
+    //protected async override void OnAppearing()
+    //{
+    //    //_viewModel.IsLoading = true;
+    //    base.OnAppearing();
+    //    //await Task.Delay(1000);
+    //    //_viewModel.IsLoading = false;
+    //}
+
     protected async override void OnAppearing()
     {
-        //_viewModel.IsLoading = true;
         base.OnAppearing();
-        //await Task.Delay(1000);
-        //_viewModel.IsLoading = false;
+
+        await _viewModel.OnPageAppearingAsync();
     }
 }
