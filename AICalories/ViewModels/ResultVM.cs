@@ -405,10 +405,13 @@ namespace AICalories.ViewModels
             }
         }
 
-        public void ShowHistoryGridAfterAds()
+        public async void ShowHistoryGridAfterAds()
         {
-            if (IsAdsEnabled == false)
+            //if (IsAdsEnabled == false)
+            if (IsLoading == false)
             {
+                IsHistoryGridVisible = false;
+                await Task.Delay(200);
                 IsHistoryGridVisible = true;
             }
         }
@@ -645,7 +648,10 @@ namespace AICalories.ViewModels
                         {
                             Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
                             IsAdsEnabled = false;
-                            ShowHistoryGridAfterAds();
+                            if (IsLoading == false)
+                            {
+                                ShowHistoryGridAfterAds();
+                            }
                         }));
 
             }
@@ -653,7 +659,10 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine($"Error loading ads: {ex.Message}");
                 IsAdsEnabled = false;
-                ShowHistoryGridAfterAds();
+                if (IsLoading == false)
+                {
+                    ShowHistoryGridAfterAds();
+                }
             }
         }
 
@@ -669,7 +678,10 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine("Ad is not ready to be shown yet.");
                 IsAdsEnabled = false;
-                ShowHistoryGridAfterAds();
+                if (IsLoading == false)
+                {
+                    ShowHistoryGridAfterAds();
+                }
             }
         }
 
