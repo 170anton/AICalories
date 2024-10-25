@@ -536,25 +536,33 @@
                                                 ColumnDefinitions="*,Auto"
                                                 Margin="0,0"
                                                 VerticalOptions="FillAndExpand">
-
-                                                <!--Time Old-->
-                                                <!--<Border Grid.Row="0" Style="{StaticResource MainBorderStyle}"
-                                                        Padding="1"
-                                                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray950}}"
+                                                        
+                                                <!--Calories-->
+                                                <Border Grid.Row="0" Style="{StaticResource MainBorderStyle}"
+                                                        Padding="14,6"
+                                                        BackgroundColor="{StaticResource SoftYellow}"
                                                         HorizontalOptions="Start"
                                                         VerticalOptions="Start"
-                                                        IsVisible="False">
+                                                        IsVisible="True">
                                         
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="0,0,0,35"/>
                                                     </Border.StrokeShape>
-                                                    <Label Margin="16,5,16,5"
-                                                        Text="{Binding Time, StringFormat='{0} &#8203;'}" Style="{StaticResource LabelAppStyle}"
-                                                        FontAttributes="Italic"
 
-                                                        HorizontalOptions="Center"
-                                                        FontSize="Medium"/>
-                                                </Border>-->
+                                                    <HorizontalStackLayout>
+                                                        <Label FontSize="Medium" FontAttributes="Bold"
+                                                                Text="{Binding Calories, StringFormat='{0}'}" Style="{StaticResource LabelAppStyle}"
+                                                                TextColor="White"
+                                                                HorizontalOptions="Start"/>
+                                                        <Label FontSize="Small" FontAttributes="Bold"
+                                                                Text=" Cals" Style="{StaticResource LabelAppStyle}"
+                                                                TextColor="White"
+                                                                Margin="0,1,0,0"
+                                                                HorizontalOptions="Start"/>
+
+
+                                                    </HorizontalStackLayout>
+                                                </Border>
 
                                                 <VerticalStackLayout Grid.Row="1"
                                                                      VerticalOptions="CenterAndExpand"
@@ -565,17 +573,17 @@
                                                     <!--Name-->
                                                     <Label Margin="0,5,0,10"
                                                             Text="{Binding MealName}" Style="{StaticResource LabelAppStyle}"
-                                                            FontAttributes="Italic"
+                                                            FontAttributes="Bold"
                                                             FontSize="Body"
                                                             HorizontalTextAlignment="Start"
-                                                            MaxLines="3" LineBreakMode="TailTruncation"/>
+                                                            MaxLines="4" LineBreakMode="TailTruncation"/>
                                             
                                                     <!--Calories-->
 
-                                                    <Label FontSize="Medium" FontAttributes="Bold"
+                                                    <!--<Label FontSize="Medium" FontAttributes="Bold"
                                                             Text="{Binding Calories, StringFormat='{0} Calories'}" Style="{StaticResource LabelAppStyle}"
                                                 
-                                                            HorizontalOptions="Start"/>
+                                                            HorizontalOptions="Start"/>-->
                                                 </VerticalStackLayout>
                                                 <!--<Grid Grid.Row="2"
                                                       IsVisible="False"
@@ -911,7 +919,7 @@
 
             <Button
                     Text="New &#xFF0B;"
-                    Padding="15"
+                    Padding="17"
                     CornerRadius="0"
                     Style="{StaticResource ImageOptionStyle}"
                     Command="{Binding NewImageCommand}">

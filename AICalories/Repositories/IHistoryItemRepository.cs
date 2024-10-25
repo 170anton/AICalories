@@ -9,6 +9,7 @@ namespace AICalories.Repositories
         Task DeleteAllMealItemsAsync();
         Task<MealItem> GetLastMealItemAsync();
         Task<int> GetMealItemsCountAsync();
+        Task UpdateMealItemAsync(MealItem item);
         Task SaveMealItemAsync(MealItem item);
     }
 }

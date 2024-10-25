@@ -48,6 +48,11 @@ namespace AICalories
             }
         }
 
+        public Task<int> UpdateItemAsync(T item)
+        {
+            return _database.UpdateAsync(item);
+        }
+
         public Task<int> DeleteAsync(T item)
         {
             return _database.DeleteAsync(item);

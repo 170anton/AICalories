@@ -3,12 +3,19 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using AICalories.DI;
 using AICalories.Models;
+using AICalories.Services;
+using AICalories.Views;
 
 namespace AICalories.ViewModels
 {
 	public class HistoryVM : INotifyPropertyChanged
     {
+        private readonly IViewModelService _viewModelService;
+        private readonly INavigationService _navigationService;
+        private readonly IAlertService _alertService;
+
         private bool _isLoading;
         private bool _isLabelVisible;
 
@@ -16,6 +23,7 @@ namespace AICalories.ViewModels
         public ICommand AddItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
         public ICommand ClearAllCommand { get; }
+        public ICommand OpenMealInfoCommand { get; }
 
         #region Properties
 
@@ -42,18 +50,24 @@ namespace AICalories.ViewModels
         }
         #endregion
 
-        public HistoryVM()
+        public HistoryVM(IViewModelService viewModelService,
+            INavigationService navigationService, IAlertService alertService)
         {
+            _viewModelService = viewModelService;
+            _viewModelService.HistoryVM = this;
+            _navigationService = navigationService;
+            _alertService = alertService;
+
             //OnClearAll();
             DayGroupedItems = new ObservableCollection<DayGroupedItem>();
             AddItemCommand = new Command(OnAddItem);
             DeleteItemCommand = new Command<MealItem>(OnDeleteItem);
             ClearAllCommand = new Command(OnClearAll);
+            OpenMealInfoCommand = new Command<MealItem>(OnOpenMealInfo);
             //Task.Run(() => LoadData());
         }
 
-
-        public async void CheckForUpdate()
+        public async Task CheckForUpdate()
         {
             try
             {
@@ -79,7 +93,7 @@ namespace AICalories.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error CheckForUpdate: {ex.Message}");
-                throw;
+                _alertService.ShowUnexpectedError();
             }
         }
 
@@ -154,6 +168,23 @@ namespace AICalories.ViewModels
             }
 
             group.Add(newItem);
+        }
+
+        private async void OnOpenMealInfo(MealItem mealItem)
+        {
+            try
+            {
+                //await _navigationService.NavigateToMealInfoPageAsync(); todo Complete DI for MealInfoPage
+
+                mealItem.Ingredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(mealItem.Id);
+
+                var mealInfoPage = new MealInfoPage(mealItem);
+                await Shell.Current.Navigation.PushModalAsync(mealInfoPage);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Sad");
+            }
         }
 
         private async void OnDeleteItem(MealItem item)

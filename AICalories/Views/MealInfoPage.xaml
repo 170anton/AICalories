@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AICalories.Views.ResultPage"
-             Title="ResultPage">
+             x:Class="AICalories.Views.MealInfoPage"
+             Title="MealInfoPage">
     
     <AbsoluteLayout>
         <Grid RowDefinitions=".9*,.11*" 
@@ -55,18 +55,17 @@
                                         Padding="50,15,50,15"
                                         Margin="10,5,10,10"
                                         Opacity="1">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="35,3,3,35"/>
-                                        </Border.StrokeShape>
-
-                                        <HorizontalStackLayout>
-                                            <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
-                                                    Text="{Binding LastHistoryItemCalories, StringFormat='{0}'}"
-                                                    Style="{StaticResource IngredientsStyle}"
-                                                    />
-                                            <Label Margin="0,1,0,0" FontAttributes="Bold" FontSize="Medium"
-                                                    Text=" Calories" Style="{StaticResource IngredientsStyle}"/>
-                                        </HorizontalStackLayout>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="35,3,3,35"/>
+                                    </Border.StrokeShape>
+                                        
+                                    <Label FontSize="Title" FontAttributes="Bold" TextColor="White"
+                                            Text="{Binding LastHistoryItemCalories, StringFormat='{0} Calories'}"
+                                            Style="{StaticResource IngredientsStyle}"
+                                            />
+                                    
+                                        <!--<Label Margin="3,0,0,0" FontAttributes="Bold" FontSize="Large"
+                                                Text="cals" Style="{StaticResource IngredientsStyle}"/>-->
 
                                     </Border>
 
@@ -96,11 +95,11 @@
 
                                 <CollectionView Grid.Row="1" x:Name="ingredientsCollectionView"
                                                 ItemsSource="{Binding Ingredients}"
-                                                Margin="2" IsEnabled="True">
+                                                Margin="2" IsEnabled="False">
 
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid Padding="2" ColumnDefinitions=".4*,.3*,.3*, Auto">
+                                            <Grid Padding="2" ColumnDefinitions=".4*,.3*,.3*">
                                                 <!--<Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="Auto" />
@@ -118,40 +117,12 @@
                                                        Grid.Row="0" Grid.Column="0" Style="{StaticResource IngredientsStyleBlack}"
                                                        />
 
-                                                <HorizontalStackLayout  Grid.Row="0" Grid.Column="1" HorizontalOptions="Center">
-                                                    <Label Text="{Binding Path=Weight, StringFormat='{0}'}"
-                                                           Style="{StaticResource IngredientsStyleBlack}" />
-                                                    <Label Text="{Binding Path=Weight, StringFormat=' g'}"
-                                                           Style="{StaticResource IngredientsStyleBlack}"
-                                                           FontSize="Body"/>
-                                                </HorizontalStackLayout>
-                                            
-                                                <HorizontalStackLayout  Grid.Row="0" Grid.Column="2" HorizontalOptions="Center">
-                                                    <Label Text="{Binding Path=Calories, StringFormat='{0}'}"
-                                                           Style="{StaticResource IngredientsStyleBlack}" />
-                                                    <Label Text="{Binding Path=Weight, StringFormat=' Cals'}"
-                                                           Style="{StaticResource IngredientsStyleBlack}"
-                                                           Margin="0,1,0,0"
-                                                           FontSize="Body"/>
-                                                </HorizontalStackLayout>
-                                            
-                                                <!-- Delete Ingredient -->
-                                                <Button
-                                                        Grid.Column="3" 
-                                                        HorizontalOptions="Center"
-                                                        VerticalOptions="Center"
-                                                        HeightRequest="20"
-                                                        WidthRequest="20"
-                                                        Margin="0,4,0,0"
-                                                        Style="{StaticResource ImageOptionStyle}"
-                                                        BackgroundColor="Transparent"
-                                                        BorderColor="Transparent"
-                                                        Opacity="0.3"
-                                                        IsEnabled="True"
-                                                        ImageSource="delete_lastmeal.png"
-                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteSelectedIngredientCommand}"
-                                                        CommandParameter="{Binding .}"
-                                                        />
+                                                <Label Text="{Binding Path=Weight, StringFormat='{0} g'}" Grid.Row="0" 
+                                                       Grid.Column="1" Style="{StaticResource IngredientsStyleBlack}" />
+
+                                                <Label Text="{Binding Path=Calories, StringFormat='{0} Cals'}" Grid.Row="0" 
+                                                       Grid.Column="2" Style="{StaticResource IngredientsStyleBlack}" />
+
                                                 <!--<Label Text="{Binding Proteins}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />
 
                                                 <Label Text="{Binding Fats}" Grid.Row="0" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />

@@ -32,6 +32,11 @@ namespace AICalories.Repositories
             return _historyDatabase.GetCountAsync();
         }
 
+        public Task UpdateMealItemAsync(MealItem item)
+        {
+            return _historyDatabase.UpdateItemAsync(item);
+        }
+
         public Task DeleteMealItemAsync(MealItem item)
         {
             return _historyDatabase.DeleteAsync(item);

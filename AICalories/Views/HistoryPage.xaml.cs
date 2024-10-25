@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using AICalories.DI;
 using AICalories.Models;
 using AICalories.ViewModels;
 
@@ -14,8 +15,19 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
     public HistoryPage()
     {
         InitializeComponent();
-        _viewModel = new HistoryVM();
-        BindingContext = _viewModel;
+        try
+        {
+            var viewModelLocator = Application.Current.Handler.MauiContext.Services.GetService<ViewModelLocator>();
+            if (viewModelLocator != null)
+            {
+                _viewModel = viewModelLocator.GetHistoryViewModel();
+                BindingContext = _viewModel;
+            }
+        }
+        catch (Exception)
+        {
+            DisplayAlertConfiguration.ShowUnexpectedError();
+        }
     }
 
     private void ShowOverlay()
@@ -42,6 +54,33 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
     }
 
     public async void OnCollectionViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var item = e.CurrentSelection;
+
+            // Ensure there is a selected item
+            if (item == null || item.Count == 0)
+            {
+                return;
+            }
+
+            if (item.FirstOrDefault() is MealItem selectedItem)
+            {
+                _viewModel.OpenMealInfoCommand.Execute(selectedItem);
+            }
+            // Deselect the item
+            ((CollectionView)sender).SelectedItem = null;
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred", "Sad");
+        }
+
+    }
+
+    [Obsolete]
+    public async void OnCollectionViewSelectionChangedOLD(object sender, SelectionChangedEventArgs e)
     {
         try
         {
@@ -85,6 +124,6 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.CheckForUpdate();
+        await _viewModel.CheckForUpdate();
     }
 }

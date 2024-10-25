@@ -182,11 +182,14 @@
 	  <Compile Remove="Views\LoadingScreenPage.xaml.cs" />
 	  <Compile Remove="Models\ResponseData.cs" />
 	  <Compile Remove="Views\AboutPage.xaml.cs" />
+	  <Compile Remove="Views\SupportPage.xaml.cs" />
+	  <Compile Remove="ViewModels\SupportVM.cs" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiXaml Remove="Views\BlurEffectView.xaml" />
 	  <MauiXaml Remove="Views\LoadingScreenPage.xaml" />
 	  <MauiXaml Remove="Views\AboutPage.xaml" />
+	  <MauiXaml Remove="Views\SupportPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiIcon Include="Resources\AppIcon\appicon.png" />

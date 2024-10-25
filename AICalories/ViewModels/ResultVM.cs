@@ -22,6 +22,7 @@ namespace AICalories.ViewModels
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
+        private IImageInfo _imageInfo;
         private readonly string _adUnitId = "ca-app-pub-9280044316923474/7763621828";
         //"ca-app-pub-3940256099942544/1033173712"; - for testing
         //"ca-app-pub-9280044316923474/7763621828"; - actual
@@ -51,9 +52,8 @@ namespace AICalories.ViewModels
         private ApiKeys _apiKeys;
         private readonly HttpClient _client = new HttpClient();
         private const string OpenAIAPIUrl = "https://api.openai.com/v1/chat/completions";
-
-        private IImageInfo _imageInfo;
-
+        
+        public ICommand DeleteSelectedIngredientCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand NewImageCommand { get; }
@@ -312,8 +312,9 @@ namespace AICalories.ViewModels
             _imageInfo = imageInfo;
 
             Ingredients = new ObservableCollection<IngredientItem>();
+            DeleteSelectedIngredientCommand = new Command<IngredientItem>(DeleteSelectedIngredientClicked);
             SaveCommand = new Command(async () => await OnSaveAsync());
-            DeleteCommand = new Command(async () => await OnDeleteAsync());
+            DeleteCommand = new Command(async () => await OnDeleteMealAsync());
             NewImageCommand = new Command(async () => await OnNewImageAsync());
             LoadAdCommand = new Command(async () => await LoadAdAsync());
             ShowAdCommand = new Command(ShowAd);
@@ -324,7 +325,7 @@ namespace AICalories.ViewModels
             await _navigationService.PopToMainModalAsync();
         }
 
-        private async Task OnDeleteAsync()
+        private async Task OnDeleteMealAsync()
         {
             bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
             if (delete)
@@ -338,6 +339,52 @@ namespace AICalories.ViewModels
         {
             _navigationService.PopModalAsync();
             await _navigationService.NavigateToTakeImagePageAsync();
+        }
+
+        private async void DeleteSelectedIngredientClicked(IngredientItem item)
+        {
+            try
+            {
+                bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+                if (delete)
+                {
+                    if (item != null)
+                    {
+                        await DeleteMealIngredient(item);
+                        await UpdateMealCalories(item);
+                        await UpdateMealDB();
+                        await UpdateMealInfo(LastHistoryItem);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                _alertService.ShowUnexpectedError();
+            }
+        }
+
+        private async Task DeleteMealIngredient(IngredientItem item)
+        {
+            LastHistoryItem.Ingredients.Remove(item);
+
+            await App.IngredientItemRepository.DeleteIngredientAsync(item);
+        }
+
+        private async Task UpdateMealCalories(IngredientItem item)
+        {
+            LastHistoryItem.Calories -= Convert.ToInt32(item.Calories);
+
+            if (LastHistoryItem.Calories < 0)
+            {
+                LastHistoryItem.Calories = 0;
+            }
+
+        }
+
+        private async Task UpdateMealDB()
+        {
+            await App.HistoryItemRepository.UpdateMealItemAsync(LastHistoryItem);
         }
 
         #region Process Image
@@ -368,7 +415,7 @@ namespace AICalories.ViewModels
                     }
 
                     //LoadAIResponse(mealItem);
-                    await LoadMealResponse(mealItem);
+                    await UpdateMealInfo(mealItem);
 
                     await AddItemToDB(mealItem);
                     //#if ANDROID
@@ -434,30 +481,6 @@ namespace AICalories.ViewModels
         //    IsRefreshing = false;
         //}
 
-
-        public async Task LoadMealResponse(MealItem mealItem)
-        {
-            try
-            {
-                LastHistoryItem = mealItem;
-                LastHistoryItemImage = mealItem.ImagePath;
-                LastHistoryItemName = mealItem.MealName;
-                LastHistoryItemCalories = mealItem.Calories.ToString();
-                LastHistoryItemCalories = mealItem.Calories.ToString();
-                LastHistoryItemProtein = mealItem.Proteins.ToString();
-                LastHistoryItemFat = mealItem.Fats.ToString();
-                LastHistoryItemCarbs = mealItem.Carbohydrates.ToString();
-                LastHistoryItemSugar = mealItem.Sugar.ToString();
-
-                Ingredients = new ObservableCollection<IngredientItem>(mealItem.Ingredients);
-
-                //await LoadLastMealIngredients(mealItem.Id);
-            }
-            catch (Exception)
-            {
-                _alertService.ShowError("Loading error occurred");
-            }
-        }
 
 
         //private async Task LoadLastMealIngredients(int lastMealId)
@@ -595,6 +618,31 @@ namespace AICalories.ViewModels
 
         #endregion
 
+
+        public async Task UpdateMealInfo(MealItem mealItem)
+        {
+            try
+            {
+                LastHistoryItem = mealItem;
+                LastHistoryItemImage = mealItem.ImagePath;
+                LastHistoryItemName = mealItem.MealName;
+                LastHistoryItemCalories = mealItem.Calories.ToString();
+                LastHistoryItemCalories = mealItem.Calories.ToString();
+                LastHistoryItemProtein = mealItem.Proteins.ToString();
+                LastHistoryItemFat = mealItem.Fats.ToString();
+                LastHistoryItemCarbs = mealItem.Carbohydrates.ToString();
+                LastHistoryItemSugar = mealItem.Sugar.ToString();
+
+                Ingredients = new ObservableCollection<IngredientItem>(mealItem.Ingredients);
+
+                //await LoadLastMealIngredients(mealItem.Id);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("UpdateMealInfo exception");
+                _alertService.ShowError("Loading error occurred");
+            }
+        }
 
 
         private async Task LoadSecrets()

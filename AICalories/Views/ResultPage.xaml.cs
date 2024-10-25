@@ -45,7 +45,7 @@ public partial class ResultPage : ContentPage
     {
         if (_viewModel.IsLoading == false) //should be check on completed result
         {
-            Shell.Current.Navigation.PopToRootAsync();
+            Shell.Current.Navigation.PopModalAsync(); //todo change pop to root
         }
         return true;
     }

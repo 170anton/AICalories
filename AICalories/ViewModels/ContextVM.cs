@@ -21,6 +21,7 @@ namespace AICalories.ViewModels
         private string _selectedOption;
         private string _userInfo;
         private string _mainImage;
+        private bool _isConfirmClicked;
         private IImageInfo _imageInfo;
 
         #region Properties
@@ -167,6 +168,10 @@ namespace AICalories.ViewModels
 
         private async Task OnConfirmAsync()
         {
+            if (_isConfirmClicked)
+                return;
+
+            _isConfirmClicked = true;
 
             await SetAdditionalInfo();
 
@@ -178,6 +183,8 @@ namespace AICalories.ViewModels
 
             _navigationService.PopModalAsync();
             await _navigationService.NavigateToResultPageAsync();
+
+            _isConfirmClicked = false;
         }
 
         private async Task OnNewImageAsync()

@@ -11,6 +11,7 @@ namespace AICalories.Services
         Task NavigateToTakeImagePageAsyncNotModal();
         Task NavigateToContextPageAsync();
         Task NavigateToResultPageAsync();
+        Task NavigateToMealInfoPageAsync();
     }
 }
 

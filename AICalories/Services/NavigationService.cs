@@ -57,6 +57,12 @@ namespace AICalories.Services
             var resultPage = _serviceProvider.GetService<ResultPage>();
             return Shell.Current.Navigation.PushModalAsync(resultPage);
         }
+
+        public Task NavigateToMealInfoPageAsync()
+        {
+            var resultPage = _serviceProvider.GetService<MealInfoPage>();
+            return Shell.Current.Navigation.PushModalAsync(resultPage);
+        }
     }
 }
 

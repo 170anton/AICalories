@@ -65,16 +65,21 @@ public static class MauiProgram
         builder.Services.AddSingleton<ViewModelLocator>();
         builder.Services.AddSingleton<AppShell>();
 
-        builder.Services.AddTransient<AppSettingsVM>();
         builder.Services.AddTransient<MainVM>();
-        builder.Services.AddTransient<ContextVM>();
+        builder.Services.AddTransient<AppSettingsVM>();
+        builder.Services.AddTransient<HistoryVM>();
         builder.Services.AddTransient<TakeImageVM>();
+        builder.Services.AddTransient<ContextVM>();
         builder.Services.AddTransient<ResultVM>();
+        builder.Services.AddTransient<MealInfoVM>();
 
         builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<AppSettingsPage>();
+        builder.Services.AddTransient<HistoryPage>();
         builder.Services.AddTransient<TakeImagePage>();
         builder.Services.AddTransient<ContextPage>();
         builder.Services.AddTransient<ResultPage>();
+        builder.Services.AddTransient<MealInfoPage>();
 
 
 #if DEBUG

@@ -18,6 +18,9 @@ namespace AICalories.DI
         }
 
         public MainVM GetMainViewModel() => _serviceProvider.GetRequiredService<MainVM>();
+        public AppSettingsVM GetAppSettingsViewModel() => _serviceProvider.GetRequiredService<AppSettingsVM>();
+        public HistoryVM GetHistoryViewModel() => _serviceProvider.GetRequiredService<HistoryVM>();
+
         public TakeImageVM GetTakeImageViewModel(CameraView cameraView)
         {
             var cameraService = new CameraService(cameraView);
@@ -30,8 +33,7 @@ namespace AICalories.DI
         }
         public ContextVM GetContextViewModel() => _serviceProvider.GetRequiredService<ContextVM>();
         public ResultVM GetResultViewModel() => _serviceProvider.GetRequiredService<ResultVM>();
-        public AppSettingsVM GetAppSettingsViewModel() => _serviceProvider.GetRequiredService<AppSettingsVM>();
-
+        public MealInfoVM GetMealInfoViewModel() => _serviceProvider.GetRequiredService<MealInfoVM>();
     }
 }
 
