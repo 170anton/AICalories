@@ -919,7 +919,7 @@
 
             <Button
                     Text="New &#xFF0B;"
-                    Padding="17"
+                    Padding="18"
                     CornerRadius="0"
                     Style="{StaticResource ImageOptionStyle}"
                     Command="{Binding NewImageCommand}">

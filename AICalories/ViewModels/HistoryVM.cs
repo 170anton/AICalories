@@ -101,6 +101,7 @@ namespace AICalories.ViewModels
         {
             try
             {
+                IsLoading = true;
                 DayGroupedItems.Clear();
 
                 var dateTimeNow = DateTime.Now;
@@ -125,6 +126,7 @@ namespace AICalories.ViewModels
 
                     DayGroupedItems.Add(group);
                 }
+                IsLoading = false;
             }
             catch (Exception ex)
             {

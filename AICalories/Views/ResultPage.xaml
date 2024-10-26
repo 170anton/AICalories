@@ -81,19 +81,8 @@
                                 
                                 </Grid>
 
+
                                 <!--Ingredients-->
-
-                                <!--<Grid Grid.Row="1" ColumnDefinitions=".4*,.3*,.3*">
-                                    <Label Text="" Grid.Row="0" Grid.Column="0" Style="{StaticResource IngredientsStyle}" />
-                                    <Label Text="Weight" Grid.Row="1" Grid.Column="1" Style="{StaticResource IngredientsStyle}" />
-                                    <Label Text="Calories   " Grid.Row="2" Grid.Column="2" Style="{StaticResource IngredientsStyle}" />
-                                    <Label Text="Protein:" Grid.Row="3" Grid.Column="3" Style="{StaticResource IngredientsStyle}" />
-                                    <Label Text="Fat:" Grid.Row="4" Grid.Column="4" Style="{StaticResource IngredientsStyle}" />
-                                    <Label Text="Carbs:" Grid.Row="5" Grid.Column="5" Style="{StaticResource IngredientsStyle}" />
-
-
-                                </Grid>-->
-
                                 <CollectionView Grid.Row="1" x:Name="ingredientsCollectionView"
                                                 ItemsSource="{Binding Ingredients}"
                                                 Margin="2" IsEnabled="True">
@@ -101,19 +90,7 @@
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid Padding="2" ColumnDefinitions=".4*,.3*,.3*, Auto">
-                                                <!--<Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>-->
-
+                                                
                                                 <Label Text="{Binding Name}"
                                                        Grid.Row="0" Grid.Column="0" Style="{StaticResource IngredientsStyleBlack}"
                                                        />
@@ -162,14 +139,19 @@
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
 
-
+                                <Grid Grid.Row="2"
+                                      RowDefinitions="*,*"
+                                      Margin="20,40,20,30">
+                                    <Label Text="Nutrients"
+                                           Style="{StaticResource LabelAppStyle}"
+                                           Margin="10"
+                                           IsVisible="False"/>
                                         <!--Protein, Fat, Carbs, Sugar-->
-                                        <Grid x:Name="pfcsInfo" Grid.Row="2"
+                                        <Grid x:Name="pfcsInfo" Grid.Row="1"
                                                 RowDefinitions="*,*,*,*"
                                                 ColumnDefinitions="*,*"
                                                 RowSpacing="20"
                                                 ColumnSpacing="20"
-                                                Margin="20,40,20,30"
                                                 VerticalOptions="Center"
                                                 HorizontalOptions="Center"> 
                                         <!--Proteins-->
@@ -296,8 +278,8 @@
 
                                             </VerticalStackLayout>
                                             </Border>
+                                        </Grid>
                                     </Grid>
-
                                     <!--<Grid Grid.Row="3" ColumnDefinitions="*,*,*,*" 
                                           Margin="10" ColumnSpacing="10">
                                         <Frame Grid.Column="0" Style="{StaticResource TodayStatsFrameStyle}"
@@ -376,14 +358,19 @@
             FontSize="Title" FontAttributes="Bold"
             Text="Loading error" Style="{StaticResource LabelAppStyle}"
             IsVisible="{Binding IsLabelVisible}"/>
-
-        <ActivityIndicator
-            AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            IsVisible="{Binding IsLoading}"
-            IsRunning="{Binding IsLoading}"
-            Style="{StaticResource MainActivityIndicatorStyle}"
+        <VerticalStackLayout
+                AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                IsVisible="{Binding IsLoading}">
+            <Label Style="{StaticResource LabelAppStyle}"
+                   Text="Processing your photo..."/>
+            <ActivityIndicator
+                IsVisible="{Binding IsLoading}"
+                IsRunning="{Binding IsLoading}"
+                Style="{StaticResource MainActivityIndicatorStyle}"
+                Margin="40"
         
-            />
+                />
+        </VerticalStackLayout>
     </AbsoluteLayout>
 </ContentPage>

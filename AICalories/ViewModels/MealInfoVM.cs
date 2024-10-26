@@ -38,6 +38,7 @@ namespace AICalories.ViewModels
         private string _totalResultJSON;
         private ObservableCollection<IngredientItem> _ingredients;
 
+        public ICommand DeleteSelectedIngredientCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
 
@@ -281,6 +282,13 @@ namespace AICalories.ViewModels
             _navigationService = navigationService;
             _alertService = alertService;
             _imageInfo = imageInfo;
+
+
+            DeleteSelectedIngredientCommand = new Command<IngredientItem>(DeleteSelectedIngredientClicked);
+            SaveCommand = new Command(async () => await OnSaveAsync());
+            DeleteCommand = new Command(async () => await OnDeleteMealAsync());
+
+
         }
 
 
@@ -311,6 +319,71 @@ namespace AICalories.ViewModels
                 _alertService.ShowError("Loading error occurred");
             }
         }
+
+        private async Task OnSaveAsync()
+        {
+            await _navigationService.PopModalAsync();
+        }
+
+        private async Task OnDeleteMealAsync()
+        {
+            bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete it?", "Yes", "No");
+            if (delete)
+            {
+                await App.HistoryItemRepository.DeleteMealItemAsync(LastHistoryItem);
+                await _navigationService.PopModalAsync();
+            }
+        }
+
+        private async void DeleteSelectedIngredientClicked(IngredientItem item)
+        {
+            try
+            {
+                bool delete = await App.Current.MainPage.DisplayAlert("Delete", "Are you sure to delete this ingredient?", "Yes", "No");
+                if (delete)
+                {
+                    if (item != null)
+                    {
+                        await DeleteMealIngredient(item);
+                        await UpdateMealCalories(item);
+                        await UpdateMealDB();
+                        _viewModelService.HistoryVM.UpdateData();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                _alertService.ShowUnexpectedError();
+            }
+        }
+
+
+        private async Task DeleteMealIngredient(IngredientItem item)
+        {
+            Ingredients.Remove(item);
+            LastHistoryItem.Ingredients.Remove(item);
+
+            await App.IngredientItemRepository.DeleteIngredientAsync(item);
+        }
+
+        private async Task UpdateMealCalories(IngredientItem item)
+        {
+            LastHistoryItem.Calories -= Convert.ToInt32(item.Calories);
+
+            if (LastHistoryItem.Calories < 0)
+            {
+                LastHistoryItem.Calories = 0;
+            }
+
+            LastHistoryItemCalories = LastHistoryItem.Calories.ToString();
+        }
+
+        private async Task UpdateMealDB()
+        {
+            await App.HistoryItemRepository.UpdateMealItemAsync(LastHistoryItem);
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

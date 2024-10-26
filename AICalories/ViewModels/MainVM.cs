@@ -585,7 +585,11 @@ public class MainVM : INotifyPropertyChanged
         bool haveSameImages = todayMeals.Select(i => i.ImagePath)
                                .SequenceEqual(TodayMealsCollection.ToList().Select(i => i.ImagePath));
 
-        if (haveSameImages)
+        bool haveSameCalories = todayMeals.Select(i => i.Calories)
+                               .SequenceEqual(TodayMealsCollection.ToList().Select(i => i.Calories));
+
+
+        if (haveSameImages && haveSameCalories)
             return false;
         else
             return true;
