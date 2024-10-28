@@ -22,6 +22,7 @@ namespace AICalories.ViewModels
         private readonly IViewModelService _viewModelService;
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
+        private readonly IAdService _adService;
         private IImageInfo _imageInfo;
         private readonly string _adUnitId = "ca-app-pub-9280044316923474/7763621828";
         //"ca-app-pub-3940256099942544/1033173712"; - for testing
@@ -303,12 +304,13 @@ namespace AICalories.ViewModels
         #endregion
 
         public ResultVM(IViewModelService viewModelService, IImageInfo imageInfo,
-            INavigationService navigationService, IAlertService alertService)
+            INavigationService navigationService, IAlertService alertService, IAdService adService)
         {
             _viewModelService = viewModelService;
             _viewModelService.ResultVM = this;
             _navigationService = navigationService;
             _alertService = alertService;
+            _adService = adService;
             _imageInfo = imageInfo;
 
             //Ingredients = new ObservableCollection<IngredientItem>();
@@ -620,7 +622,7 @@ namespace AICalories.ViewModels
         #endregion
 
 
-        public async Task UpdateMealInfo(MealItem mealItem)
+        public Task UpdateMealInfo(MealItem mealItem)
         {
             try
             {
@@ -642,10 +644,12 @@ namespace AICalories.ViewModels
                 Console.WriteLine("UpdateMealInfo exception");
                 _alertService.ShowError("Loading error occurred");
             }
+
+            return Task.CompletedTask;
         }
 
 
-        private async Task LoadSecrets()
+        private Task LoadSecrets()
         {
             try
             {
@@ -662,10 +666,10 @@ namespace AICalories.ViewModels
                         throw new Exception();
                     }
                     _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys?.OpenAIAPIKeyReserved}");
-                    return;
+                    return Task.CompletedTask;
                 }
                 _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKeys?.OpenAIAPIKey}");
-                return;
+                return Task.CompletedTask;
 
             }
             catch (Exception ex)

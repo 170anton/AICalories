@@ -19,7 +19,6 @@ namespace AICalories.Services
         public override void OnAdDismissedFullScreenContent()
         {
             Console.WriteLine("Ad dismissed.");
-            //RefreshUI();
             _viewModel.IsAdsEnabled = false;
             if (_viewModel.IsLoading == false)
             {
@@ -44,15 +43,6 @@ namespace AICalories.Services
 
             // Set the interstitial ad to null after it is shown to prevent reuse
             _viewModel.SetInterstitialAd(null); // Clear the ad reference after showing //todo test
-        }
-
-        private async Task RefreshUI()
-        {
-
-            if (Application.Current?.MainPage is ResultPage page)
-            {
-                await page.UpdateContent();
-            }
         }
     }
 }

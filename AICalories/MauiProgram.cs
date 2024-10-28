@@ -61,6 +61,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<IAlertService, AlertService>();
         builder.Services.AddTransient<ICameraService, CameraService>();
+        builder.Services.AddSingleton<IAdService, AdService>();
 
         builder.Services.AddSingleton<ViewModelLocator>();
         builder.Services.AddSingleton<AppShell>();

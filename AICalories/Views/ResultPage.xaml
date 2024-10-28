@@ -368,7 +368,7 @@
                 IsVisible="{Binding IsLoading}"
                 IsRunning="{Binding IsLoading}"
                 Style="{StaticResource MainActivityIndicatorStyle}"
-                Margin="40"
+                Margin="50"
         
                 />
         </VerticalStackLayout>

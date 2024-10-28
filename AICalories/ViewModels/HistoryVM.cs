@@ -16,6 +16,7 @@ namespace AICalories.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
 
+        private bool _isMealClicked;
         private bool _isLoading;
         private bool _isLabelVisible;
 
@@ -178,10 +179,17 @@ namespace AICalories.ViewModels
             {
                 //await _navigationService.NavigateToMealInfoPageAsync(); todo Complete DI for MealInfoPage
 
+                if (_isMealClicked)
+                    return;
+
+                _isMealClicked = true;
+
                 mealItem.Ingredients = await App.IngredientItemRepository.GetIngredientsByMealIdAsync(mealItem.Id);
 
                 var mealInfoPage = new MealInfoPage(mealItem);
                 await Shell.Current.Navigation.PushModalAsync(mealInfoPage);
+
+                _isMealClicked = false;
             }
             catch (Exception ex)
             {

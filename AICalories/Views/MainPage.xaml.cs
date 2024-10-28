@@ -73,11 +73,11 @@ public partial class MainPage : ContentPage
         base.OnDisappearing();
     }
 
-    protected async override void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        await _viewModel.OnPageAppearingAsync();
+        _ = _viewModel.OnPageAppearingAsync();
     }
     #endregion
 }
