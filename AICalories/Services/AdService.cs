@@ -26,8 +26,8 @@ namespace AICalories.Services
         {
             try
             {
-                await Task.Run(() =>
-                {
+                //await Task.Run(() =>
+                //{
                     var adRequest = new AdRequest.Builder().Build();
                     var context = Android.App.Application.Context;
 
@@ -38,7 +38,7 @@ namespace AICalories.Services
                             {
                                 SetInterstitialAd(ad);
                                 Console.WriteLine("Interstitial Ad loaded successfully.");
-                                ShowAd();
+                                //ShowAd();
                             },
                             loadAdError =>
                             {
@@ -49,7 +49,7 @@ namespace AICalories.Services
                                 //    ShowHistoryGridAfterAds();
                                 //}
                             }));
-                });
+                //});
             }
             catch (Exception ex)
             {

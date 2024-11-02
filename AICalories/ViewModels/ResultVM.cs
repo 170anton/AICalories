@@ -412,7 +412,7 @@ namespace AICalories.ViewModels
                     }
                     if (mealItem.IsMeal == false)
                     {
-                        _alertService.ShowError("There is no food in this image.");
+                        _alertService.ShowCustomAlert("Empty", "There is no food in this image.");
                         await _navigationService.PopModalAsync();
                         return;
                     }
@@ -461,7 +461,7 @@ namespace AICalories.ViewModels
             if (IsLoading == false)
             {
                 IsHistoryGridVisible = false;
-                await Task.Delay(200);
+                await Task.Delay(100);
                 IsHistoryGridVisible = true;
             }
         }
@@ -700,10 +700,7 @@ namespace AICalories.ViewModels
                         {
                             Console.WriteLine($"Failed to load interstitial ad: {loadAdError.Message}");
                             IsAdsEnabled = false;
-                            if (IsLoading == false)
-                            {
-                                ShowHistoryGridAfterAds();
-                            }
+                            ShowHistoryGridAfterAds();
                         }));
 
             }
@@ -711,10 +708,7 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine($"Error loading ads: {ex.Message}");
                 IsAdsEnabled = false;
-                if (IsLoading == false)
-                {
-                    ShowHistoryGridAfterAds();
-                }
+                ShowHistoryGridAfterAds();
             }
         }
 
@@ -730,10 +724,7 @@ namespace AICalories.ViewModels
             {
                 Console.WriteLine("Ad is not ready to be shown yet.");
                 IsAdsEnabled = false;
-                if (IsLoading == false)
-                {
-                    ShowHistoryGridAfterAds();
-                }
+                ShowHistoryGridAfterAds();
             }
         }
 

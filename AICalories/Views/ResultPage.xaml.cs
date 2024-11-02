@@ -56,6 +56,7 @@ public partial class ResultPage : ContentPage
 
         _viewModel.LoadAdCommand.Execute(null);
         //_viewModel.ShowAdCommand.Execute(null);
+        //_viewModel.ShowAd();
 
         await _viewModel.ProcessImage();
 

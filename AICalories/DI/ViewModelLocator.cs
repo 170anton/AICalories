@@ -28,8 +28,9 @@ namespace AICalories.DI
             var imageInfo = _serviceProvider.GetService<IImageInfo>();
             var navigationService = _serviceProvider.GetService<INavigationService>();
             var alertService = _serviceProvider.GetService<IAlertService>();
+            var adService = _serviceProvider.GetService<IAdService>();
 
-            return new TakeImageVM(viewModelService, imageInfo, cameraService, navigationService, alertService);
+            return new TakeImageVM(viewModelService, imageInfo, cameraService, navigationService, alertService, adService);
         }
         public ContextVM GetContextViewModel() => _serviceProvider.GetRequiredService<ContextVM>();
         public ResultVM GetResultViewModel() => _serviceProvider.GetRequiredService<ResultVM>();

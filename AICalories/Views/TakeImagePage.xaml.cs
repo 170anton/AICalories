@@ -164,5 +164,7 @@ public partial class TakeImagePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+        //_ = _viewModel.OnPageAppearingAsync();
     }
 }

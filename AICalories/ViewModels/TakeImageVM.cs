@@ -19,6 +19,7 @@ namespace AICalories.ViewModels
         private readonly INavigationService _navigationService;
         private readonly IAlertService _alertService;
         private readonly ICameraService _cameraService;
+        private readonly IAdService _adService;
         private CameraInfo _selectedCamera;
         private Size _selectedResolution;
         private CameraFlashMode _flashMode;
@@ -75,12 +76,13 @@ namespace AICalories.ViewModels
         #endregion
 
         public TakeImageVM(IViewModelService viewModelService, IImageInfo imageInfo, ICameraService cameraService,
-            INavigationService navigationService, IAlertService alertService)
+            INavigationService navigationService, IAlertService alertService, IAdService adService)
         {
             _viewModelService = viewModelService;
             _viewModelService.TakeImageVM = this;
             _navigationService = navigationService;
             _alertService = alertService;
+            _adService = adService;
             //_cameraService = cameraService;
 
 
@@ -90,6 +92,19 @@ namespace AICalories.ViewModels
 
             _imageInfo = imageInfo;
             _imageInfo.Clear();
+        }
+
+        public async Task OnPageAppearingAsync()
+        {
+            try
+            {
+               await _adService.LoadAdAsync();
+
+            }
+            catch (Exception)
+            {
+                _alertService.ShowError("Loading error occurred");
+            }
         }
 
         public async Task SetImage(string imagePath)
@@ -111,6 +126,7 @@ namespace AICalories.ViewModels
             {
                 //string imagePath = await SaveImage(stream);
 
+
                 await SaveToGallery(imagePath);
 
                 await SetImage(imagePath);
@@ -119,7 +135,7 @@ namespace AICalories.ViewModels
             }
             catch (Exception)
             {
-                _navigationService.PopModalAsync();
+                _ = _navigationService.PopModalAsync();
                 _alertService.ShowError("Failed to load image");
             }
         }
