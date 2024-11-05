@@ -539,7 +539,7 @@
                                                         
                                                 <!--Calories-->
                                                 <Border Grid.Row="0" Style="{StaticResource MainBorderStyle}"
-                                                        Padding="14,6"
+                                                        Padding="18,6"
                                                         BackgroundColor="{StaticResource SoftYellow}"
                                                         HorizontalOptions="Start"
                                                         VerticalOptions="Start"

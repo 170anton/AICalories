@@ -9,11 +9,53 @@
         <Grid RowDefinitions="Auto, Auto, *" 
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All"
+            IsVisible="{Binding IsLayoutVisible}"
             
             Padding="10,0">
             <Button IsVisible="False" Grid.Row="0" Text="Add Item" Command="{Binding AddItemCommand}"/>
             <Button IsVisible="False" Grid.Row="1" Text="Clear All" Command="{Binding ClearAllCommand}" />
             <!--BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"-->
+            <Grid Grid.Row="0"
+                  ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15"
+                  HorizontalOptions="CenterAndExpand"
+                  Margin="0,10,0,0">
+
+                <!--Left arrow-->
+                <Button Grid.Column="0"
+                        Padding="10"
+                        Style="{StaticResource ImageOptionStyle}"
+                        BackgroundColor="Transparent" BorderColor="Transparent"
+                        HeightRequest="50"
+                        Command="{Binding PreviousMonthCommand}">
+                    <Button.ImageSource>
+                        <AppThemeBinding Light="left_arrow_black.png" Dark="left_arrow_white.png" />
+                    </Button.ImageSource>
+
+                </Button>
+
+                <!--Right arrow-->
+                <Button Grid.Column="2"
+                        Padding="10"
+                        Style="{StaticResource ImageOptionStyle}"
+                        BackgroundColor="Transparent" BorderColor="Transparent"
+                        HeightRequest="50"
+                        Command="{Binding NextMonthCommand}">
+                    
+                    <Button.ImageSource>
+                        <AppThemeBinding Light="right_arrow_black.png" Dark="right_arrow_white.png" />
+                    </Button.ImageSource>
+
+                </Button>
+
+                <!--Month name-->
+                <Label
+                    Grid.Column="1"
+                    Style="{StaticResource LabelAppStyle}"
+                    FontAttributes="Bold"
+                    Text="{Binding SelectedMonth, StringFormat='{}{0:MMMM}'}"/>
+
+            </Grid>
+
             <CollectionView Grid.Row="2"
                             x:Name="collectionView"
                             ItemsSource="{Binding DayGroupedItems}"
@@ -30,7 +72,7 @@
                     <DataTemplate>
                     
                         <Border
-                               Padding="0" Margin="0,30,0,5"
+                               Padding="0" Margin="0,20,0,5"
                                Style="{StaticResource BorderOfButtonStyle}">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="35,3,3,35"/>
@@ -89,22 +131,36 @@
                     <DataTemplate>
                     
                                   <!--BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}"-->
-                            <Grid ColumnDefinitions="2*,4*,5*"
-                                  HeightRequest="60"
+                            <Grid ColumnDefinitions="2*,3*,5*"
+                                  HeightRequest="40"
                                   Padding="0,0,0,0">
                                 <Label Grid.Column="0" Text="{Binding Time}"
                                        Margin="0,0,10,0"
                                        FontAttributes="Italic"
                                        FontSize="Medium" Style="{StaticResource LabelAppStyle}"/>
                                 <Border Grid.Column="1" Style="{StaticResource MainBorderStyle}"
+                                        BackgroundColor="{StaticResource SoftYellow}"
                                         Margin="0,0,2,0" Opacity="1"
                                            Padding="0">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="35,3,3,3"/>
                                     </Border.StrokeShape>
-                                    <Label Text="{Binding Calories, StringFormat='{0} Cals'}"
-                                           FontSize="Medium" Style="{StaticResource LabelAppStyle}"
-                                            FontAttributes="Bold"/>
+                                    
+                                    <HorizontalStackLayout
+                                                HorizontalOptions="CenterAndExpand">
+                                        <Label FontSize="Medium" FontAttributes="Bold"
+                                                Text="{Binding Calories, StringFormat='{0}'}" Style="{StaticResource LabelAppStyle}"
+                                                TextColor="White"/>
+                                        <Label FontSize="Small" FontAttributes="Bold"
+                                                Text=" Cals" Style="{StaticResource LabelAppStyle}"
+                                                TextColor="White"
+                                                Margin="0,1,0,0"/>
+                                        <!--<Label Text="{Binding Calories, StringFormat='{0} Cals'}"
+                                               FontSize="Medium" Style="{StaticResource LabelAppStyle}"
+                                                FontAttributes="Bold"/>-->
+
+
+                                    </HorizontalStackLayout>
                                 </Border>
                                 <Border Grid.Column="2" Grid.ColumnSpan="1" Style="{StaticResource BorderOfButtonStyle}"
                                         BackgroundColor="Transparent"

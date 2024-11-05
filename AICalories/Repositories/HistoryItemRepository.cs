@@ -17,6 +17,11 @@ namespace AICalories.Repositories
             return _historyDatabase.SaveItemAsync(item);
         }
 
+        public Task<MealItem> GetOldestMealItemAsync()
+        {
+            return _historyDatabase.GetOldestItemAsync();
+        }
+
         public Task<MealItem> GetLastMealItemAsync()
         {
             return _historyDatabase.GetLastItemAsync();
@@ -25,6 +30,11 @@ namespace AICalories.Repositories
         public Task<List<MealItem>> GetAllMealItemsAsync()
         {
             return _historyDatabase.GetAllItemsAsync();
+        }
+
+        public Task<List<MealItem>> GetAllMealItemsByMonthAsync(DateTime dateTime)
+        {
+            return _historyDatabase.GetAllItemsByMonthAsync(dateTime);
         }
 
         public Task<int> GetMealItemsCountAsync()

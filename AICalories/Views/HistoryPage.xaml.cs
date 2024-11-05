@@ -121,9 +121,10 @@ public partial class HistoryPage : ContentPage, INotifyPropertyChanged
         return true;
     }
 
-    protected async override void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.CheckForUpdate();
+        //await _viewModel.CheckForUpdate();
+        _ = _viewModel.OnPageAppearingAsync();
     }
 }

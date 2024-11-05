@@ -24,9 +24,25 @@ namespace AICalories
             return _database.Table<T>().OrderByDescending(i => i.Date).ToListAsync();
         }
 
-        public Task<T> GetLastItemAsync()
+        public async Task<List<T>> GetAllItemsByMonthAsync(DateTime dateTime)
         {
-            return _database.Table<T>()
+            var items = await _database.Table<T>().ToListAsync();
+            return items
+                .Where(item => item.Date.Month == dateTime.Month && item.Date.Year == dateTime.Year)
+                .OrderByDescending(i => i.Date)
+                .ToList();
+        }
+
+        public async Task<T> GetOldestItemAsync()
+        {
+            return await _database.Table<T>()
+                .OrderBy(item => item.Date)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<T> GetLastItemAsync()
+        {
+            return await _database.Table<T>()
                 .OrderByDescending(i => i.Date)
                 .FirstOrDefaultAsync();
         }

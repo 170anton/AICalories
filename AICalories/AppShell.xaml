@@ -50,6 +50,7 @@
              Icon="history_clocks.png">
             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" Route="history"/>
         </Tab>
+        
     </TabBar>
     <!--<FlyoutItem Title="Settings">
         <Tab>
