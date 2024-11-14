@@ -15,7 +15,7 @@
 
         <ScrollView Padding="10,10,10,10" >
         <Grid RowDefinitions="Auto,*"
-              Padding="0,20,0,0" >
+              Padding="0,0,0,0" >
 
 
             <Grid RowDefinitions="Auto,Auto,*"> 

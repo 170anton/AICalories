@@ -20,7 +20,7 @@
                     <VerticalStackLayout Padding="10,5" Spacing="10">
                     
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Dark Mode" Style="{StaticResource LabelAppStyle}"
+                                <Label Text="Dark Theme" Style="{StaticResource LabelAppStyle}"
                                        HorizontalOptions="Start"
                                        FontSize="Large"/>
                                 <Switch Grid.Column="1" Style="{StaticResource MainSwitchStyle}"

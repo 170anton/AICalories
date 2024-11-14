@@ -363,7 +363,7 @@
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 IsVisible="{Binding IsLoading}">
             <Label Style="{StaticResource LabelAppStyle}"
-                   Text="Processing your photo..."/>
+                   Text="Analyzing your photo..."/>
             <ActivityIndicator
                 IsVisible="{Binding IsLoading}"
                 IsRunning="{Binding IsLoading}"

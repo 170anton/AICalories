@@ -248,15 +248,26 @@ namespace AICalories.ViewModels
 
         private async Task<bool> IsInHistoryBoundDateRange(DateTime selectedMonth)
         {
+            //if (SelectedMonth.Month == DateTime.Now.Month)
+            //{
+            //    return true;
+            //}
             var lowerBoundItem = await App.HistoryItemRepository.GetOldestMealItemAsync();
             var upperBoundItem = await App.HistoryItemRepository.GetLastMealItemAsync();
+
+            if (lowerBoundItem == null || upperBoundItem == null)
+            {
+                return false;
+            }
 
             // Define if selectedMonth is within the bounds of the history range
             bool isAfterLowerBound = selectedMonth.Year > lowerBoundItem.Date.Year ||
                                      (selectedMonth.Year == lowerBoundItem.Date.Year && selectedMonth.Month >= lowerBoundItem.Date.Month);
 
-            bool isBeforeUpperBound = selectedMonth.Year < upperBoundItem.Date.Year ||
-                                      (selectedMonth.Year == upperBoundItem.Date.Year && selectedMonth.Month <= upperBoundItem.Date.Month);
+            bool isBeforeUpperBound = (selectedMonth.Year < DateTime.Now.Year ||
+                                      (selectedMonth.Year == DateTime.Now.Year && selectedMonth.Month <= DateTime.Now.Month)) ||
+                                      (selectedMonth.Year < upperBoundItem.Date.Year ||
+                                      (selectedMonth.Year == upperBoundItem.Date.Year && selectedMonth.Month <= upperBoundItem.Date.Month));
 
             // Return true if within range, false otherwise
             return isAfterLowerBound && isBeforeUpperBound;
