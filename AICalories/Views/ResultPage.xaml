@@ -52,7 +52,7 @@
                                         Style="{StaticResource TodayStatsBorderStyle}"
                                         BackgroundColor="{StaticResource CaloriesColor}"
                                         HorizontalOptions="Center"
-                                        Padding="50,15,50,15"
+                                        Padding="40,13"
                                         Margin="10,5,10,10"
                                         Opacity="1">
                                         <Border.StrokeShape>

@@ -658,7 +658,9 @@ namespace AICalories.ViewModels
                 var keyStorageService = new KeyStorageService(encryptionKey);
 
                 _apiKeys = new ApiKeys();
-                _apiKeys.OpenAIAPIKey = "sk-proj-QgMA" + "bggM8w9pUhiyP2BvT3BlbkFJ" + "Cp1pm1hywYBWL1QNkG1M";
+                _apiKeys.OpenAIAPIKey = "sk-proj-97PaQBgUsVI-yZ5yMbphqhJRg4fKlVhGCDLTTzP" +
+                    "KVI83MRAqRIZqLVBC7wmi8ZwAB-T7sLc9NpT3BlbkFJzufOOhWyio" +
+                    "VY6NOzphdDcqj0hByGxy3515Rp0DZJn6RnkaYAx0oCwMGLGb7_r5eFWDfjIWetQA";
                 if (_apiKeys?.OpenAIAPIKey == null)
                 {
                     if (_apiKeys?.OpenAIAPIKeyReserved == null)
